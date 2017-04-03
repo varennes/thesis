@@ -1,0 +1,400 @@
+% \documentclass[a4paper]{article}
+\documentclass[phys,prelim]{puthesis}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{multirow,geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\graphicspath{ {/home/julien/Documents/biophys/ink/} }
+
+\renewcommand{\r}[1]{\textcolor{red}{#1}}
+
+\title{Computational Study of Collective Cell Sensing and Multicellular Migration}
+
+\author{Julien Varennes}{Varennes, Julien}
+\pudegree{Doctor of Philosophy}{PhD}{May}{2018}
+\majorprof{Andrew Mugler}
+\campus{West Lafayette}
+\let\en=\ensuremath
+
+\begin{document}
+
+\volume
+
+\tableofcontents
+
+
+\begin{abstract}
+    Collective cell migration in response to a chemical cue requires both multicellular sensing of chemical gradients and coordinated mechanical action. Examples from morphogenesis and cancer metastasis demonstrate that clusters of migratory cells are extremely sensitive, responding to gradients of less than 1\% difference in chemical concentration across a cell body. While the limits to multicellular sensing are becoming known, how this information leads to coherent migration remains poorly understood. We develop a model of multicellular sensing and migration in which groups of cells collectively measure noisy chemical gradients. The output of the sensing process is coupled to individual cells’ polarization to model migratory behavior. Through the use of numerical simulations, we find that larger clusters of cells detect the gradient direction with higher precision and thus achieve stronger polarization bias, but larger clusters are also accompanied by less coherent collective motion. The trade-off between these two effects leads to an optimally efficient cluster size. Experimental tests of our model are ongoing and are focused on observations of breast cancer cell migration. Future plans include extending the model to systems of cells which include leading-edge cells that are phenotypically different from non-leading cells, and exploring an alternative model of collective migration in which cells make independent measurements and coordinated behavior emerges through local interactions. By completing these studies we aim to understand the precise roles of multicellular sensing in producing collective cell migration, in metastasis and in general.
+\end{abstract}
+
+
+\chapter{Introduction}
+
+Cells gather information about their environment by sensing chemical concentrations and concentration gradients. In fact, cells can do this with remarkable precision. The amoeba \textit{Dictyostelium discoideum} is sensitive to differences on the order of ten molecules between its front and back half \cite{song2006dictyostelium}. It is therefore natural to ask how well cells can sense their environment, and whether the error in the sensing capabilities can be quantified. These questions were first answered by Berg and Purcell almost 40 years ago \cite{berg1977physics}. They considered a simplified model of a cell in order to calculate a lower limit on the relative error in its measurement of a chemical concentration, and they also showed that the sensory machinery of the \textit{Escheria coli} bacterium operates very near this physical bound. The question of how well single cells measure chemical concentrations has been revisited to account for binding kinetics, spatiotemporal correlations and spatial confinement \cite{bialek2005physical, kaizu2014berg, bicknell2015limits}. These studies have helped shape our understanding of how cells sense their environment. However, in nature cells are rarely found alone, and the interactions between nearby cells may alter cells' sensory capabilities.
+
+In many biological contexts cells act in close proximity to one another so their interactions may not be easily ignored when trying to understand the physical limits to sensing. In fact, these interactions can enhance cell sensitivity to the environment. Using communication, clusters of mammary epithelial cells can detect chemical gradients that single cells cannot \cite{ellison2015cell}, and cultures of neurons have been shown to be sensitive to single molecule differences across an individual neuron's axonal growth cone \cite{rosoff2004new}. In studying multicellular sensing of chemical concentrations and gradients it is important to recognize that in order to collect these spatially separated measurements from individual cells the information must be communicated to some common location. Explaining how cells efficiently communicate information has been the topic of recent research. Similar to the limits set by Berg and Purcell, the physical limits to communicated, collective gradient sensing have been derived \cite{mugler2015limits,ellison2015cell} by using a multicellular version of the local excitation-global inhibition (LEGI) communication model \cite{levchenko2002models}, one of the simplest adaptive mechanisms of gradient sensing. With these studies the physical limits of cell sensing have been extended from single cells to multicellular collectives.
+
+In parallel to studies on collective sensing, much recent work has focused on collective cell behavior, including migration. For example, processes in development, cellular migration, pathogenic response, and cancer progression all involve many cells acting in a coordinated way \cite{friedl2010plasticity,rasmussen2006quorum,boelens2014exosome,cheung2013collective,vader2014extracellular}. Work has been done in studying how these multicellular systems behave from a mechanical perspective. Simple mechanical models have successfully explained observed collective behaviors such as cell streaming, cell sorting, cell sheet migration, wound healing, and cell aggregation \cite{kabla2012collective,szabo2010collective,basan2013alignment,janulevicius2015short}. Though these studies accurately model some form of collective cell migration they fail to include the affects of multicellular sensing in driving the mechanics at play. In many biological systems, cells are capable of communicating with one another, so understanding how these cells translate that information into mechanical action is of prime interest.
+
+Here we focus our attention on collective cell migration and how cells use multicellular communication to direct their motion. As summarized, much is known regarding multicellular communication and its physical limits as well as how to model the mechanics of collective behavior. The connection between these two fields, however, is missing. The primary goal of this research is to connect the studies of the physical limits of cell communication to those of cellular dynamics in order to gain deeper insight into collective behavior. These two fields can be connected by creating a model which links the collective sensing output to the polarization of migrating cells. Furthermore, by creating numerical simulations of collective sensing and migration we can relate our model to real biological systems.
+
+One multicellular system of particular interest is that of cancer metastasis. The first step in metastasis is the invasion of tumor cells into the surrounding micro-environment. Invasion is known to occur in a highly organized manner that likely involves communication \cite{cheung2013collective,friedl2012classifying,vader2014extracellular}. Recent work shows that tumor cell invasion is guided by sensory cues to blood vessels and to lymphatics, and that cancer cells can sense their environment with remarkable precision \cite{shields2007autologous}. It is clear that the early stages of metastasis depend on cell sensing and in certain types of cancer, occur in a collective manner. Hence understanding how the limits of multicellular sensing affect collective cell migration can help us better understand how collective tumor cell invasion occurs.
+
+In conjunction with the development and analysis of a model of collective sensing and migration, work with experimental collaborators will help verify whether the proposed model can indeed reproduce experimental results. In developing any theoretical model it is important to be able to validate or disprove the model through experiments. This will be achieved through our collaboration with Professor Bumsoo Han of Purdue University and his research group, who will observe how breast cancer cells migrate in the presence of a chemoattractant gradient. Developing a theoretical model alongside experiment will enable us to verify its accuracy and also match theoretical parameters with experimental observables in order to extend the model to more biological systems.
+
+% Finally, it is important to understand in which contexts collective communication and migration are beneficial and perform better than single cell sensing and collective migration. As stated above, from simple interaction rules between cells collective behavior can emerge. By developing a model in which single cell chemotaxis and cell-cell interaction are explicitly modeled we can directly compare collective sensing model to single-cell sensing models. With this study, the advantages of either sensing and migration method can be examined quantitatively. This can yeild insight into which types of biological systems does communication advantage cells and therefore where we can expect collective communication to play a critical role in multicellular migration.
+
+\chapter{Thesis Plan}
+
+Here we briefly describe the basic components of the thesis. Further details on each component will follow in the Preliminary Results section.
+
+\section{Collective Cell Sensing and Migration Model}
+
+The goal of the first part of the thesis is to develop a model to describe and quantify the connection between collective sensing and multicellular migration. Communication between cells and collective sensing can improve upon an individual cell's ability to sense the environment \cite{ellison2015cell}, and in turn we hypothesize that this information can be used to direct the cell's motion. To describe collective sensing, we will use the well-established local excitation--global inhibition (LEGI) mechanism \cite{levchenko2002models,mugler2015limits}. To describe collective migration, we will integrate this mechanism with the well-studied phenomenon of contact inhibition of locomotion (CIL)-mediated interactions between neighboring cells \cite{mayor2010keeping}. Cells within the cluster will have their polarization biased in the direction away from contact and weighted by the extent to which they are up or down the chemical gradient. With this model of collective sensing and migration we can examine the migratory behavior that emerges through simulations. By developing and running numerical simulations it is possible to test the model's dependence on various parameters and importantly, its dependence on the number of cells in the cluster. With these tests in mind we will be able to examine our hypothesis that increased cluster size leads to more accurate sensing but at the cost of less coherent collective motion.
+
+\section{Application of the Model to Cancer Metastasis}
+
+In conjunction with the development and analysis of numerical simulations we will work alongside our experimental collaborators in the group of Professor Bumsoo Han. Here our goal is to verify whether the collective sensing and migration model can indeed reproduce experimental results. The experiments performed by Professor Han and his group will observe collective breast cancer cell migration in the presence of a chemoattractant gradient. Using numerical simulations of the collective sensing and migration model we will predict an optimal cell cluster size for the most efficient migration and compare it to experimental findings. Comparisons with experimental results will be extremely valuable in translating model parameters to physical observables.
+
+In addition to working in collaboration on breast cancer cell migration, the model can be applied to metastatic systems containing cells of different phenotypes. It is known that invasive cell clusters have leading-edge cells that are phenotypically differentiated, and that tumor cell invasion can be aided by stromal cells \cite{cheung2013collective,gaggioli2007fibroblast,gray2010cellular}. The collective sensing and migration model could simulate these sorts of systems by incorporating different cell types which could have different interaction energies and sensing capabilities. With some straightforward modifications, simulations can be used to predict how leader cells behave with a cluster of communicating cells and the associated effects on collective migration.
+
+\section{Systematic Comparison of Collective Migration Modes}
+
+Although the model of collective sensing described above may lead to new insights into the mechanics of multicellular migration, it may not be the only model capable of producing robust collective behavior. It may be the case that in certain biological contexts intercellular communication is not the cause of collective behavior, or that the model of collective sensing is not the most effective at producing collective migration. Studies have shown that in certain types of cancer only a sub-set of cells exhibit pro-migratory behavior required for invasion, and research on mammalian skin cells suggest that collective behavior could depend on cell density \cite{deisboeck2009collective}. A model based on individual cell motility and local interactions predicts these characteristics for collective migration \cite{coburn2013tactile}. Can the collective sensing and migration model also predict this behavior, or is a different approach needed? Therefore, for this part of the thesis we investigate collective migration that is independent of communication and whether it can outperform the collective sensing and migration model.
+
+% Although the model of collective sensing described above may lead to new insights into the mechanics of multicell migration, it may not be the only model capable of producing robust collective behavior. It may be the case that in certain biological contexts that intercellular communication is not the cause of collective behavior, or that the model of collective sensing is not the most effective at producing collective migration. The goal of the part of the thesis is to investigate collective migration that is independent of communication and whether it outperforms the collective sensing and migration model.
+
+The aforementioned model of collective behavior without communication can involve individual sensing and chemotaxis, coupled with local mechanical interactions. In this sort of model, single cells independently sense a gradient and migrate, although it may be with lower precision than a collective sensing model. When many cells are located near one another, group migration can become directed through local interactions between cells. Even though each cell has low sensory and migratory accuracy, the precision of the group as a whole increases due to local interactions. This mechanism is termed the ``many wrongs'' model and it can produce group migratory behavior \cite{simons2004many,coburn2013tactile}. Local interactions act to average over the errors in individual cell sensing, thereby decoupling group behavior from single-cell properties. This part of the thesis will aim to verify whether or not intercellular communication is the optimally efficient way to achieve collective migration.
+
+
+\chapter{Preliminary Results}
+
+\section{Part 1: Collective Sensing and Migration Model}
+
+\subsection{Background Information on Sensing}
+
+Multicellular communication can prove very useful in enhancing cell sensing. For example, in many types of cancer tumor cell invasion is a multicellular process and so intercellular communication is thought to play a very important role \cite{cheung2013collective,friedl2012classifying,varennes2015sense}. In the case of extremely shallow gradients, groups of cells can sense gradients that individual cells cannot. Clusters of mammary epithelial cells have been shown to exhibit a biased cell-branching response to very shallow gradients while single cells had no response \cite{ellison2015cell}. Furthermore, large clusters were no more responsive than small clusters of cells, supporting the claim that communication is at work. Clearly, communication can be advantageous for these systems of cells.
+
+Before we discuss multicellular communication and sensing in the context of our model, it is important to know how cells may sense their environment and the physical limits to their sensing. Limits to the precision of single-cell concentration sensing were first derived by Berg and Purcell \cite{berg1977physics}. In their study, Berg and Purcell first considered a cell acting as a perfect counting instrument. In this simplest of models, the cell is a sphere of diameter $a$ and volume $V$ through which molecules can freely diffuse in and out (Fig.\ \ref{fig:sense0}A). Assuming that the molecule concentration is uniform, and that the cell derives all its information about the concentration by counting each molecule inside its spherical body, the expected count is $\bar{n} = \bar{c}V$ where $\bar{c}$ is the mean concentration. Since diffusion is a Poisson process the number of molecules the cell counts will randomly fluctuate around the expected value $\bar{n}$. For a Poisson process the variance $\sigma_n^2$ is equal to the mean $\bar{n}$, and therefore the relative error in the cell's concentration estimate is
+$\sigma_c/\bar{c} = \sigma_n/\bar{n} = 1/\sqrt{\bar{c} V}$.
+
+The cell can decrease its relative error by taking several measurements of the molecules inside it and time-averaging the results. However, independent measurements must be separated by a sufficient amount of time so that the molecules inside the cell are refreshed. The time-scale for this is characterized by the diffusion time, $\tau \sim V^{2/3}/D \sim a^2/D$, where $D$ is the diffusion constant. Assuming the cell integrates over a time period $T$, the cell makes $\nu = T/\tau$ independent measurements thus reducing the variance by a factor of $1/\nu$. This gives the long-standing lower limit on the relative error in single-cell concentration sensing
+\begin{equation} \label{eq:singleConc}
+\frac{ \sigma_c }{\bar{c}} = \frac{ \sigma_n}{\bar{n}} \sim \frac{1}{\sqrt{a\bar{c}DT}}.
+\end{equation}
+The relative error decreases with increased cell size ($a$) and chemical concentration ($\bar{c}$), since this increases $\bar{n}$. Being able to take more independent measurements benefits the cell, hence with increasing $D$ and $T$ the relative error goes down. This limit has been more rigorously derived \cite{berg1977physics} and the effects of binding kinetics, spatial confinement and, spatiotemporal correlations have also been studied \cite{bialek2005physical, kaizu2014berg, bicknell2015limits}. Nonetheless, a term of the form in Eq.\ \ref{eq:singleConc} emerges in all cases as the fundamental limit for single-cell concentration sensing.
+
+\begin{figure}[ht]
+    \centering
+        \makebox[\textwidth][c]{\includegraphics[width=1.0\textwidth]{../fig/sensing_theory.png}}
+        % \includegraphics[width=1.0\textwidth]{../fig/sensing_1.png}
+    \caption{From \cite{varennes2015sense}. (A) A cell idealized as a permeable sphere. (B) A cell measures a concentration gradient by counting molecules in two different compartments. (C) The LEGI model of multicellular gradient sensing. The $Y$ molecules (blue) can diffuse between neighboring cells, $X$ molecules (green) cannot. The difference between $X$ and $Y$ molecule populations in a cell reports the extent to which that cell's concentration measurements are above average.} \label{fig:sense0}
+\end{figure}
+
+These simple limits to concentration sensing can be extended to single-cell gradient sensing. The most direct way for cells to measure a chemical gradient is to compare concentration measurements made at different locations along the cell body \cite{jilkine2011comparison}. For simplicity, we treat these compartments as idealized counting volumes as done previously. These compartments are usually receptors or groups of receptors on the cell surface. The chemical gradient can be estimated by taking the difference in counts between two such compartments (Fig.\ \ref{fig:sense0}B).
+
+Consider two compartments of size $s$ that are located on opposite ends of a cell of diameter $a$. Let a chemical gradient $\bar{g}$ run parallel to the compartments. Each compartment on average will measure chemical concentrations
+$\bar{c}_1$ and $\bar{c}_2=\bar{c}_1+a\bar{g}$, respectively.
+This corresponds to average molecule counts that are approximately
+$\bar{n}_1=s^3\bar{c}_1$ and $\bar{n}_2=s^3\bar{c}_2$.
+Assuming that the measurements made in each compartment are independent, then the difference in counts is proportional to the gradient
+$\Delta\bar{n} = \bar{n}_2 - \bar{n}_1 = as^3\bar{g}$.
+Using Eq.\ \ref{eq:singleConc} we find the variance in the difference to be
+$\sigma_{\Delta n}^2 = \sigma_{n_1}^2 + \sigma_{n_2}^2 \sim \bar{n}_1^2/(s\bar{c}_1DT) + \bar{n}_2^2/(s\bar{c}_2DT)$.
+This limit can be further simplified by assuming that the gradient is very small relative to the background concentration $a\bar{g}\ll\bar{c}_1$, resulting in $\bar{c}_1\approx\bar{c}_2\approx\bar{c}$ with $\bar{c}$ the concentration at the center of the cell and so
+$\sigma_{\Delta n}^2 \sim (s^3\bar{c})^2/(s\bar{c}DT)$
+where the factor of $2$ is neglected in this simple scaling estimate. Thus the relative error in gradient sensing simplifies to
+\begin{equation} \label{eq:g}
+\frac{\sigma_g}{\bar{g}} = \frac{\sigma_{\Delta n}}{\Delta \bar{n}} \sim \sqrt{\frac{\bar{c}}{s(a\bar{g})^2DT}}.
+\end{equation}
+Similar to Eq.\ \ref{eq:singleConc}, the relative error decreases with compartment size $s$, and also with $D$ and $T$. The relative error also decreases with $a\bar{g}$ because the measurements made by the two compartments are more different from each other. Unlike concentration sensing, the relative error for gradient sensing increases with $\bar{c}$ because it is more difficult to measure a small difference in concentration on a larger background than on a smaller one \cite{ellison2015cell}. Eq.\ \ref{eq:g} has been more extensively derived and generalized to systems with compartments of different geometries \cite{endres2008accuracy,endres2009accuracy,hu2010physical}. In all such cases a term of the form in Eq.\ \ref{eq:g} appears as the fundamental limit, with the length-scale $s$ dictated by the particular sensory mechanism and geometry.
+
+We now consider gradient sensing by a cluster of cells. It is clear from Eq.\ \ref{eq:g} that multicellular collectives can more accurately detect gradients than a single cell since a collective spans a larger region of the chemical gradient. If we consider the cells on opposite ends of the cluster as the two compartments comparing concentration measurements, then in Eq.\ \ref{eq:g} $s \to a$ and $a \to Na$ where $N$ is the number of cells running parallel to the gradient. The relative error for the multicellular cluster becomes \cite{mugler2015limits}
+\begin{equation} \label{eq:G1}
+\frac{\sigma_g}{\bar{g}} \sim \sqrt{\frac{\bar{c}}{a(Na\bar{g})^2DT}}.
+\end{equation}
+
+However, there is a crucial effect that was neglected in formulating Eq.\ \ref{eq:G1} which is the mechanism by which the cells communicate their measurements across the collective. This will introduce additional noise to the gradient sensing process thereby altering the expression for the relative error. In the case of a single cell it is reasonable to assume that measurements from different compartments can be reliably transmitted, but with the increased size of the multicellular cluster we can no longer neglect this effect. The physical limits to communication-aided collective gradient sensing have been derived \cite{ellison2015cell, mugler2015limits}. In these studies the local excitation--global inhibition (LEGI) paradigm \cite{levchenko2002models} was used to model intercellular communication. The LEGI paradigm is one of the simplest ways to model adaptive, multicellular sensing. In the model cells produce both a ``local'' and a ``global'' molecular species in response to the chemoattractant, and the global species provides the communication by diffusing between neighboring cells (Fig.\ \ref{fig:sense0}C). The difference between local and global molecule numbers in a given cell provides the readout. A positive difference informs the cell that its measurement is above the spatial average among its neighbors, and therefore that the cell is located up the gradient, not down. The relative error of gradient sensing was found to be limited from below by
+\begin{equation} \label{eq:G2}
+\frac{\sigma_g}{\bar{g}} \sim \sqrt{\frac{\bar{c}}{a(n_0a\bar{g})^2DT}},
+\end{equation}
+where $n_0^2$ is the ratio of the cell-cell exchange rate to the degradation rate of the global species. This parameter sets an effective length-scale $n_0a$ over which cells can reliably share information. Therefore, as the cell collective grows larger than $n_0$ cells the relative error does not improve, unlike Eq.\ \ref{eq:G1} where the effects of communication are ignored.
+
+\subsection{Implementation of Multicellular Sensing}
+
+In our model, multicellular gradient sensing will also use the LEGI paradigm \cite{mugler2015limits,levchenko2002models}. The LEGI model is the simplest model of gradient sensing that is adaptive to changes in concentration. Adaptation of signaling networks involved in gradient sensing is experimentally motivated \cite{alon1999robustness,takeda2012incoherent}. Next, we discuss in detail the sensing model and its computational implementation.
+
+In the LEGI model cells produce two chemical species, $X$ and $Y$, in response to the chemical concentration $S$ in the environment. The local reporter species $X$ remains within individual cells and represents that cell’s measurement of its local chemical concentration whereas the global reporter $Y$ can diffuse at the rate $\gamma$ between neighboring cells. The chemical reactions are given below.
+\begin{align*}
+    S &\rightarrow S+X \hspace{20pt} X \rightarrow R \\
+    S &\rightarrow S+Y \hspace{20pt} Y \ \dashv \ R
+\end{align*}
+\begin{equation}
+    \begin{aligned}
+        s_k &\xrightarrow{\kappa} s_k + x_k \hspace{20pt} x_k \xrightarrow{\mu} \emptyset \\
+        s_k &\xrightarrow{\kappa} s_k + y_k \hspace{20pt} y_k \xrightarrow{\mu} \emptyset \hspace{20pt} y_k \rightleftharpoons_{\gamma_{j,k}}^{\gamma_{k,j}} y_{j} \\
+    \end{aligned}
+\end{equation}
+The global reporter molecule exchange rate $\gamma$ is dependent on the amount of contact $\mathcal{C}$ made between adjacent cells, and on the exchange rate per unit contact-length $\Gamma$.
+\begin{gather}
+    \gamma_{j,k} = \int_{\mathcal{C}} \Gamma dl \\
+    R_k = x_k - y_k
+\end{gather}
+In the LEGI model $X$ activates a downstream reporter molecule $R$, while $Y$ inhibits it. In the limit of shallow gradients, $R$ effectively reports the difference $X-Y$ \cite{ellison2015cell}. A negative (positive) difference indicates that the cell is below (above) the average measured concentration relative to nearby cells. The chemical concentration is modeled as a space-dependent field $E(r_1,r_2)$, and in this case has a constant gradient in the $r_1$-direction.
+\begin{gather*}
+    E(r_1,r_2) = gr_1 + g_0 \\[0pt]
+    [ E ] = \text{molecules} / \text{area}
+\end{gather*}
+The average signal around the $k^\text{th}$ cell is $\bar{s}_k = \int_k dA \ E(r_1,r_2)$. Since diffusion is a Poisson process the variance in the measured signal $s_k$ is equal to the mean so $\sigma_{s_k}^2 = \bar{s}_k$. The dynamics of the local reporter satisfy the stochastic equation
+\begin{equation} \label{eq:xdot}
+    \dot{x}_k = \kappa s_k - \mu x_k + \eta_{x_k}
+\end{equation}
+where $\eta_{x_k}$ is a random variable, which in steady-state is equal to
+$\eta_{x_k} = \sqrt{\kappa\bar{s}_k}\xi_2 - \sqrt{\mu \bar{x}_k} \xi_3$.
+In Eq\ \ref{eq:xdot} and subsequent stochastic equations $\xi_i$ and $\chi_{j,k}$ are unit Gaussian random variables that simulate the noise in the molecule population. The dynamics of the global species can be modeled in similar fashion.
+\begin{equation} \label{eq:ydot}
+    \dot{y}_k = \kappa s_k - \mu y_k - y_k \sum_{<j,k>} \gamma_{j,k} + \sum_{<j,k>} y_j \ \gamma_{j,k} + \eta_{y_k}
+\end{equation}
+\begin{equation*}
+    \eta_{y_k} = \sqrt{\kappa \bar{s}_k} \xi_4 - \sqrt{mu\bar{y}_k} \xi_5 + \sum_{j=1}^N \left[ \chi_{j,k} \sqrt{\gamma_{j,k}} \left( \sqrt{\bar{y}_j}-\sqrt{\bar{y}_k} \right) \right]
+\end{equation*}
+The expression for the noise term $\eta_{y_k}$ corresponds to the steady-state solution of $y_k$. The first summation term in Eq.\ \ref{eq:ydot} accounts for the loss of $y_k$ due to the diffusion out to neighboring cells, and similarly the second summation term accounts for the increase in $y_k$ due to diffusion into cell $k$ from its neighbors. The notation $<j,k>$ represents the set of all nearest neighbor pairs. This expression can be simplified by noting that exchange rates are symmetric $\gamma_{j,k}=\gamma_{k,j}$, $\gamma_{i,i}=0$, and by defining the sum of all the exchange rates between cell $k$ and all other cells as $\Gamma_k = \sum_{j=1}^N \gamma_{j,k}$.
+
+For the local reporter, the steady-state solution is simply
+\begin{equation} \label{eq:xss}
+    x_{k}^{ss} = \left( \kappa/\mu \right) s_k + \left( 1/\mu \right) \eta_{x_k}.
+\end{equation}
+The steady-state solution for the global reporter is more involved, and can be written as a matrix equation
+\begin{equation} \label{eq:yss}
+    M\vec{y}^{ss} = \kappa\vec{s} + \vec{\eta}_y
+\end{equation}
+where $M$ is a square, symmetric matrix that governs the degradation and exchange of $Y$ molecules in all cells.
+\begin{equation} \label{eq:Mmatrix}
+    M =
+    \begin{bmatrix}
+     \mu+\Gamma_1 & -\gamma_{1,2} & \cdots & -\gamma_{1,N} \\
+     -\gamma_{2,1} & \mu+\Gamma_2 & \cdots & -\gamma_{2,N} \\
+     \vdots  & \vdots  & \ddots & \vdots  \\
+     -\gamma_{N,1} & -\gamma_{N,2} & \cdots & \mu+\Gamma_N
+    \end{bmatrix}
+\end{equation}
+In simulations, Eq.\ \ref{eq:yss} is solved numerically at each time step for $\vec{y}^{ss}$ the vector of global reporter molecule populations in every cell.
+
+\begin{figure}[ht]
+    \centering
+        \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{../fig/sensing_1.png}}
+        % \includegraphics[width=1.0\textwidth]{../fig/sensing_1.png}
+    \caption{(A) Diagram of the system of cells used to obtain results (B) and (C). (B) Distribution of the $X$ (yellow and green bars) and $Y$ (light pink and green bars) molecule populations in cells 1 and 2 obtained from many simulation instances. (C) Distribution of values of $R$, the downstream readout of the collective sensing model, for each cell obtained from many simulation instances. (D) The relative error in gradient sensing of the leading-edge cell for various cluster sizes, the blue-line displays the predicted scaling relationship.} \label{fig:sense1}
+\end{figure}
+
+The basic properties of the model are shown in Fig.\ \ref{fig:sense1}, which illustrates the results from many simulation for the simple case of two cells. We find a Poisson distribution of the $X$ molecule population, the $Y$ molecule population in each cell is equal on average because of exchange, and that the $Y$ molecule population represents the average value of the $X$ molecule population in every cell (Fig.\ \ref{fig:sense1}B). The readout $R$ of the LEGI model is displayed in Fig.\ \ref{fig:sense1}C. On average the cell on the lower-end of the chemical concentration (Cell 1) is on the lower side of the gradient as indicated by an average negative value of $R$, and vice versa for the other cell.
+
+Next, the relative error of collective gradient sensing for various sized clusters of cells is calculated. We define the relative error as the variance over the squared mean of $R$ in the cell furthest up the gradient. Fig.\ \ref{fig:sense1}D shows the relative error vs. the number of cells in the cluster that are parallel to the gradient direction. There is a clear power-law dependence on $N$ the number of cells parallel to the gradient which is in very close agreement with our theoretical prediction for the scaling of $N^{-2}$ (Eq.\ \ref{eq:G1}). This is to be expected since in these simulations the global-reporter exchange rate between cells is very large compared to the degradation rate ($\gamma\gg\mu$) and so it is expected that the effects of communication can be neglected. Therefore, Eq.\ \ref{eq:G1} accurately models the error in the cluster's measurement of the chemical gradient; namely, it states that the relative error should go as $\sigma_R^2/\bar{R}^2 \sim N^{-2}$.
+
+\subsection{Background Information on Migration}
+
+The next step in our study is to connect collective migration with multicellular sensing. Modeling cellular migration is an interesting problem because often rich and sophisticated behavior can emerge from a few interaction rules. Even in the absence of sensing, simple models are successful at explaining observed collective behaviors such as cell streaming, cell sorting, cell sheet migration, wound healing, and cell aggregation \cite{kabla2012collective,szabo2010collective,basan2013alignment,janulevicius2015short}. These models are very interesting and have myriad applications but they ignore the cell's sensing capabilities and its potential ramifications on cell behavior.
+
+Recently, Camely et.\ al.\ developed a model in order to connect cell sensing and multicellular chemotaxis \cite{camley2015emergent}. In this model, cells are tightly connected but are polarized away from neighboring cells due to contact inhibition of locomotion (CIL), the physical phenomenon of cells ceasing motion in the direction of cell-cell contact \cite{mayor2010keeping}. Individual cells sense the local chemoattractant concentration and are polarized with a strength proportional to this concentration, but mechanical coupling acts to keep them together. In the presence of a concentration gradient, the difference in individual cells' measurements causes an imbalance in migration strengths resulting in net directed motion and successful chemotaxis. This model is very interesting since cell clusters chemotax even though individual cells cannot, since without other cells, there is no CIL to bias the direction of motion. Although this is a very valuable model it has its shortcomings. Firstly, it does not naturally account for the stochastic nature of cellular behavior; instead a phenomenological noise term is added to the dynamics. Secondly, cell to cell communication is not addressed, and although it is not the aim of that paper to do so, it does leave us without a model suitable to our interests.
+
+Modeling collective cellular behavior is an active field of research. Indeed, many models exist that are able to characterize collective behavior of cells. There are also models that take into account cell sensing and how it affects cell dynamics \cite{coburn2013tactile,camley2015emergent}. However, there is a lack of models that combine the effects of multicellular communication with collective cellular migration. The goal of this part of the project is to develop such a model.
+
+\subsection{Coupling Sensing to Migration}
+
+Next we describe how the information obtained from multicellular sensing is used to bias cell motion. In our model the downstream readout $R$ is coupled to individual cell polarization $\vec{p}$. Modeling collective behavior using cell polarization has been used in the past \cite{szabo2010collective,camley2015emergent}. In order for clusters of cells to achieve migration in the direction of increasing chemical concentration individual cell polarization vectors should be dependent on the cell's location within the cluster. Information about the cell's surroundings are naturally expressed by the repulsion vector $\vec{q}$ \cite{camley2015emergent}. The repulsion vector for cell $k$ is a unit vector that points away from all of cell $k$'s neighbors.
+\begin{equation}
+    \vec{q}_k = \left( \frac{1}{\sum_{\langle j,k \rangle} L_{j,k}|\vec{x}_k - \vec{x}_j|} \right)
+    \sum_{\langle j,k \rangle} L_{j,k} \left( \vec{x}_k - \vec{x}_j \right)
+\end{equation}
+$L_{j,k}$ is the contact length made between cell $k$ and it's neighboring cell $j$. The repulsion vector is representative of contact inhibited locomotion (CIL). CIL may decrease motility in the direction of the contact and shows that cells are aware of their immediate surroundings. Using a combination of the repulsion vector and the downstream readout the cell's polarization will change as a function of time.
+
+\begin{equation} \label{eq:polarVec}
+    \frac{d\vec{p}_k}{dt} = r \left[ -\vec{p}_k + \epsilon \frac{R_k}{\sigma_R} \vec{q}_k \right]
+\end{equation}
+
+The first term  in Eq.\ \ref{eq:polarVec} represents the decay of the polarization vector. In the absence of a chemical concentration an individual cell will undergo a persistent random walk and the cell's direction will change at a rate $r$. The second term acts to align or anti-align the cell’s polarization vector with the repulsion vector based on the cell's information about the chemical gradient. The net effect is illustrated in Fig.\ \ref{fig:cellPolar}.
+
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=.75\textwidth]{../fig/multicell_sensing_repulsion.png}
+    \caption{Cell polarization is biased by multicellular sensing. On average, the cells on the left and right edges will measure negative and positive values of $R$, respectively. This causes the left-edge (Cell 1) and right-edge (Cell 3) cells to polarize in the direction of the gradient, while cells in the middle (Cell 2) are on average not polarized since $\bar{R} \approx 0$. Polarization vectors $\vec{p}$ are red, repulsion vectors $\vec{q}$ are black.} \label{fig:cellPolar}
+\end{figure}
+
+In this model clusters of multiple cells can successfully chemotax in the direction of increasing chemical concentration. In the presence of a gradient, cells on the edge near the lower-end of the chemical concentration will tend to be polarized into the cluster (Cell 1 in Fig.\ \ref{fig:cellPolar}), whereas cells on the higher concentration edge tend to be polarized outwards (Cell 3 in Fig.\ \ref{fig:cellPolar}). Cells in the center of the cluster (Cell 2 in Fig.\ \ref{fig:cellPolar}) are on average unpolarized. The net effect is that the cells on the edges of the cluster will drive motion in the direction of increasing chemical concentration. It is important to note that this model fails in the case of single cell chemotaxis and is only relevant to systems of multicellular migration. Single cells are not able to detect gradients on their own which is relevant for the regime of shallow gradients. Similarly without neighboring cells there is no repulsion vector to bias the cell's polarization.
+
+\subsection{Computational Implementation}
+
+A computational implementation is required in order to understand the dynamics that evolve from the model of collective sensing and migration. Simulations are an essential way to characterize the types of behaviors the model produces along with comparing those with experiment. The implementation chosen is the Cellular Potts Model (CPM) \cite{graner1992simulation,swat2012multi}. The CPM is widely used for simulating cell-centric systems. Despite its relative simplicity, this computational implementation can qualitatively reproduce diverse biological phenomena \cite{maree2007cellular}. The CPM is a very good implementation for simulating systems wherein cell geometry is crucial to the dynamics of the system. Using CPM many studies, some involving cell polarization and mechanical-based coupling, successfully reproduce epithelial cell streaming, cell sorting, chemotaxis and collective migration \cite{maclaren2015models,kabla2012collective,szabo2010collective}.
+
+In CPM cells live on a discrete lattice and are represented as groupings of lattice points. Simply-connected groups of lattice sites $x$ with the same integer values for their \textit{lattice label} $\sigma(x)>0$ comprise a single cell. The extracellular matrix (ECM) is labeled with the lattice label $\sigma(x)=0$. Cells have a desired size and circumference from which they can fluctuate and cells adhere to their neighboring environment with an associated adhesion energy. The energy of the whole system is the sum of contributions from adhesion $J_{i,j}$, area-restriction $\lambda_A$, and circumference-restriction $\lambda_P$ terms.
+\begin{equation}
+    u = \sum_{\langle x,x' \rangle} J_{\sigma(x),\sigma(x')} + \sum_{i=1}^N \left( \lambda_A (\delta A_i)^2 + \lambda_P (\delta P_i)^2 \right)
+\end{equation}
+\begin{equation}
+    J_{\sigma(x),\sigma(x')} =
+    \begin{cases}
+        0, &\sigma(x)=\sigma(x') \ \text{(within the same cell)} \\
+        \alpha, &\sigma(x)\sigma(x')>0 \ \text{(cell-cell contact)} \\
+        \beta, &\sigma(x)\sigma(x')=0 \ \text{(cell-ECM contact)}
+    \end{cases}
+\end{equation}
+The parameters $\alpha$ and $\beta$ characterize intercellular adhesiveness, and in order to ensure that it is energetically favorable for cells to remain in contact, we must make the restriction that $\beta > 2\alpha$ \cite{szabo2010collective}. The volume and circumference-restriction energy terms restrict cells from growing or shrinking to unphysical sizes as well as branching or stretching into unphysical shapes. Cells fluctuate in shape and size around the desired area $A_0$ and circumference $P_0$ with $\delta A_i \equiv A_i-A_0$ (and similarly for $\delta P_i$). The resulting dynamics evolve from the minimization of the system’s energy under thermal fluctuations.
+
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=.5\textwidth]{../fig/cpm_2.png}
+    \caption{From \cite{varennes2015sense}. Illustration of the Cellular Potts Model (CPM). Cells comprise of simply connected lattice points. There are adhesion energies associated with different types of contact: cell-cell, $\alpha$ (blue-dashed line), and cell-ECM, $\beta$ (yellow-dashed line). Cell motility is modeled by the addition/removal of lattice points (pink). Each cell has a center-of-mass (white dot), a polarization vector, $\vec{p}$ (red) and a repulsion vector, $\vec{q}$ (black).} \label{fig:CPM1}
+\end{figure}
+
+Cell dynamics are a consequence of minimizing the energy of the whole system. This is a random process that is sensitive to thermal fluctuations and is modeled using a Monte Carlo process. In a system of $n$ lattice sites, one \textit{Monte Carlo} time step (MC step) is composed of $n$ \textit{elementary} steps. Each elementary step consists of an attempt to copy the lattice label of a randomly chosen lattice site onto that of a randomly chosen neighboring site as illustrated by the pink lattice site in Fig.\ \ref{fig:CPM1}. The new configuration resulting from the copy is accepted with probability $P$, which depends on the change in the system's energy accrued in copying over the lattice label.
+\begin{equation} \label{eq:prob}
+    P =
+    \begin{cases}
+        e^{-\left( \Delta u - w \right)}, &\ \Delta u - w > 0 \\
+        1, &\ \Delta u - w \leq 0
+    \end{cases}
+\end{equation}
+The term $\Delta u$ is the change in energy of the system due to the proposed lattice label copy. $w$ is the \textit{bias} term which acts to bias cell motion in the direction of polarization. The bias term in the CPM model is required in order for cell clusters to exhibit directed motion \cite{szabo2010collective}.
+\begin{equation} \label{eq:w}
+    w = \sum_{k=\sigma(a),\sigma(b)} \frac{\Delta\vec{x}_{k(a \to b)} \cdot \vec{p}_k}{ |\Delta\vec{x}_{k(a \to b)}| |\Delta\vec{x}_{k(\Delta t)}|}
+\end{equation}
+The summation in Eq.\ \ref{eq:w} is over the cells involved in the elementary time step: $a$ is the lattice site being copied, and $b$ is the lattice site being changed. The change in the cell's center of mass position during the elementary time step is $\Delta\vec{x}_{k(a \to b)}$, whereas $\Delta\vec{x}_{k(\Delta t)}$ is the cell's change in the center of mass during a MC step. The cell polarization vector $\vec{p}_k$ is updated at every MC step in accordance with Eq.\ \eqref{eq:polarVec}. The dot product acts to bias cell motion since movement that is parallel to the polarization vector will result in a more positive $w$ which in turn results in a higher acceptance probability (Eq.\ \ref{eq:prob}).
+
+The dynamics that evolve from computer simulations are in agreement with those outlined in the model. As illustrated in figure \ref{fig:cellPolar}, using this computational implementation leads to cell's on the edges of the cluster being polarized in the direction of increasing chemical concentration, and leaves cells in the center with no net polarization.
+
+\subsection{Preliminary Simulation Results}
+
+Using our simulations we can collect statistics on multicellular sensing and migration. One such statistic is the first-passage time which is the time it takes for a cluster of cells to travel a fixed distance; the threshold distance is measured with respect to the cluster center of mass (Fig.\ \ref{fig:fpt}A).
+
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=1.1\textwidth]{../fig/fpt_diagram_2.png}
+    \caption{(A) Diagram of a first-passage time process. The first-passage time is the time it takes for the center of mass of the cell cluster to travel the threshold distance. (B) A heatmap of mean first-passage times (MFPT) as a function of cell-ECM adhesion energy, $\beta$ and polarization bias strength, $\epsilon$. Warmer colors represent higher MFPT values.} \label{fig:fpt}
+\end{figure}
+
+Since the simulations represent stochastic processes it is important to run several instances in order to gather meaningful statistics on the first-passage time. Before we begin to investigate how well communicating clusters of cells perform it is important to understand the effects of the various parameters on our simulations. From examining the simulated cell behavior for different parameter values we identify two crucial parameters: $\beta$ the cell-ECM adhesion energy, and $\epsilon$ the polarization bias strength. When we vary these two parameters we find three distinct phases of cell migration (regions 1, 2, and 3 in Fig.\ \ref{fig:fpt}B).
+
+We see in Fig.\ \ref{fig:fpt}B that in the center of the figure the mean first-passage time (MFPT) remains relatively constant as $\beta$ and $\epsilon$ grow in proportion to one another. In this phase, region 2 of Fig.\ \ref{fig:fpt}B, cells migrate as a collective. However if the adhesion energy is increased further while the bias strength remains fixed the MFPT starts to increase. This is due to the increased energy cost in cells making protrusions into the ECM. If $\beta$ is increased further the cluster cells will eventually stop moving since protrusions become highly improbable as dictated by the CPM, and this corresponds to region 3 of Fig.\ \ref{fig:fpt}B. The other large MFPT phase is due to increasing $\epsilon$ while keeping $\beta$ fixed. In this case the cell's polarization becomes large enough to overcome the intercell adhesion energy causing the cluster of cells to scatter. As previously mentioned, when cells are not in contact they cannot measure the chemical gradient so their motion becomes unbiased. Therefore there is a large region in parameter space where the model system is physically realistic, and in the limits where we would expect our model to breakdown the simulations do as well. With this in mind we can further examine simulations knowing that the results are not being affected by unrealistic parameter values.
+
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=0.7\textwidth]{../fig/fullcpm_MFPT_1.png}
+    \caption{Mean first-passage times for the collective sensing and migration model. The legend indicates different values of $\Gamma$ (exchange rate per unit contact-length) used in each instance.} \label{fig:fullMFPT}
+\end{figure}
+
+Next we examine the MFPT as a function of cluster size (Fig.\ \ref{fig:fullMFPT}). Starting from $N=2$ we see that as the number of cells increases the MFPT decreases; this can be understood from our understanding of multicellular sensing. Before reaching the limiting length-scale dictated by $n_0a$ (Eq.\ \ref{eq:G2}), the error in gradient sensing decreases as $N^{-2}$ and so the cluster's ability to more precisely measure the gradient increases causing the MFPT to decrease. However, as the number of cells increases the MFPT tends to saturate to some minimal value and can even start to increase. The MFPT reaches a minimum around $N \sim 20$ cells and the minimum depends on the choice of $\Gamma$, the global molecule exchange rate per unit length. Communication between cells improves as $\Gamma$ increases resulting in a larger value of $n_0$ thereby pushing the point of saturation to larger cluster sizes. From these results we see that the model does predict an optimally efficient cluster size.
+
+We hypothesize that there are two effects that contribute to the MFPT reaching a minimum: one is the increased drag due to larger cluster size, second is the reduced benefit to sensory precision with larger clusters. Saturation is expected due to the limits of multicellular communication, but in order to understand the increase in MFPT we must isolate the effects of migration.
+
+\subsection{Separating Migration from Sensing}
+
+In order to isolate migration, it is useful to simplify our model. In the limit of perfect sensing, cluster migration essentially becomes independent from the sensing mechanism since the cells perfectly measure the gradient. In this limit the behavior of each cell's polarization simplifies to the scenario illustrated in Fig.\ \ref{fig:toyGeo}A. The cells located on the leading-edge of the cluster where $R>0$ will have polarization vectors that point out from the cluster, whereas cells on the opposite side where $R<0$ will have their polarization vectors pointing into the cluster. Cells that are completely enclosed by neighboring cells will remain unpolarized. In this simplified model, polarization vectors for each cell will be equal to $\vec{p} = \epsilon \cos\theta \vec{q}$ where $\epsilon$ is again the polarization alignment strength, or if a cell is completely surrounded by neighboring cells $\vec{p} = 0$. The angle $\theta$ is the angle between the cell's repulsion vector $\vec{q}$ and the desired direction of migration.
+
+\begin{figure}[ht]
+    \centering
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{../fig/toy_model_3.png}}
+        % \includegraphics[width=1.0\textwidth]{../fig/toy_model_3.png}
+    \caption{The simplified, sensing independent toy model. (A) A diagram of the simplified model. The polarization vector $\vec{p}$ points in the direction of the repulsion vector $\vec{q}$ scaled by $\cos\theta$. (B) Mean first-passage times $\langle\tau\rangle$ for the simplified migration model. (C) Cluster area as a function of the number of cells $N$, and (D) cluster perimeter as a function of $N$.} \label{fig:toyGeo}
+\end{figure}
+
+With this simplified migration model we can study how first-passage times scale with cluster size independent of collective sensing. As shown in Fig.\ \ref{fig:toyGeo}B, we find a power-law relationship between the number of cells $N$ and the mean first-passage time $\langle\tau\rangle$. This relationship can be understood through simple scaling arguments for the drag and driving forces on the cluster. The first-passage time should scale proportionally with the drag experienced on the cluster, whereas it should be inversely related to the force driving migration.
+\begin{equation} \label{eq:fpt1}
+    \langle\tau\rangle \sim \frac{\text{drag}}{\text{force}}
+\end{equation}
+The drag on the cluster should scale with the area of the cluster, $\text{drag} \propto A(N)$, and the driving force should scale with the perimeter of the cluster since we know that only cells on the edges of the cluster will be polarized in the desired direction, $\text{force} \propto P(N)$. From simulations we can see the functional relationship of the area $A(N)$ and the perimeter $P(N)$ on the number of cells within the cluster. As expected the area of the cluster grows linearly with the number of cells, $A(N) \sim N^{1.000\pm0.001}$ (Fig.\ \ref{fig:toyGeo}C). Interestingly, the perimeter of the cluster scales as $P(N) \sim N^{0.628\pm0.044}$ which tells us that the preferred cluster geometry is more amoeboid than circular, since circular implies $P(N) \sim N^{1/2}$ (Fig.\ \ref{fig:toyGeo}). Plugging this into Eq.\ \ref{eq:fpt1} we find that
+$\langle\tau\rangle \sim N^{0.372\pm0.044}$
+which is in agreement with the MFPT simulation result of
+$\langle\tau\rangle \sim N^{0.323\pm0.043}$
+within error bars (Fig.\ \ref{fig:toyGeo}B). Therefore, the migratory behavior independent of sensing can be well understood purely from the geometry of the cluster and its consequences on migration.
+
+\subsection{Collective Sensing and Migration, Simulation Results}
+
+Next, we examine how well our simplified, sensing independent model compares to the full, collective sensing and migration model which is of primary interest. Simulations of the collective sensing model are conducted to understand how the cluster size and perimeter scales with the number of cells within the cluster. As shown in Fig.\ \ref{fig:fullGeo}, we again find agreement within error bars on the power-law dependencies of $N$ for the area and perimeter of the cluster.
+
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=0.8\textwidth]{../fig/fullcpm_A_P_1.png}
+    \caption{Cluster scaling relationships for the collective sensing and migration model.} \label{fig:fullGeo}
+\end{figure}
+
+Therefore, our toy model is a very good approximation of the full collective sensing model. Hence the scaling arguments used for the toy model can be applied to the collective sensing model in order to explain that in the absence of noisy collective sensing, migration will slow down with increasing $N$ because of the geometry of the cluster.
+% These scaling arguments can be generalized in order to hypothesize how the full, collective sensing and migration model will perform as a function of cluster size. We previously observed that in the fast-communication limit the signal-to-noise ratio (SNR) for collective sensing behaves as $\text{SNR} = (\sigma_R^2/\bar{R}^2)^{-1} \sim N_g^{2}$ where $N_g$ is the number of cells in the cluster that are parallel to the gradient. Combining this with the result that in the absence of sensing the MFPT scales as $\langle\tau\rangle \sim N^{0.414\pm0.023}$ we can formulate a simple hypothesis for how the MFPT should scale in the full model. Namely, in the collective sensing and migration model we hypothesize that the MFPT should scale as the ratio of the two effects, $\langle\tau\rangle \sim N^{0.414\pm0.023} / N_g^{2}$. By running simulations wherein we keep track of the distance between the leading-edge cell and the trailing-edge cell in a cluster the total number of cells in a cluster $N$ is related to the number of cells parallel to the gradient $N_g$, and we find that $N_g \sim N^{0.743\pm0.015}$.
+% Therefore, we hypothesize that in the regime where all the cells in the cluster can effectively communicate with one another the MFPT should approximately scale as
+% \begin{equation}
+    % <\tau > \sim N^{-1} .
+% \end{equation}
+From our study of multicellular sensing we know that the relative error in gradient sensing will saturate to the lower-bound of $\frac{\sigma_g}{\bar{g}} \sim n_0^{-1}$ (Eq.\ \ref{eq:G2}) recalling that $n_0$ sets the number of cells over which information can be reliably shared. So for clusters of cells where the number of cells parallel to the gradient is larger than $n_0$ we would expect the benefits of multicellular communication to saturate and that the MFPT will return to the communication-free scaling relationship of $\langle\tau\rangle \sim N^{0.414\pm0.023}$.
+
+Now that we have preliminary results on the sensory and migratory performances of the multicellular clusters, we can apply our understanding to the MFPT results for the collective sensing and migration model (Fig.\ \ref{fig:fullMFPT}). As the size of the cluster increases drag causes the cluster to slow down, for small clusters of cells this is counter-acted by the increased sensory precision provided by having more cells. As the clusters become larger the error in gradient sensing saturates causing a minimum in MFPT. Once the critical cluster size is reached gradient sensing cannot improve, and there is no benefit to adding more cells to the cluster. This leads to an optimal cluster size for minimizing the MFPT. Interestingly, as communication between each cell is improved the minimum in MFPT becomes more shallow indicating that improved communication can combat the drag effects of increased cluster size.
+
+\section{Part 2: Application of the Model to Cancer Metastasis}
+
+\subsection{Cancer Cell Migration Collaborative Research}
+
+The goal of this part of the thesis is to apply the model of collective cell sensing and migration to breast cancer cell migration experiments. By collaborating with Professor Bumsoo Han and his research group it is possible to develop an integrated mathematical and experimental model of collective tumor cell invasion. Previous experiments have shown that tumor cells invade as collective aggregates \cite{cheung2013collective,friedl2012classifying}. In applying the model to tumor cell invasion we can quantify the degree with which invasion is aided by collective effects.
+
+\begin{figure}[ht]
+    \centering
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{../fig/device_2.png}}
+        % \includegraphics[width=0.7\textwidth]{../fig/device_2.png}
+    \caption{(A) Diagram of the microfluidic device. In the center of the device there is a collagen gel where cells are placed (yellow), solutions can be placed on either side of the collagen in order to form a chemical gradient across the device (pink). (B) 3D rendering of the microfluidic device with an attachment (blue) for placing cell cultures in the collagen. (C) Image of breast-cancer cells inside the collagen gel. (D) Image processing allows for the identification of clusters and counting the number of cells. (E) Dextran concentration profiles in the device. Concentration is reported as normalized fluorescence intensity.} \label{fig:exp}
+\end{figure}
+
+Experiments on breast cancer cell clusters of varying size have begun in order to determine whether invasiveness depends on cluster size. As illustrated in Fig.\ \ref{fig:exp}, the clusters of cells are placed in a microfluidic device in which cells are exposed to concentration gradients of known tumor cell attractors, in particular TGF-$\beta$1 \cite{kwak2014simulation,shin2013development}. The experimental device is composed of three sections. The central section comprises of the collagen matrix in which the cells are placed. The central, collagen gel is neighbored on either side by channels which are composed of different cultures and chemical solutions. For this project, one channel will have a chemoattractant culture whereas the other will be a chemoattractant-free culture medium. The different solutions diffusing from either channel causes a gradient in chemoattractant concentration across the central, collagen gel. Cells seeded in the collagen gel can be imaged in order to track their movement (Fig.\ \ref{fig:exp}C). Collective migration of the cells throughout the surrounding collagen will be measured in order to quantify the invasive potential of the clusters.
+
+The experimental set-up will be reproduced computationally in order to see whether the model can predict the observed behavior. Working in conjunction with experiments will be very helpful in refining the model for the application of tumor cell invasion and understanding the relationship between model parameters and experimental behavior. The model will be able to predict which cluster size exhibits the most efficient collective migration under experimentally determined chemical gradients, analogous to the simulations conducted for Fig.\ \ref{fig:fullMFPT}. Therefore, our collaboration will be able to predict and quantify which cluster size(s) has the highest invasive potential.
+
+The current state of the experiments is that clusters of cells of variable size can be cultured in the collagen and individual cells can be identified (Fig.\ \ref{fig:exp}D). Prof Han's group can image and track individual cell centroids which will prove useful in the future when recording first-passage times. It was recently shown that a gradient of $10 \ \text{kDa}$ Dextran, which has similar diffusive properties to typical growth factors, can be formed successfully across the gel in approximately twenty hours (Fig.\ \ref{fig:exp}E). Observing chemotaxis of cell clusters is the next step in this project.
+
+\subsection{Unit Comparison}
+
+Even without experimental first-passage time data we can still make comparisons between physical experiments and numerical simulations. From experiments on culturing the cells in the hydrogel cell sizes can be compared between experiment and simulation. Experiments report that cells have a radius of $r \approx 10 \mu\text{m}$. In our simulation cells have a target size $A_0 = 50\text{px}^2$ where $\text{px}$ is the length of one simulation lattice site. Setting the simulation target area equal to the average size seen in experiment we find that $1\text{px} = 2.5\mu\text{m}$. With this information we can also convert chemical concentrations to and from simulation units, $9.4\cdot 10^9 \frac{\text{molecules}}{\text{px}^3} = 1 \text{M}$. More simply stated, $1 \text{nM}$
+is equivalent to about $9 \ \text{molecules}/\text{px}^3$.
+The various conversions that can be derived are listed in Table\ \ref{units}.
+
+\begin{table}[t]
+\begin{center}
+\begin{tabular}{ |c|c|c| }
+    \hline
+    \ & Experiment & Simulation \\ \hline
+    Length & $1 \mu\text{m}$ & $0.4 \text{px}$ \\ \hline
+    Chemical Concentration & $1\text{nM}$ & $9.4\text{molecules}/\text{px}^3$  \\ \hline
+    Concentration Gradient & $1\text{nM}/\text{mm}$ & $0.02\text{molecules}/\text{px}^4$ \\ \hline
+\end{tabular}
+\caption{Conversion of physical units to computer simulation units.}
+\label{units}
+\end{center}
+\end{table}
+
+Using these conversions we are able to model extremely small chemical concentrations and gradients, which approach the theoretical limits of collective sensing. From simulations we see that cell clusters in the model can successfully chemotax in these conditions. It is yet to be seen whether these findings can be replicated in experiment.
+
+\section{Part 3: Systematic Comparison of Collective Migration Modes}
+
+The collective sensing model clearly succeeds in its goal of producing collective chemotaxis in the presence of chemical gradients. However, this is not the sole model that can produce collective behavior. It is important to investigate alternative models which can also produce collective migration in order to quantitatively compare how well collective sensing and migration performs. One such set of models uses the many wrongs principle in which global behavior emerges from local interactions.
+
+\subsection{Background Information}
+
+Recent experiments on cancer cells and mammalian skin cells show that collective behavior may depend on cell density and can emerge from only a few biased, leading cells \cite{deisboeck2009collective}. Both of these qualities are present in a many wrongs model of migration \cite{vicsek1995novel,coburn2013tactile}. The many wrongs principle is based on the idea that sampling many inaccurate measurements will yield a single, more accurate measurement because individual measurement error is suppressed due the number of samples available to the whole group \cite{simons2004many}. Theoretical models of migration show that simple interaction rules between individuals results in group level migration \cite{vicsek1995novel}. Interactions between group members act to average over the errors in individuals' information, thereby decoupling the group behavior from the properties of the individual.
+
+The collective behavior of a group of cells utilizing the many wrongs principle has been studied. In the theoretical and numerical study conducted by Coburn et al., cells are composed of a circular body along with a polarized region of protrusions, and cells migrate in the direction of their protrusions \cite{coburn2013tactile}. For systems of collective cell migration it is important to choose an interaction rule that accurately represents cells and their limitations. The interactions are governed solely by physical cell-cell contact which is justified by the fact that cells have highly localized information of their neighbors so the possible effects of diffusive signaling molecules are neglected. In the model when two cells make contact the protrusions collapse at the location of the collision. The inelastic collision breaks the symmetry of protrusions causing a reorientation of each cell's polarization and protrusions are reformed along the polarization direction after the collision. In between collisions the cells randomly reorient their protrusions and thereby changing direction.
+
+Through simulations with randomly initialized cell locations and orientations it was shown that the group of cells eventually achieved collective alignment and migration given sufficient cell density. Next, simulations were conducted to model the behavior of cells in response to a chemotactic gradient. In this case the cells always reoriented themselves between collisions towards the desired, gradient direction. Once again, the group of cells successfully aligned itself producing collective migration. This phenomenon was shown to be robust to changes in parameters, so we can infer that the alignment of the group of cells is independent of the mechanism with which individual cells detect the gradient. For example, when cells were made to more strongly align themselves in the desired direction it only acted to decrease the time it took to achieve collective migration, but there was no transition from an unordered to a collective phase of migration. This further reinforces the paper's statement that the details of the underlying sensing mechanism are not crucial to achieving collective migration.
+
+\subsection{Many Wrongs Model of Collective Migration}
+
+In developing our own many wrongs model and its corresponding numerical simulations we can directly compare how it performs with respect to the collective sensing and migration model. Although the work by Coburn et al. shows that the underlying mechanism for individual sensing is not crucial to achieving collective migration it may play a role in determining the most efficient mode of migration. It is also known that for shallow enough chemical gradients individual cells can no longer chemotax while communicating clusters of cells can \cite{ellison2015cell} so these limits can also be explored. Therefore, we will fully implement individual cell sensing of a chemical gradient along with it's associated error (Eq.\ \ref{eq:g}), and individual cell's polarization will be biased in the measured direction of the chemical gradient. In doing so we can directly compare how the two models for collective migration perform in the presence of various chemical concentrations and gradients. It may be that the collective sensing model works best for some specific range of concentrations and gradients, while the many wrongs model is better suited for another range.
+
+
+\chapter{Outlook}
+
+For the near term, our goal is to complete our investigation into the scaling properties of the MFPT for the collective sensing and migration model in order to understand where and why there exists an optimal cluster size for shortest MFPT. Alongside finishing the first part of the thesis our collaboration with Professor Han will continue to progress and we will begin to compare theoretical predictions to experimental results. In particular, we will first use the experiments to test the prediction that there is an optimal cluster size that minimizes the MFPT. These experimental data will also allow us to relate model parameters to experimental observables and in doing so, extend our model to different biological systems. Our long term goals are to flesh out our many wrongs model of collective migration to ensure that the model considered can be directly compared to the previously completed model of collective sensing and migration.
+
+
+% \bibliographystyle{unsrt}
+\bibliography{../../bib/bio_exp,../../bib/bio_review,../../bib/drugs,../../bib/models,../../bib/sensing}
+
+\end{document}

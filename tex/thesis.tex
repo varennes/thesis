@@ -1,0 +1,102 @@
+\documentclass[ece,dissertation]{puthesis}
+
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{subfigure}
+
+\title{Computational Study of Collective Cell Sensing and Multicellular Migration}
+% \title{%
+%   An Example Thesis Done with LaTeX\\
+%   that has a Very Long Title%
+% }
+
+\author{Julien Varennes}{Varennes, Julien}
+
+\pudegree{Doctor of Philosophy}{PhD}{May}{2018}
+
+\majorprof{Andrew Mugler}
+\campus{West Lafayette}
+\let\en=\ensuremath
+\campus{West Lafayette}
+
+
+%
+% My command definitions not specific to my thesis.
+%
+
+% CHANGE NEXT LINE?
+% \input{mydefs}
+
+% Let typing "\en" be exactly the same as typing "\ensuremath".
+% \let\en=\ensuremath
+
+% Set things up so \margins will show where the margins on the page are.
+\newcommand{\margins}{\Repeat{Show where the margins for the page are.}{4}}
+% Define a \ve command with two arguments, so if it called with
+%     \ve an
+% it will expand to
+%     {\en{a_1},~\en{a_2},\ \ldots,~\en{a_{n}}}
+\newcommand{\ve}[2]{\en{#1_1},~\en{#1_2},\ \ldots,~\en{#1_{#2}}}
+
+
+% To LaTeX only some parts of your thesis put the
+% names of the parts to include here.  For example,
+% \includeonly{front} would only process front.tex.
+% \includeonly{front,introduction} would only process
+% front.tex and introduction.tex.
+% To print the final copy of your thesis put a '%'
+% in front of the \includeonly command and run LaTeX
+% three times to make sure that all cross-references
+% are correct.  Then run BibTeX once and LaTeX twice
+% more.
+% CHANGE NEXT LINE?
+%\includeonly{front,introduction}
+
+\begin{document}
+
+% Start a new volume for your thesis.
+% All theses must have at least one volume.
+% If your thesis has multiple volumes put another "\volume"
+% command between chapters below.
+\volume
+
+% Front matter:
+%     dedication
+%     acknowledgments
+%     preface
+%     table of contents
+%     list of tables
+%     list of figures
+%     list of symbols
+%     list of abbreviations
+%     nomenclature
+%     glossary
+%     abstract
+%     publication
+\include{front}
+
+\include{introduction}
+
+\include{summary}
+
+% \include{recommendations}
+
+\include{bibliography}
+
+% Use "\appendix" for one appendix or "\appendices" for more than one
+% appendix.
+% \appendices
+% \include{demo-citations}
+% \include{demo-figures}
+% \include{demo-mathematics}
+% \include{demo-multicols}
+% \include{demo-tables}
+% \include{demo-text}
+
+% A vita is optional for masters theses
+% and required for doctoral dissertations.
+% Reference: TM2006 page 13.
+% CHANGE NEXT LINE?
+% \include{vita}
+
+\end{document}
