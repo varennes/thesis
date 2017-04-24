@@ -1,6 +1,3 @@
-%
-%  summary.tex  2007-02-06  Mark Senn  http://www.ecn.purdue.edu/~mark
-%
 
 \chapter{Limits to Collective Chemotaxis}
 
@@ -17,7 +14,7 @@ $\{N^{-2}, N^{-3/2}, N^{-1}\}$ for 1D, 2D, and 3D, respectively, whereas in IC i
 
 \begin{figure}
     \centering
-        \includegraphics[width=0.45\textwidth]{fig1_submit.png}
+        \includegraphics[width=0.45\textwidth]{../fig/ch3_fig1.pdf}
     \caption{(a) We study the chemotactic performance of 1D chains, 2D sheets, and 3D clusters of cells. (b) In individual-based chemotaxis (IC), cells in the collective polarize based on their own gradient measurement. (c) In emergent chemotaxis (EC), cell polarization depends on intercellular interactions: cells on the edge polarize based on their measurement of the concentration, and cells in the bulk do not polarize. In both mechanisms the total polarization $\vec{P}$ will fluctuate in magnitude and direction due to noise in cell measurements.} \label{fig:1}
 \end{figure}
 
@@ -50,7 +47,7 @@ Therefore, understanding the behavior of $\vec{P}$ will inform us of the collect
     = \frac{\text{Var}[v_z]}{\langle v_z \rangle^2}.
 \end{equation}
 To investigate $\langle P_z\rangle$ and $\epsilon^2$ for the IC model,
-we first perform particle-based simulations of the chemoattractant in the presence of the permeable cells \cite{supinfo,SIcode1}. We find that the total mean polarization $\langle \vec{P} \rangle$ points solely in the gradient direction with equal magnitude regardless of dimensionality [Fig.\ \ref{fig:2}(a), blue data points]. Indeed, Eq.\ \ref{eq:ICcell} indicates that a single cell will have mean polarization proportional to the concentration difference across the cell,
+we first perform particle-based simulations of the chemoattractant in the presence of the permeable cells \cite{supinfo,ch3code}. We find that the total mean polarization $\langle \vec{P} \rangle$ points solely in the gradient direction with equal magnitude regardless of dimensionality [Fig.\ \ref{fig:2}(a), blue data points]. Indeed, Eq.\ \ref{eq:ICcell} indicates that a single cell will have mean polarization proportional to the concentration difference across the cell,
 $\langle \vec{p}_i \rangle = \pi a^4g \hat{z}/3$,
 regardless of the cell's location.
 Therefore the mean collective polarization is geometry-independent, depending only on the number of cells present,
@@ -61,7 +58,7 @@ as shown in Fig.\ \ref{fig:2}(a) (blue lines).
 
 \begin{figure}[t]
     \centering
-        \includegraphics[width=0.49\textwidth]{fig2_submit}
+        \includegraphics[width=0.49\textwidth]{../fig/ch3_fig2.pdf}
     \caption{(a) Mean cluster polarization and (b) relative error for both mechanisms of collective chemotaxis in every configuration. Points are simulation data, colored lines are analytical predictions. 1D EC data plotted with respect to $N-1$.} \label{fig:2}
 \end{figure}
 
@@ -262,26 +259,20 @@ This advantage arises due to the ways that errors accumulate in the two mechanis
 %whereas for IC it scales as $\epsilon^2 \sim N^{-1}$ regardless of geometry. One and two-dimensional EC collectives have lower relative error than IC, suggesting that the improved chemotactic precision along with the ability for cell differentiation to occur may explain the prevelance of EC migration in cellular biology. We also connected our theoretical scalings to experimental observables, such as mean speed and chemotactic index, in the hopes that our findings can be tested with future experiments.
 
 
-\bibliographystyle{apsrev}
-\bibliography{refs}
-
 \newpage
 
 
-\widetext
 \begin{center}
 \textbf{\large Supplementary Information for \\ ``Emergent versus Individual-based Multicellular Chemotaxis''}
 \end{center}
 
-\renewcommand{\thefigure}{S\arabic{figure}}
-\renewcommand{\theequation}{S\arabic{equation}}
-\setcounter{equation}{0}
-\setcounter{figure}{0}
+% \renewcommand{\thefigure}{S\arabic{figure}}
+% \renewcommand{\theequation}{S\arabic{equation}}
+% \setcounter{equation}{0}
+% \setcounter{figure}{0}
 
 % \renewcommand{\bibnumfmt}[1]{[S#1]}
 % \renewcommand{\citenumfont}[1]{S#1}
-
-\onecolumngrid
 
 
 \section{Particle-based Simulations}
@@ -753,7 +744,7 @@ For the three-dimensional cluster, numerical methods must be used in order to fi
 
 \begin{figure}[ht]
     \centering
-        \includegraphics[width=0.50\textwidth]{sup3dEC}
+        \includegraphics[width=0.50\textwidth]{../fig/ch3_si1.pdf}
     \caption{$\text{Var}[P_z]$ for a 3D cluster of EC cells. Cluster variance shown in red. Pink circles are the single cell variance contributions $V$, and pink diamonds are the cell-cell covariance contributions $C$.} \label{fig:S2}
 \end{figure}
 
@@ -766,7 +757,7 @@ $\text{Var}[P_z] \sim N$ as in Table I of the main text.
 
 \begin{figure}[ht]
     \centering
-        \includegraphics[width=0.65\textwidth]{si_error1_original}
+        \includegraphics[width=0.65\textwidth]{../fig/ch3_si2.pdf}
     \caption{(a) Short-time integration relative error results. Data points are of simulations for $T= \frac{1}{100} \tau_D$. (b) Exponential concentration profile relative error results. The mean concentration profile is $\bar{c}(z) = c_0 e^{-z/\lambda}$, the lengthscale $\lambda=\sqrt{D/\beta}$ is set by the diffusion coefficient $D$ and the molecule decay rate $\beta$. Lines are from original analytical predictions using $T > \tau_D$ and a linear concentration profile.} \label{fig:S1}
 \end{figure}
 
