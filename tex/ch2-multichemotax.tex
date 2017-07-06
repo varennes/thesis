@@ -12,11 +12,11 @@ How the phenomena of collective sensing and multicellular migration are connecte
 Here we focus our attention on stochastic processes governing collective gradient sensing and cell motility. First, the limits to collective gradient sensing are briefly reviewed and our implementation of multicellular LEGI described. Information gained from collective sensing then must be used to direct cell motion. We develop a model which takes into account the fluctuating shape of cells while coupling cell motility to noisy collective gradient sensing. We model intercellular communication via the direct exchange of messenger molecules between cells. Candidate mediators of such intercellular communication have been recently identified in \textit{Drosophila} development \cite{ramel2013rab11}, and other studies suggest intercellular communication's involvement in organoid branching, angiogenesis, and cancer \cite{ellison2016cell,gerhardt2003vegf,hsu2000cadherin,friedl2009collective}. We study cluster migration in shallow gradients where the change in concentration across a cell width is very small relative to the background concentration. This regime is of prime interest since experiments show that collectives can respond to these shallow gradients whereas single cells cannot \cite{ellison2016cell,malet2015collective,rosoff2004new}. By explicitly modeling the stochastic processes of sensing and migration this model places constraints on the collective behavior of cells and predicts an optimal cluster size for fastest chemotaxis. We conclude by discussing our model's implications for cell migration experiments.
 
 
-\begin{figure*}
+\begin{figure}
     \centering
-        \includegraphics[width=.75\textwidth]{../fig/ch2_fig1.png}
+        \includegraphics[width=0.8\textwidth]{../fig/ch2_fig1.png}
     \caption{Model implementation. (A) Cell polarization is biased by multicellular sensing. On average, the cells on the left and right edges will measure negative and positive values of $R$, respectively. This causes the left-edge (Cell 1) and right-edge (Cell 3) cells to polarize in the direction of the gradient, while cells in the middle (Cell 2) are on average not polarized since $\bar{R} \approx 0$. Polarization vectors $\vec{p}$ are red, repulsion vectors $\vec{q}$ are black. (B) Simulations are implemented using the Cellular Potts Model (CPM). Cells comprise of simply connected lattice points. There are adhesion energies associated with different types of contact: cell-cell, $\alpha$ (blue-dashed line), and cell-ECM, $\beta$ (yellow-dashed line). Cell motility is modeled by the addition/removal of lattice points (pink). Each cell has a center-of-mass (white dot), a polarization vector, $\vec{p}$ (red) and a repulsion vector, $\vec{q}$ (black).} \label{fig:model}
-\end{figure*}
+\end{figure}
 
 
 \section{MODEL}
@@ -207,13 +207,13 @@ In addition to calculating the energy of the system, at each MC step the $X$ and
 \section{Results}
 
 
-\begin{figure*}[t]
+\begin{figure}[ht]
     \centering
-        \includegraphics[width=0.7\textwidth]{../fig/ch2_fig2.png}
+        \includegraphics[width=0.8\textwidth]{../fig/ch2_fig2.png}
     \caption{Characterizing the emergent multicellular migration. (A) Snapshot from simulation. Individual cells are distinguished by color and white arrows represent their polarization vectors. The cluster centroid is initially located along the gray dashed line and must cross the black dashed line in order to record a first-passage time event. (B) A heat-map of MFPT in units of minutes as a function of cell-ECM adhesion energy, $\beta$ and polarization bias strength, $\epsilon$. Warmer colors represent higher MFPT values (colorbar). Parameter values for the heat-map: $N = 20$, $\bar{c} = 10\text{nM}$, $g = 0.004\text{nM}/\mu\text{m}$, $\Gamma = 80 (\mu\text{m min.})^{-1}$. Illustrations in (C) represent cluster migratory behavior in their respective regimes of parameter space. Larger values of $\epsilon$ correspond to larger cell polarization vectors (red arrows), whereas larger values of $\beta$ correspond to an ECM that is more difficult to traverse. (D) Mean cluster size
     $\langle N_\text{sub} \rangle$
     as a function of the total number of cells in the system $N$. Regime 1: $\beta = 1.5$, $\epsilon = 1.0$. Regime 2: $\beta = 3.5$, $\epsilon = 0.8$} \label{fig:heat}
-\end{figure*}
+\end{figure}
 
 
 We simulate clusters of various sizes migrating in response to shallow constant chemical gradients over a fixed distance (Fig.\ \ref{fig:heat}A, Movie S1). The simulation results were calibrated using the cluster migration data from Malet-Engra et al.\ \cite{malet2015collective} and assuming a typical cell radius $a = 10 \mu\text{m}$. Similar to the experimental study, initial simulations were conducted with a gradient and background concentration equivalent to $\bar{g} = 0.001 \text{nM}/\mu\text{m}$ and $\bar{c} = 1 \text{nM}$. We found that increasing the gradient and background concentration values to those reported in Table \ref{table:param} (see pg.\ 11), which still maintain the limit
@@ -227,7 +227,7 @@ while keeping $\beta$ fixed (regime 1 of Fig.\ \ref{fig:heat}B).
 In this case the cell's polarization becomes large enough to overcome the intercell adhesion energy causing the cluster of cells to scatter as illustrated in Fig.\ \ref{fig:heat}C. To further characterize whether a cluster will scatter or remain persistently connected, we track the mean subcluster size $\langle N_\text{sub} \rangle$, defined as the average cluster size weighted by the number of cells present in each constituent cluster (Fig.\ \ref{fig:heat}D). Although cells' initial configuration is that of a single cluster, partial scattering may occur stochastically and reversibly, leading to a value of $\langle N_\text{sub} \rangle$ that is less than the cluster size $N$. As seen in Fig.\ \ref{fig:heat}D, the persistence $\langle N_\text{sub} \rangle/N$ is largely independent of $N$, and clusters in the parameter space of regime 2 are more persistent than those corresponding to regime 1 where cells are likely to scatter permanently. Overall, we see that there is a large region in parameter space which yields physically realistic behavior, and the model breaks down in the limits where we would expect it to. With this in mind we further examine simulations within regime 2 of parameter space.
 
 
-\begin{figure}[t]
+\begin{figure}[ht]
     \centering
         \includegraphics[width=0.45\textwidth]{../fig/ch2_fig3.png}
     \caption{Tradeoff between sensing and drag leads to a minimum mean first-passage time (MFPT) with cluster size. $\Gamma_0 = 0.80 (\mu\text{m} \ \text{min})^{-1}$. (A) MFPT for various values of the exchange rate per unit contact-length $\Gamma$. (B) Relative error in gradient sensing for various values of $\Gamma$. (C) Area $A$ and perimeter $P$ scaling relationships with the number of cells $N$ in a cluster. (D) MFPT results in A on a log-log scale, compared with the geometric prediction arising from C. All error bars represent standard deviation.} \label{fig:results}
@@ -268,9 +268,9 @@ To the extent possible, our model has been constructed and parameterized using c
 How do our model predictions compare to experiments? There have been many studies on collective migration \cite{cheung2013collective,puliafito2015three,defranco2008migrating,ramel2013rab11} though only one (to our knowledge), by Malet-Engra et al.\ \cite{malet2015collective}, measures migratory properties as a function of cluster size. The experiments conducted by Malet-Engra et al.\ reveal that beyond a minimum cluster size, the cluster velocity saturates to a maximal value and then remains constant with increasing cluster size. In our study, we find that when communication is strong, the MFPT -- which is inversely related to the mean velocity -- also saturates to a minimal value and remains constant for a large range of cluster sizes. As shown in Fig.\ \ref{fig:results}A (red curve), as the cluster size increases from about 30 to 200 cells the MFPT remains relatively constant, in qualitative agreement with the aforementioned experimental results. This saturation regime occurs when communication is sufficiently strong to suppress, over a large range of cluster sizes, the drag-induced slowdown. Our findings thus suggest that sensory information is reliably transferred throughout the clusters of lymphocytes studied by Malet-Engra et al., and that communication is strong enough that drag does not strongly constrain migration speed for the cluster sizes analyzed.
 
 
-\begin{figure}[t]
+\begin{figure}[ht]
     \centering
-        \includegraphics[width=0.45\textwidth]{../fig/ch2_fig4.png}
+        \includegraphics[width=0.7\textwidth]{../fig/ch2_fig4.png}
     \caption{Prediction to distinguish collective from individual chemotaxis in experiments. (A) Expected MFPT behavior for cluster migration driven by collective sensing. (B) Expected MFPT behavior for cluster migration driven by local interactions.} \label{fig:mfpt}
 \end{figure}
 

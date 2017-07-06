@@ -1,5 +1,5 @@
 
-\chapter{Physical Limits to Multicellular Sensing}
+\chapter{Introduction}
 
 Cells gather information about their environment by sensing chemical concentrations and concentration gradients. In fact, cells can do this with remarkable precision. The amoeba \textit{Dictyostelium discoideum} is sensitive to differences on the order of ten molecules between its front and back half \cite{song2006dictyostelium}. It is therefore natural to ask how well cells can sense their environment, and whether the error in the sensing capabilities can be quantified. These questions were first answered by Berg and Purcell almost 40 years ago \cite{berg1977physics}. They considered a simplified model of a cell in order to calculate a lower limit on the relative error in its measurement of a chemical concentration, and they also showed that the sensory machinery of the \textit{Escheria coli} bacterium operates very near this physical bound. The question of how well single cells measure chemical concentrations has been revisited to account for binding kinetics, spatiotemporal correlations and spatial confinement
 \cite{bialek2005physical, kaizu2014berg, bicknell2015limits}.
@@ -7,7 +7,7 @@ These studies have helped shape our understanding of how cells sense their envir
 
 In many biological contexts cells act in close proximity to one another so their interactions may not be easily ignored when trying to understand the physical limits to sensing. In fact, these interactions can enhance cell sensitivity to the environment. Using communication, clusters of mammary epithelial cells can detect chemical gradients that single cells cannot \cite{ellison2016cell}, and cultures of neurons have been shown to be sensitive to single molecule differences across an individual neuron's axonal growth cone \cite{rosoff2004new}. In studying multicellular sensing of chemical concentrations and gradients it is important to recognize that in order to collect these spatially separated measurements from individual cells the information must be communicated to some common location. Explaining how cells efficiently communicate information has been the topic of recent research. Similar to the limits set by Berg and Purcell, the physical limits to communicated, collective gradient sensing have been derived \cite{mugler2016limits,ellison2016cell} by using a multicellular version of the local excitation-global inhibition (LEGI) communication model \cite{levchenko2002models}, one of the simplest adaptive mechanisms of gradient sensing. With these studies the physical limits of cell sensing have been extended from single cells to multicellular collectives.
 
-In parallel to studies on collective sensing, much recent work has focused on collective cell behavior, including migration. For example, processes in development, cellular migration, pathogenic response, and cancer progression all involve many cells acting in a coordinated way \cite{friedl2010plasticity,rasmussen2006quorum,boelens2014exosome,cheung2013collective,vader2014extracellular}. Work has been done in studying how these multicellular systems behave from a mechanical perspective. Simple mechanical models have successfully explained observed collective behaviors such as cell streaming, cell sorting, cell sheet migration, wound healing, and cell aggregation \cite{kabla2012collective,szabo2010collective,basan2013alignment,janulevicius2015short}. Though these studies accurately model some form of collective cell migration they fail to include the affects of multicellular sensing in driving the mechanics at play. In many biological systems, cells are capable of communicating with one another, so understanding how these cells translate that information into mechanical action is of prime interest.
+In parallel to studies on collective sensing, much recent work has focused on collective cell behavior, including migration. For example, processes in development, cellular migration, pathogenic response, and cancer progression all involve many cells acting in a coordinated way \cite{friedl2010plasticity,rasmussen2006quorum,boelens2014exosome,cheung2013collective,vader2014extracellular}. Work has been done in studying how these multicellular systems behave from a mechanical perspective. Simple mechanical models have successfully explained observed collective behaviors such as cell streaming, cell sorting, cell sheet migration, wound healing, and cell aggregation \cite{kabla2012collective,szabo2010collective,basan2013alignment,janulevicius2015short}. Though these studies accurately model some form of collective cell migration they fail to include the effects of multicellular sensing in driving the mechanics at play. In many biological systems, cells are capable of communicating with one another, so understanding how these cells translate that information into mechanical action is of prime interest.
 
 Here we focus our attention on collective cell migration and how cells use multicellular communication to direct their motion. As summarized, much is known regarding multicellular communication and its physical limits as well as how to model the mechanics of collective behavior. The connection between these two fields, however, is missing. The primary goal of this research is to connect the studies of the physical limits of cell communication to those of cellular dynamics in order to gain deeper insight into collective behavior. These two fields can be connected by creating a model which links the collective sensing output to the polarization of migrating cells. Furthermore, by creating numerical simulations of collective sensing and migration we can relate our model to real biological systems.
 
@@ -31,9 +31,9 @@ Here we review recent progress on modeling sensing and migration in cells and ce
 
 
 
-\begin{figure}[tb]
+\begin{figure}[ht]
     \centering
-        \includegraphics[width=0.8\columnwidth]{../fig/ch1_fig1.pdf}
+        \includegraphics[width=0.8\textwidth]{../fig/ch1_fig1.pdf}
     \caption{Metastatic invasion is guided by chemical attractants and can occur via (A) single cells or (B) multicellular groups. (C) Drugs are delivered to the tumor environment in order to prevent tumor growth and metastasis. Drugs may cause cell death (orange), block cell-to-cell communication (purple), or prevent cell migration (blue).}
 \label{overview}
 \end{figure}
@@ -53,15 +53,15 @@ $\sigma_c/\bar{c} = \sigma_n/\bar{n} = 1/\sqrt{\bar{c} V}$.
 
 
 
-\begin{figure*}[tb]
+\begin{figure}[ht]
     \centering
-        \includegraphics[width=0.75\textwidth]{../fig/ch1_fig2.pdf}
+        \includegraphics[width=0.8\textwidth]{../fig/ch1_fig2.pdf}
     \caption{
     (A) An idealized cell as a permeable sphere that counts molecules inside its volume.
     (B) A cell counts molecules in two compartments in order to estimate a concentration gradient.
     (C) The local excitation--global inhibition (LEGI) model of multicellular gradient sensing. $Y$ molecules diffuse between neighboring cells, whereas $X$ molecules do not. The difference between $X$ and $Y$ counts in a given cell reports the extent to which that cell's concentration measurements are above the average.}
     \label{sensing}
-\end{figure*}
+\end{figure}
 
 
 
@@ -180,12 +180,12 @@ Broadly speaking, the mechanisms of collective migration can be divided into thr
 
 
 
-\begin{figure*}[tb]
+\begin{figure}[ht]
     \centering
-        \includegraphics[width=0.75\textwidth]{../fig/ch1_fig3.pdf}
+        \includegraphics[width=0.8\textwidth]{../fig/ch1_fig3.pdf}
     \caption{Mechanisms of collective migration: (A) individual sensing and migration (the ``many wrongs'' mechanism), (B) individual sensing but collective migration (emergent chemotaxis), and (C) collective sensing and migration. Implementations of collective migration: (D) in force-based models, dynamics evolve from stochastic forces acting on each cell; (E) in energy-based models, dynamics evolve via energy minimization with thermal noise. E shows the cellular Potts model framework, in which cells are collections of lattice sites, and cell-cell (dashed blue) and cell-environment (dashed yellow) contacts contribute to the energy of the system.}
 \label{models}
-\end{figure*}
+\end{figure}
 
 
 
