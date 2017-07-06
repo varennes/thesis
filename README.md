@@ -20,6 +20,8 @@ Start off with collab paper since it is about single cell chemotaxis. Single cel
 
 Supplementary information of collab project and ECvIC need to merged into their respective chapters.
 
-## References
+Abstract needs to be changed.
+
+# References
 
 All references bibtex information located in `/ref/all.bib`.
