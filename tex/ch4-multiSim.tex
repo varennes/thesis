@@ -145,32 +145,6 @@ In the presence of a gradient, cells on the edge near the lower-end of the chemi
 
 \subsection{Computational Implementation}
 
-
-% \begin{table*}[hb]
-% \centering
-% \footnotesize
-% \begin{tabular}{ |c|c|c| }
-% \hline
-% Parameter & Value & Notes \\ \hline
-% Concentration $\bar{c}$ & $10 \text{nM}$ & Assumes $\bar{c} \gg a\bar{g}$ for shallow gradients \cite{malet2015collective,ellison2016cell} \\
-% Gradient $\bar{g}$ & $0.04 \text{nM/}\mu\text{m}$ & \\ \hline
-% LEGI Molecule Production Rate $\kappa$ & $19.72 \text{min}^{-1}$ & Assumes $ \{\kappa,\mu\} \gg r$ \\
-% LEGI Molecule Degradation Rate $\mu$ & $19.72 \text{min}^{-1}$ & i.e.\ biochemical signaling is faster than motility response \\ \hline
-% Global Reporter Exchange Rate $\Gamma$ & $80 (\mu\text{m} \ \text{min})^{-1}$ & Varied in Fig.\ \ref{fig:results} \\ \hline
-% Polarization Bias Strength $\epsilon$ & 0.8 & Varied in Fig.\ \ref{fig:heat} \\ \hline
-% Polarization Decay Rate $r$ & $3.94 \text{min}^{-1}$ & Sets polarization memory time, as used in \cite{szabo2010collective} \\ \hline
-% Relaxed Cell Area $A_0$ & $315 \mu\text{m}^2$ & Assumes cell radius $10 \mu\text{m}$ \cite{leber2009molecular} \\ \hline
-% Relaxed Cell Perimeter $P_0$ & $3.6\sqrt{A_0} \mu\text{m}$ & Assumes circular resting shape \\ \hline
-% Cell-cell Contact Energy $\alpha$ & 1.0 & Sets energy scale \\
-% Cell-ECM Contact Energy $\beta$ & 3.5 & $2\beta > \alpha$ for cell adhesion \cite{graner1992simulation} (Varied in Fig.\ \ref{fig:heat}) \\ \hline
-% Area Energy Cost $\lambda_A$ & 1.5  & Prevents ``stringy'' cell-shapes \\
-% Area Energy Cost $\lambda_P$ & 0.01 & \\ \hline
-% \end{tabular}
-% \caption{Table of parameter values. Energy costs are in units of $k_B T$, where $k_B T$ is the thermal energy of the CPM Monte Carlo scheme.}
-% \label{table:param}
-% \end{table*}
-
-
 Computational simulations are conducted in order to understand the dynamics that evolve from the model of collective sensing and migration. The source code for the simulations can be found here \cite{ch2code}. The implementation chosen is the Cellular Potts Model (CPM) \cite{graner1992simulation,swat2012multi} although other cellular automata models are possible as well \cite{ermentrout1993cellular,maire2015molecular,mente2015analysis}. The CPM is widely used for simulating cell-centric systems. Despite its relative simplicity, this computational implementation can qualitatively reproduce diverse biological phenomena \cite{maree2007cellular}. The CPM is a very good implementation for simulating systems wherein cell geometry is crucial to the dynamics of the system. Using CPM many studies, some involving cell polarization and mechanical-based coupling, successfully reproduce epithelial cell streaming, cell sorting, chemotaxis and collective migration \cite{maclaren2015models,kabla2012collective,szabo2010collective}.
 
 In the CPM cells exist on a discrete lattice and are represented as groupings of lattice points. Simply-connected groups of lattice sites $x$ with the same integer values for their \textit{lattice label} $\sigma(x)>0$ comprise a single cell. The extracellular matrix (ECM) is labeled with the lattice label $\sigma(x)=0$. Cells have a desired size and perimeter from which they can fluctuate, and cells adhere to their neighboring environment with an associated adhesion energy. The energy of the whole system is the sum of contributions from adhesion $J_{i,j}$, area-restriction $\lambda_A$, and perimeter-restriction $\lambda_P$ terms,

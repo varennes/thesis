@@ -104,16 +104,16 @@ Here we find that TGF$\beta$ is a strong chemoattractant (Fig.\ \ref{fig:ch2_2}a
 In summary, adding a gradient of EGF or TGF$\beta$ results in chemotaxis as indicated by CI values significantly above zero. The experimental parameters' affects on chemotactic behavior are consolidated into Fig.\ \ref{fig:ch2_2}d. Movement in the CI-CR plane of Fig.\ \ref{fig:ch2_2}d indicates changing persitence and accuracy of chemotaxis, whereas the size of each data point represents the average speed. Under all conditions the cells move at speeds of $\sim 10 \mu\text{m}/\text{hr}$. An increase in speed is observed when the MD-MB-231 cells are exposed to either growth factor. This is not not a surprising result since chemical agents that promote persistent or directed migration often results in increased motility \cite{petrie2009random}. EGF and TGF$\beta$ both produce similarly persistent motion though EGF promotes more motility as indicated by its fastest cell speed.
 
 
-\section{Simulation Results}
+\section{Chemotaxis Simulations}
 
 The experiments tell us how cells respond to specific concentration profiles of EGF and TGF$\beta$. However, experiments do not tell us how chemotactic performance varies from experimental configuration to the next, and we are limited to testing conditions that experimentally feasible. Can we develop a model of chemotaxis that is capable of predicting chemotactic performance before doing experiments?
 
 Here we conduct single cell chemotaxis simulations to further probe cell chemotactic performance. With simulations environmental parameters such as collagen stiffness, background chemical concentration, and gradient can all be easily varied over a wide range of values which may not be experimentally practical. These experimental parameters are individually varied to develop predictions on how each each parameter affects chemotactic accuracy (CI), persistence (CR), and speed.
 
-Cell chemotaxis simulations are implemented using the Cellular Potts Model (CPM) similar to the formulation used in our previous study \cite{varennes2016collective}. Briefly, in the simulations a cell moves on a lattice by stochastically making protrusions and contractions along its body (Fig.\ \ref{fig:ch2_3}a). The direction in which cell protrusions are formed is biased by the cell's internal polarization vector \red{[CITE]}. Cell polarization is dependent on sensing of chemicals in the local environment (chemotaxis) and on the cell's previous direction of motion (persistence). A detailed description of the CPM simulations can be found in in the supplement and the source code can be found here \red{[CITE]}.
-The length and time scales of the simulation are calibrated to the experimentally observed average cell size and speed over all assays. Internal cellular parameters, such as the cell polarization strength and decay rate, are then calibrated such that the simulation's CI and CR values are approximately the same as those observed in experiments (see supplement).
 
-\begin{figure}[t]
+\subsection{Computational Implementation}
+
+\begin{figure}
     \centering
     \includegraphics[width=0.80\textwidth]{../fig/ch2_fig3.png}
     \caption{a) Screen shot of simulation. Cell (gray) is migrating towards increasing chemical concentration, and the white line traces out the cell's path. Inset, illustration of the CPM. A Cell is comprised of simply connected lattice sites. There is an adhesion energy associated with cell-collagen contact, $\alpha$ (red-dashed line). Cell motility occurs through the addtion/removal of lattice sites (light-gray). The white dot represents the cell's center of mass and the black arrow its polarization vector $\vec{p}$. b) Simulation results. Environmental parameters collagen stiffness $\alpha$ (red), background concentration $c_0$ (green), and gradient $g$ are varied (blue).
@@ -121,7 +121,75 @@ The length and time scales of the simulation are calibrated to the experimentall
     \label{fig:ch2_3}
 \end{figure}
 
-Next we vary the environmental parameters of collagen stiffness $\alpha$, background concentration $c_0$, and gradient $g$ to study their effects on chemotactic performance. Fig.\ \ref{fig:ch2_3}b shows the resulting CI, CR and speed values when environmental parameters are changed. Each data point along a parameter's trajectory indicates the CI and CR values, while the size of the data point indicates the average speed for that particular choice of parameter value. All other parameters are held fixed along each trajectory. The background concentration is varied over three orders of magnitude whereas both the gradient and collagen stiffness are varied over one order of magnitude.
+Cell chemotaxis simulations are implemented using the Cellular Potts Model (CPM) \cite{graner1992simulation,swat2012multi}. The CPM used here is similar to that used in our previous study \cite{varennes2016collective}.
+\red{The source code for the simulations can be found here [CITE].}
+Briefly, the cell in the CPM are composed of a finite set of simply connected lattice sites $\{ x \}$ (Fig.\ \ref{fig:ch2_3}a, inset).
+Cell lattice sites are given the lattice label $\sigma(x)=1$ whereas the extracellular environment is labeled $\sigma(x)=0$. Cells have a desired size $A_0$ and perimeter $P_0$ from which they can fluctuate, and cells adhere to their neighboring environment with an adhesion energy $\alpha$. The energy of the whole system is the sum of adhesion, area-restriction, and perimeter-restriction terms,
+\begin{equation} \label{eq:CPMu1}
+    u = \alpha N_p + \lambda_A(A_0 - N)^2 + \lambda_P(P_0 - N_p)^2 \ .
+\end{equation}
+$N_p$ is the number of lattice sites that comprise the cell's perimeter, $N$ is the total number of cell lattice sites. The parameters $\lambda_{A}$ and $\lambda_{P}$ are the area and perimeter restriction costs.
+
+Cell motion is a consequence of minimizing the energy of the whole system. This stochastic process is sensitive to thermal fluctuations and is modeled using a Monte Carlo scheme. In a system of $n$ lattice sites, one \textit{Monte Carlo} time step (MC step) is composed of $n$ attempts to copy a random lattice site's label to a randomly chosen neighboring site. An attempt is accepted with probability $P$, which depends on the change in the system's energy $\Delta u$ accrued in copying over the lattice label,
+\begin{equation} \label{eq:prob}
+    P =
+    \begin{cases}
+        e^{-\left( \Delta u - w \right)} &\ \Delta u - w > 0 , \\
+        1 &\ \Delta u - w \leq 0 .
+    \end{cases}
+\end{equation}
+The bias term $w$ acts to bias cell motion in the direction of its polarization, and is necessary in order for cells to exhibit directed motion \cite{szabo2010collective}.
+The bias is defined as
+\begin{equation}
+    w = \Delta\hat{x} \cdot \vec{p} \ ,
+\end{equation}
+with $\Delta\hat{x}$ the unit vector pointing in the change in the cell's center of mass caused by the addition or removal of the lattice site in question, and $\vec{p}$ is the cell's polarization vector (Fig.\ \ref{fig:ch2_3}a, black arrow). The dot product acts to bias cell motion since movement that is parallel to the polarization vector will result in a more positive $w$ which in turn results in a higher acceptance probability (Eq.\ \ref{eq:prob}).
+
+After the random addition and removal of lattice sites occurs during one MC step the cell updates its polarization vector. The time evolution of the cell's polarization vector is defined as
+\begin{equation} \label{eq:CPMp1}
+    \frac{d\vec{p}}{dt} = -r\vec{p} + \Delta\vec{x} + \epsilon \vec{q}\ .
+\end{equation}
+The first term in Eq.\ \ref{eq:CPMp1} results in exponential decay of the cell's current polarization at a rate $r$. $\Delta x$ is the cell's displacement and it creates persistence in cell motion; $\vec{p}$ is reinforced in the direction of motion. The third term represents chemotaxis, with $\epsilon$ the bias strength and $\vec{q}$ an abstraction of the cell's gradient sensing.
+\begin{equation} \label{eq:CPMq1}
+    \vec{q} = \frac{1}{N_P} \sum_{i=1}^{N_P} \frac{c_i-\bar{c}}{\bar{c}} \ \hat{r}_i
+\end{equation}
+$\hat{r}_i$ is a unit vector that points radially outwards from the cell's center of mass to the location of lattice site $i$. $c_i$ is the concentration of the chemoattractant sampled at the lattice site $i$ and $\bar{c}$ is the cell's measurement of the mean concentration in its local environment; $c_i$ is sampled from a Poisson distribution and $\bar{c}$ is the mean from all $c_i$ measured at each lattice site.
+
+
+\subsection{Calibration of Simulation Parameters}
+
+The length and time scales of the simulation are calibrated to the experimentally observed average cell size and speed over all assays. Internal cellular parameters, such as the cell polarization strength and decay rate, are then calibrated such that the simulation's CI and CR values are approximately the same as those observed in experiments.
+
+From experiments we know that cells are on average $400 \mu\text{m}^2$ in size, and we use this to set one lattice site to equal $5 \mu\text{m}$ such that cells occupy $\sim 10$ lattice sites. Next we calibrate the time-scale in simulations by equating the average cell velocity in simulations to approximately that observed experimentally, $\sim 10 \mu\text{m/hr}$. With this we equate a simulation time step to $5 \text{min}$. Finally, we need to calibrate the internal cell parameters. We consider internal cell parameters to be those which are not affected by the environment and are characteristic of the particular cell type we are simulating.
+These include the energy costs of cell area and perimeter fluctuations $\lambda_A$, $\lambda_P$, the polarization decay rate $r$, and the bias strength $\epsilon$. These parameters are set such that the chemotactic index (CI) and chemotactic ratio (CR) recorded in experiments is approximately the same as that observed in experiments. We refer to the collagen stiffness $\alpha$, background concentration $c_0$, and the concentration gradient $g$ as experimental parameters.
+
+In running simulations internal parameters are fixed to the values used for the initial calibration. External parameters are varied (as in Fig.\ 3 of the manuscript) in order to quantify their effects on chemotactic performance. The internal parameter values used as well as the baseline external parameter values are listed in Table \ref{table:ch2_1}.
+
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{ |c|c|c| }
+\hline
+Parameter & Value & Notes \\ \hline
+Concentration $\bar{c}$ & $10 \ \text{nM}$ & \\
+Gradient $g$ & $0.5 \ \text{nM/}\mu\text{m}$ & \\ \hline
+Cell-cell Contact Energy $\alpha$ & 0.7 & Sets energy scale \\ \hline
+Area Energy Cost $\lambda_A$ & 0.3  & Prevents ``stringy'' cell-shapes \\
+Perimeter Energy Cost $\lambda_P$ & 0.01 & \\ \hline
+Polarization Bias Strength $\epsilon$ & 0.1 & \\ \hline
+Polarization Decay Rate $r$ & $2.4 \ \text{hr}^{-1}$ & Sets polarization memory time, as used in \red{[CITE]} \\ \hline
+Relaxed Cell Area $A_0$ & $400 \ \mu\text{m}^2$ & \\ \hline
+Relaxed Cell Perimeter $P_0$ & $3.6\sqrt{A_0} \ \mu\text{m}$ & Assumes circular resting shape \\ \hline
+\end{tabular}
+\caption{Table of parameter values used in all CPM simulations unless stated otherwise. Energy costs are in units of $k_B T$, where $k_B T$ is the thermal energy of the CPM Monte Carlo scheme.}
+\label{table:ch2_1}
+\end{center}
+\end{table}
+
+
+\subsection{Simulation Results}
+
+With length and time scales of the simulation are calibrated and internal cellular parameters fixed, we vary the environmental parameters. Collagen stiffness $\alpha$, background concentration $c_0$, and gradient $g$ are varied to study their effects on chemotactic performance. Fig.\ \ref{fig:ch2_3}b shows the resulting CI, CR and speed values when environmental parameters are changed. Each data point along a parameter's trajectory indicates the CI and CR values, while the size of the data point indicates the average speed for that particular choice of parameter value. All other parameters are held fixed along each trajectory. The background concentration is varied over three orders of magnitude whereas both the gradient and collagen stiffness are varied over one order of magnitude.
 
 We find that varying the background concentration and gradient most significantly affects the accuracy of chemotaxis, not the persistence nor the speed. This is displayed in Fig.\ \ref{fig:ch2_3}b in which both $c_0$ and $g$ have much longer trajectories along the CI axis than along either the speed or CR axis.
 As the background concentration increases, the fluctuations in the diffusing chemoattractant become larger relative to the gradient making it more difficult for the cell to correctly determine the gradient direction. This results in a decreasing CI as $c_0$ increases. Conversely, increasing the gradient enables the cell to more accurately detect the gradient direction resulting in increasing CI values (Fig.\ \ref{fig:ch2_3}b,c).
@@ -176,59 +244,58 @@ The region of chemotactic performance that is theoretically possible overlaps wi
 % In Fig.\ \ref{fig:ch2_5}b we compare the CR and AC timescale values from all experimental conditions. As discussed in the manuscript, going from a uniform to a graded concentration of either EGF or TGF$\beta$ results in a decreased CR value. Similarly, the AC persistence timescale also decreases when going from a uniform to a graded concentration. This indicates that there is a monotonic relationship between CR and $\tau$. As the measured value of CR increases so too will the AC timescale $\tau$. Therefore, quantifying persistence with CR leads to the same patterns and analysis that could have been deduced from using AC.
 
 
-\section{Cell Chemotaxis Simulations}
+% \section{Cell Chemotaxis Simulations}
+%
+% We use the Cellular Potts Model (CPM) to simulate cell chemotaxis in a similar fashion as that prescribed in our previous paper \cite{varennes2016collective}. In the CPM cell's move on a lattice and are comprised of a finite number of lattice sites. Cell movement occurs through the stochastic addition and removal of lattice sites to the cell.
+%
+% The probability of addition or removal of a lattice site is dependent on the change in energy of the system $\Delta u$ and the bias term $w$. The energy in the system is the sum of the collagen-cell contact energy, area-restriction energy cost, and perimeter-restriction energy cost:
+% \begin{equation} \label{eq:CPMu1}
+%     u = \alpha N_p + \lambda_A(A_0 - N)^2 + \lambda_P(P_0 - N_p)^2 \ .
+% \end{equation}
+% $N_p$ is the number of lattice sites that comprise the cell's perimeter, $N$ is the total number of cell lattice sites, $\alpha$ is the cell contact energy with the collagen, and $\lambda_{A(P)}$ is the area (perimeter) restriction cost. The probability $P$ of addition or removal of a lattice site from the cell is defined as
+% \begin{equation} \label{eq:CPMprob1}
+%     P = e^{-\Delta u + w} \ .
+% \end{equation}
+% $\Delta u$ is the change in energy of the system caused by the addition or removal, and $w$ is the bias term which acts to bias the cell's motion in the direction of its polarization vector $\vec{p}$. The bias is defined as
+% \begin{equation}
+%     w = \Delta\hat{x} \cdot \vec{p} \ ,
+% \end{equation}
+% with $\Delta\hat{x}$ the unit vector pointing in the change in the cell's center of mass cause by the addition or removal of the lattice site of interest. The polarization vector is responsible for giving the cell biased, persitent motion as observed in chemotaxis experiments. The time evolution is defined as (similar to our previous study \red{[CITE]})
+% \begin{equation} \label{eq:CPMp1}
+%     \frac{d\vec{p}}{dt} = -r\vec{p} + \Delta\vec{x} + \epsilon \vec{q}\ .
+% \end{equation}
+% The first term in Eq.\ \ref{eq:CPMp1} results in exponential decay of the cell's current polarization at a rate $r$. $\Delta x$ is the cell's displacement and it creates persistence in cell motion; $\vec{p}$ is reinforced in the direction of motion. The third term represents chemotaxis, with $\epsilon$ the bias strength and $\vec{q}$ an abstraction of the cell's gradient sensing.
+% \begin{equation} \label{eq:CPMq1}
+%     \vec{q} = \frac{1}{N_P} \sum_{i=1}^{N_P} \frac{c_i-\bar{c}}{\bar{c}} \ \hat{r}_i
+% \end{equation}
+% $\hat{r}_i$ is a unit vector that points radially outwards from the cell's center of mass to the location of lattice site $i$. $c_i$ is the concentration of the chemoattractant sampled at the lattice site $i$ and $\bar{c}$ is the cell's measurement of the mean concentration in its local environment; $c_i$ is sampled from a Poisson distribution and $\bar{c}$ is the mean from all $c_i$ measured at each lattice site.
 
-
-We use the Cellular Potts Model (CPM) to simulate cell chemotaxis in a similar fashion as that prescribed in our previous paper \cite{varennes2016collective}. In the CPM cell's move on a lattice and are comprised of a finite number of lattice sites. Cell movement occurs through the stochastic addition and removal of lattice sites to the cell.
-
-The probability of addition or removal of a lattice site is dependent on the change in energy of the system $\Delta u$ and the bias term $w$. The energy in the system is the sum of the collagen-cell contact energy, area-restriction energy cost, and perimeter-restriction energy cost:
-\begin{equation} \label{eq:CPMu1}
-    u = \alpha N_p + \lambda_A(A_0 - N)^2 + \lambda_P(P_0 - N_p)^2 \ .
-\end{equation}
-$N_p$ is the number of lattice sites that comprise the cell's perimeter, $N$ is the total number of cell lattice sites, $\alpha$ is the cell contact energy with the collagen, and $\lambda_{A(P)}$ is the area (perimeter) restriction cost. The probability $P$ of addition or removal of a lattice site from the cell is defined as
-\begin{equation} \label{eq:CPMprob1}
-    P = e^{-\Delta u + w} \ .
-\end{equation}
-$\Delta u$ is the change in energy of the system caused by the addition or removal, and $w$ is the bias term which acts to bias the cell's motion in the direction of its polarization vector $\vec{p}$. The bias is defined as
-\begin{equation}
-    w = \Delta\hat{x} \cdot \vec{p} \ ,
-\end{equation}
-with $\Delta\hat{x}$ the unit vector pointing in the change in the cell's center of mass cause by the addition or removal of the lattice site of interest. The polarization vector is responsible for giving the cell biased, persitent motion as observed in chemotaxis experiments. The time evolution is defined as (similar to our previous study \red{[CITE]})
-\begin{equation} \label{eq:CPMp1}
-    \frac{d\vec{p}}{dt} = -r\vec{p} + \Delta\vec{x} + \epsilon \vec{q}\ .
-\end{equation}
-The first term in Eq.\ \ref{eq:CPMp1} results in exponential decay of the cell's current polarization at a rate $r$. $\Delta x$ is the cell's displacement and it creates persistence in cell motion; $\vec{p}$ is reinforced in the direction of motion. The third term represents chemotaxis, with $\epsilon$ the bias strength and $\vec{q}$ an abstraction of the cell's gradient sensing.
-\begin{equation} \label{eq:CPMq1}
-    \vec{q} = \frac{1}{N_P} \sum_{i=1}^{N_P} \frac{c_i-\bar{c}}{\bar{c}} \ \hat{r}_i
-\end{equation}
-$\hat{r}_i$ is a unit vector that points radially outwards from the cell's center of mass to the location of lattice site $i$. $c_i$ is the concentration of the chemoattractant sampled at the lattice site $i$ and $\bar{c}$ is the cell's measurement of the mean concentration in its local environment; $c_i$ is sampled from a Poisson distribution and $\bar{c}$ is the mean from all $c_i$ measured at each lattice site.
-
-\subsection{Calibrating Simulations}
-
-Simulation parameters must be calibrated using experimental observations in order to compare further simulation results with experiments. The length-scale in simulations is set by the size of one lattice site. From experiments we know that cells are on average $400 \mu\text{m}^2$ in size, and we use this to set one lattice site to equal $5 \mu\text{m}$ such that cells occupy $\sim 10$ lattice sites. Next we calibrate the time-scale in simulations by equating the average cell velocity in simulations to approximately that observed experimentally, $\sim 10 \mu\text{m/hr}$. With this we equate a simulation time step to $5 \text{min}$. Finally, we need to calibrate the internal cell parameters. We consider internal cell parameters to be those which are not affected by the environment and are characteristic of the particular cell type we are simulating.
-These include the energy costs of cell area and perimeter fluctuations $\lambda_A$, $\lambda_P$, the polarization decay rate $r$, and the bias strength $\epsilon$. These parameters are set such that the chemotactic index (CI) and chemotactic ratio (CR) recorded in experiments is approximately the same as that observed in experiments. We refer to the collagen stiffness $\alpha$, background concentration $c_0$, and the concentration gradient $g$ as experimental parameters.
-
-In running simulations internal parameters are fixed to the values used for the initial calibration. External parameters are varied (as in Fig.\ 3 of the manuscript) in order to quantify their effects on chemotactic performance. The internal parameter values used as well as the baseline external parameter values are listed in Table \ref{table:ch2_1}.
-
-\begin{table}[ht]
-\begin{center}
-\begin{tabular}{ |c|c|c| }
-\hline
-Parameter & Value & Notes \\ \hline
-Concentration $\bar{c}$ & $10 \ \text{nM}$ & \\
-Gradient $g$ & $0.5 \ \text{nM/}\mu\text{m}$ & \\ \hline
-Cell-cell Contact Energy $\alpha$ & 0.7 & Sets energy scale \\ \hline
-Area Energy Cost $\lambda_A$ & 0.3  & Prevents ``stringy'' cell-shapes \\
-Perimeter Energy Cost $\lambda_P$ & 0.01 & \\ \hline
-Polarization Bias Strength $\epsilon$ & 0.1 & \\ \hline
-Polarization Decay Rate $r$ & $2.4 \ \text{hr}^{-1}$ & Sets polarization memory time, as used in \red{[CITE]} \\ \hline
-Relaxed Cell Area $A_0$ & $400 \ \mu\text{m}^2$ & \\ \hline
-Relaxed Cell Perimeter $P_0$ & $3.6\sqrt{A_0} \ \mu\text{m}$ & Assumes circular resting shape \\ \hline
-\end{tabular}
-\caption{Table of parameter values used in all CPM simulations unless stated otherwise. Energy costs are in units of $k_B T$, where $k_B T$ is the thermal energy of the CPM Monte Carlo scheme.}
-\label{table:ch2_1}
-\end{center}
-\end{table}
+% \subsection{Calibrating Simulations}
+%
+% Simulation parameters must be calibrated using experimental observations in order to compare further simulation results with experiments. The length-scale in simulations is set by the size of one lattice site. From experiments we know that cells are on average $400 \mu\text{m}^2$ in size, and we use this to set one lattice site to equal $5 \mu\text{m}$ such that cells occupy $\sim 10$ lattice sites. Next we calibrate the time-scale in simulations by equating the average cell velocity in simulations to approximately that observed experimentally, $\sim 10 \mu\text{m/hr}$. With this we equate a simulation time step to $5 \text{min}$. Finally, we need to calibrate the internal cell parameters. We consider internal cell parameters to be those which are not affected by the environment and are characteristic of the particular cell type we are simulating.
+% These include the energy costs of cell area and perimeter fluctuations $\lambda_A$, $\lambda_P$, the polarization decay rate $r$, and the bias strength $\epsilon$. These parameters are set such that the chemotactic index (CI) and chemotactic ratio (CR) recorded in experiments is approximately the same as that observed in experiments. We refer to the collagen stiffness $\alpha$, background concentration $c_0$, and the concentration gradient $g$ as experimental parameters.
+%
+% In running simulations internal parameters are fixed to the values used for the initial calibration. External parameters are varied (as in Fig.\ 3 of the manuscript) in order to quantify their effects on chemotactic performance. The internal parameter values used as well as the baseline external parameter values are listed in Table \ref{table:ch2_1}.
+%
+% \begin{table}[ht]
+% \begin{center}
+% \begin{tabular}{ |c|c|c| }
+% \hline
+% Parameter & Value & Notes \\ \hline
+% Concentration $\bar{c}$ & $10 \ \text{nM}$ & \\
+% Gradient $g$ & $0.5 \ \text{nM/}\mu\text{m}$ & \\ \hline
+% Cell-cell Contact Energy $\alpha$ & 0.7 & Sets energy scale \\ \hline
+% Area Energy Cost $\lambda_A$ & 0.3  & Prevents ``stringy'' cell-shapes \\
+% Perimeter Energy Cost $\lambda_P$ & 0.01 & \\ \hline
+% Polarization Bias Strength $\epsilon$ & 0.1 & \\ \hline
+% Polarization Decay Rate $r$ & $2.4 \ \text{hr}^{-1}$ & Sets polarization memory time, as used in \red{[CITE]} \\ \hline
+% Relaxed Cell Area $A_0$ & $400 \ \mu\text{m}^2$ & \\ \hline
+% Relaxed Cell Perimeter $P_0$ & $3.6\sqrt{A_0} \ \mu\text{m}$ & Assumes circular resting shape \\ \hline
+% \end{tabular}
+% \caption{Table of parameter values used in all CPM simulations unless stated otherwise. Energy costs are in units of $k_B T$, where $k_B T$ is the thermal energy of the CPM Monte Carlo scheme.}
+% \label{table:ch2_1}
+% \end{center}
+% \end{table}
 
 
 \section{Biased Persistent Random Walk}
