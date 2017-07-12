@@ -19,6 +19,8 @@ The three metrics quantify accuracy, persistence, and speed. Next, we present ex
 
 The literature on cell migration and chemotaxis experiments contains a variety of different metrics used to characterize cell motion. In this section we briefly review some of the more common metrics used for measuring cell motility, persistence (also referred to as directionality) and chemotactic performance. Common metrics from the literature and their definitions are explained in order to motivate the definitions used in our study.
 
+\subsection{Accuracy}
+
 For chemotaxis experiments, often a single metric referred to as the chemotactic index is reported to quantify how well cells track the chemoattractant in question. However, the mathematical definition of the chemotactic index (CI) varies throughout the literature, and here we review some of the more common ones. CI has been defined as the ratio of the distance traveled towards the chemoattractant to the distance traveled in the absence of chemoattractant \cite{nelson1975chemotaxis}, the ratio of the number of cells that migrate in response to a chemical to the number of cells that migrate in the absence of stimulus \cite{iellem2001unique,mayr2002vascular,fiedler2005vegf}, and the population average of the cosine of the angle made between a cell's displacement and the gradient direction
 \cite{funamoto2001role,mouneimne2006spatial,van2007biased,kay2008changing}.
 
@@ -30,6 +32,8 @@ In this study we use the definition based on cosine of the angle cell trajectori
 \end{equation}
 Strictly speaking, CI is bounded between -1 and 1, but for chemotaxis in response to a chemoattractant -- as is the case in this study -- CI generally falls between 0 and 1. $\text{CI} = 1$ represents perfectly accurate chemotaxis in which cell displacement is parallel to the gradient direction (Fig.\ \ref{fig:ch2_1}b, top-half), and $\text{CI} = 0$ indicates that the cells' migration is unbiased (Fig.\ \ref{fig:ch2_1}b, bottom-half). This metric is more easily comparable between experiments, and its bounded range makes it easier to get intuition for different values of CI.
 
+\subsection{Persistence}
+
 Cell migratory persistence is commonly quantified using the chemotactic ratio and the directional autocorrelation function. The chemotactic ratio (CR) is defined as the ratio of the cell's displacement to the total distance traveled (Fig.\ \ref{fig:ch2_1}a):
 \begin{equation}
     \text{CR} \equiv  \left\langle \frac{\text{displacement}}{\text{distance}} \right\rangle \ .
@@ -37,7 +41,33 @@ Cell migratory persistence is commonly quantified using the chemotactic ratio an
 The CR metric goes by several names in the literature such as the McCutcheon index \cite{mccutcheon1946chemotaxis}, directionality (ratio), length ratio \cite{gorelik2014quantitative}, and straightness index \cite{codling2008random}.
 CR is bounded between 0 and 1 and intuitive sense can be made of either limit. If $\text{CR} = 1$, then the cells are moving in perfectly straight lines and motion is optimally efficient (Fig.\ \ref{fig:ch2_1}b, right-half). However, $\text{CR} = 0$ represents cell motion that is neither persistent nor efficient (Fig.\ \ref{fig:ch2_1}b, left-half).
 
-The directional autocorrelation function calculates on average, how much time must pass for the cell's current direction of motion to be independent from the direction it was going in the past \red{[CITE]}. It quantifies persistence by calculating the timescale of decay in correlations between current and previous direction of motion. The autocorrelation function is useful for cross-comparing experiments since it is largely independent of the frequency at which measurements were taken as well as the total observation time. Unlike CR, the timescale obtained from the autocorrelation function is not a bounded, dimensionless quantity. This makes gaining intuition about persistence from the autocorrelation timescale more difficult than CR. Since CR provides a clearer intuitive picture for persistence in cell chemotaxis we use it in our study. However, any trends drawn from CR also hold for the autocorrelation function since we show that CR and the autocorrelation timescale are monotonically related (see supplement).
+The directional autocorrelation function (AC) calculates on average, how much time must pass for the cell's current direction of motion to be independent from the direction it was going in the past \cite{gorelik2014quantitative,dang2013inhibitory}.
+It quantifies persistence by calculating the timescale of decay in correlations between current and previous direction of motion.
+The AC is defined as
+\begin{equation} \label{eq:AC1}
+    \text{AC}(\Delta t) = \langle \cos(\theta_{\Delta t + t}-\theta_{t}) \rangle_{t,N} \ ,
+\end{equation}
+where the average is taken over all starting times $t$ and all $N$ cell trajectories. The AC measures how the direction of cell motion is correlated with the direction of motion at a time $\Delta t$ later.
+At $\Delta t = 0$, $\text{AC}(0) = 1$ since when no time has passed both angles in Eq.\ \ref{eq:AC1} are equal. In the opposite limit,
+$\text{AC}(\Delta t \to \infty) = 0$ since trajectories that occurred infinitely far apart in time should have no effect on each other. Calculating AC for all $\Delta t$ times sets a timescale $\tau$ which quantifies the rate at which correlations decay from 1 to 0. Therefore $\tau$ quantifies the persistence in the cells motion, a larger $\tau$ is indicative of more persistent motion. We define $\tau$ as
+\begin{equation} \label{eq:tau1}
+    \tau = \int_0^\infty dt' \ \text{AC}(t') \ .
+\end{equation}
+The AC is useful for cross-comparing experiments since the persistence timescale $\tau$ is largely independent of the frequency at which measurements were taken as well as the total observation time.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.80\textwidth]{../fig/ch2_fig5.png}
+    \caption{a) Directional Autocorrelation from control dataset. Light-colored trajectories indicate autocorrelations for individual cell trajectories. Timescale $\tau$ is calculated using Eq.\ \ref{eq:tau1}. b) Directional autocorrelation timescales and CR values for all experimental assays. Data points are color-coded based on chemical environment.} \label{fig:ch2_5}
+\end{figure}
+
+We calculate the AC and its timescale $\tau$ from our experimental data. Fig.\ \ref{fig:ch2_5}a shows the autocorrelations from the control assay, the black dots are the AC values for all times $\Delta t$ observed in our experiment, and its AC has a timescale
+$\tau = 1.02 \ \text{hr}$.
+In Fig.\ \ref{fig:ch2_5}b we compare the CR and AC timescale values from all experimental conditions. Going from a uniform to a graded concentration of either EGF or TGF$\beta$ results in a decreased CR value, and the AC timescale also decreases when going from a uniform to a graded concentration. This indicates that there is a monotonic relationship between CR and $\tau$. As the measured value of CR increases so too will the AC timescale $\tau$.
+
+Therefore, quantifying persistence with CR leads to the same patterns and analysis that could have been deduced from using AC. Additionally, the timescale obtained from the AC is not a bounded, dimensionless quantity. This makes gaining intuition about persistence from the autocorrelation timescale more difficult than CR. Since CR provides a clearer intuitive picture for persistence in cell chemotaxis we use it in our study.
+
+\subsection{Migration Speed}
 
 The final factor contributing to chemotactic performance is cell speed. Speed is important in order to ensure that the cells reach their destination in a timely manner. Cell speed is affected by many environmental factors such as collgen stiffness, and chemical concentration profiles. We define speed as the population average of the instantaneous cell speed during chemotaxis
 \begin{equation}
@@ -51,7 +81,7 @@ Experimentally, measuring cell speed is limited by the frequency at which cell t
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.95\textwidth]{../fig/ch2_fig2.png}
+    \includegraphics[width=0.90\textwidth]{../fig/ch2_fig2.png}
     \caption{\red{[Plots a-c can be replaced with box-whisker style plots.]} MDA-MB-231 cell chemotaxis assays. Cells are cultured in different chemical environments and trajectories are tracked. CI (a), CR (b) and mean speed ($\bar{v}$) are reported. d) Summary of chemotaxis assay results, data point size is proportional to mean speed. In all plots colors: no chemoattractant (gray), 400nM EGF uniform concentration (red), 0-800nM EGF gradient (orange), 25nM TGF$\beta$ uniform concentration (blue), and 0-50nM TGF$\beta$ gradient (light blue). Error bars are the standard error over the population of trajectories observed.} \label{fig:ch2_2}
 \end{figure}
 
@@ -122,28 +152,28 @@ The region of chemotactic performance that is theoretically possible overlaps wi
 \red{[Need to add a discussion.]}
 
 
-\section{Persistence Metrics: Directional Autocorrelation \& Chemotacitc Ratio}
-
-As mentioned in the manuscript, two principal ways of measuring persistence are the directional autocorrelation function (AC) and the chemotactic ratio (CR). The DAC is defined as
-\begin{equation} \label{eq:AC1}
-    \text{AC}(\Delta t) = \langle \cos(\theta_{\Delta t + t}-\theta_{t}) \rangle_{t,N} \ ,
-\end{equation}
-where the average is taken over all starting times $t$ and all $N$ cell trajectories. The AC measures how the direction of cell motion is correlated with the direction of motion at a time $\Delta t$ later.
-At $\Delta t = 0$, $\text{AC}(0) = 1$ since when no time has passed both angles in Eq.\ \ref{eq:AC1} are equal. In the opposite limit,
-$\text{AC}(\Delta t \to \infty) = 0$ since trajectories that occurred infinitely far apart in time should have no effect on each other. Calculating AC for all $\Delta t$ times sets a timescale $\tau$ which quantifies the rate at which correlations decay from 1 to 0. Therefore $\tau$ quantifies the persistence in the cells motion, a larger $\tau$ is indicative of more persistent motion. We define $\tau$ as
-\begin{equation} \label{eq:tau1}
-    \tau = \int_0^\infty dt' \ \text{AC}(t') \ .
-\end{equation}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.80\textwidth]{../fig/ch2_fig5.png}
-    \caption{a) Directional Autocorrelation from control dataset. Light-colored trajectories indicate autocorrelations for individual cell trajectories. Timescale $\tau$ is calculated using Eq.\ \ref{eq:tau1}. b) Directional autocorrelation timescales and CR values for all experimental assays. Data points are color-coded based on chemical environment.} \label{fig:ch2_5}
-\end{figure}
-
-We calculate the AC from our chemotaxis experiments on MDA-MB-231 cells. Fig.\ \ref{fig:ch2_5}a shows the autocorrelations from the control assay, the black dots are the AC values for all times $\Delta t$ observed in our experiment, and its AC has a timescale
-$\tau = 1.02 \ \text{hr}$.
-In Fig.\ \ref{fig:ch2_5}b we compare the CR and AC timescale values from all experimental conditions. As discussed in the manuscript, going from a uniform to a graded concentration of either EGF or TGF$\beta$ results in a decreased CR value. Similarly, the AC persistence timescale also decreases when going from a uniform to a graded concentration. This indicates that there is a monotonic relationship between CR and $\tau$. As the measured value of CR increases so too will the AC timescale $\tau$. Therefore, quantifying persistence with CR leads to the same patterns and analysis that could have been deduced from using AC.
+% \section{Persistence Metrics: Directional Autocorrelation \& Chemotacitc Ratio}
+%
+% As mentioned in the manuscript, two principal ways of measuring persistence are the directional autocorrelation function (AC) and the chemotactic ratio (CR). The AC is defined as
+% \begin{equation} \label{eq:AC1}
+%     \text{AC}(\Delta t) = \langle \cos(\theta_{\Delta t + t}-\theta_{t}) \rangle_{t,N} \ ,
+% \end{equation}
+% where the average is taken over all starting times $t$ and all $N$ cell trajectories. The AC measures how the direction of cell motion is correlated with the direction of motion at a time $\Delta t$ later.
+% At $\Delta t = 0$, $\text{AC}(0) = 1$ since when no time has passed both angles in Eq.\ \ref{eq:AC1} are equal. In the opposite limit,
+% $\text{AC}(\Delta t \to \infty) = 0$ since trajectories that occurred infinitely far apart in time should have no effect on each other. Calculating AC for all $\Delta t$ times sets a timescale $\tau$ which quantifies the rate at which correlations decay from 1 to 0. Therefore $\tau$ quantifies the persistence in the cells motion, a larger $\tau$ is indicative of more persistent motion. We define $\tau$ as
+% \begin{equation} \label{eq:tau1}
+%     \tau = \int_0^\infty dt' \ \text{AC}(t') \ .
+% \end{equation}
+%
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.80\textwidth]{../fig/ch2_fig5.png}
+%     \caption{a) Directional Autocorrelation from control dataset. Light-colored trajectories indicate autocorrelations for individual cell trajectories. Timescale $\tau$ is calculated using Eq.\ \ref{eq:tau1}. b) Directional autocorrelation timescales and CR values for all experimental assays. Data points are color-coded based on chemical environment.} \label{fig:ch2_5}
+% \end{figure}
+%
+% We calculate the AC from our chemotaxis experiments on MDA-MB-231 cells. Fig.\ \ref{fig:ch2_5}a shows the autocorrelations from the control assay, the black dots are the AC values for all times $\Delta t$ observed in our experiment, and its AC has a timescale
+% $\tau = 1.02 \ \text{hr}$.
+% In Fig.\ \ref{fig:ch2_5}b we compare the CR and AC timescale values from all experimental conditions. As discussed in the manuscript, going from a uniform to a graded concentration of either EGF or TGF$\beta$ results in a decreased CR value. Similarly, the AC persistence timescale also decreases when going from a uniform to a graded concentration. This indicates that there is a monotonic relationship between CR and $\tau$. As the measured value of CR increases so too will the AC timescale $\tau$. Therefore, quantifying persistence with CR leads to the same patterns and analysis that could have been deduced from using AC.
 
 
 \section{Cell Chemotaxis Simulations}
