@@ -1,282 +1,772 @@
 
-\chapter{Dynamics of Collective Chemotaxis}
+\chapter{Limits to Collective Chemotaxis}
 
-Cells can migrate in response to a chemoattractant and can detect extraordinarily small changes in chemical concentrations. The limits to cell sensory precision have been a topic of research in biology and biophysics for many years. \textit{Escheria coli} bacterial chemotaxis operates very near the physical limits of their sensory machinery, and \textit{Dictyostelium discoideum} amoebae are sensitive to differences in chemical concentrations on the order of ten molecules across the cell \cite{berg1977physics,song2006dictyostelium}. Recent studies on individual breast cancer cells showed that they are sensitive to 1\% differences in concentration across the cell length \cite{shields2007autologous}. Limits to cell sensory precision were first derived by Berg and Purcell almost 40 years ago \cite{berg1977physics} and have been revisited to account for binding kinetics, spatiotemporal correlations and spatial confinement \cite{bialek2005physical, kaizu2014berg, bicknell2015limits}. However, in nature cells are rarely found alone, and the interactions between nearby cells may alter cells' sensory capabilities.
+Collective migration is ubiquitous in cell biology, occurring in organism development \cite{theveneau2010collective,cai2016modeling,bianco2007two,montell2008morphogenetic},
+tissue morphogenesis \cite{ellison2016cell} and metastatic invasion
+\cite{kim2013cooperative,friedl2009collective,friedl2012classifying,deisboeck2009collective}.
+Collective migration often occurs in response to chemical cues in the environment, a process known as chemotaxis. The simplest way for cells to collectively chemotax is by individual detection and response to the chemical attractant: each cell measures the spatial difference in chemoattractant across its body and moves in the perceived direction of the gradient, while short-range coupling keeps the group together. Groups performing this type of \textit{individual-based chemotaxis} (IC) are found not only in cell biology \cite{kulesa1998neural} but also in ecological systems such as bird flocks \cite{simons2004many}.
+However, recent experiments have uncovered an alternative type of chemotaxis, in which cells grouped together chemotax differently than if they were alone \cite{haeger2015collective,malet2015collective,leber2009molecular,gaggioli2007fibroblast}.
+For example, outer cells may polarize while inner cells do not, a mechanism observed in neural crest cells \cite{theveneau2010collective} and considered in several recent modeling studies
+\cite{malet2015collective,camley2016emergent,varennes2016collective}. This type of \textit{emergent chemotaxis} (EC) behavior seen in cell collectives presupposes a machinery within cells which allows for behavior to change once a cell is in a group. Since this machinery may come at a cost, this raises the question of whether EC offers any fundamental advantage over IC.
 
-In many biological contexts cells act in close proximity to one another which can have significant effects on collective behavior. Clusters of mammary epithelial cells, lymphocytes and neural crest cells can detect chemical gradients that single cells cannot \cite{ellison2016cell,malet2015collective,theveneau2010collective}, and cultures of neurons have been shown to be sensitive to single molecule differences across an individual neuron's axonal growth cone \cite{rosoff2004new}. In many types of cancer, tumor cell invasion is collective, involving coherent grouped motion guided by chemical cues \cite{cheung2013collective, friedl2012classifying, aceto2014circulating, puliafito2015three}. It is clear from these examples that cells acting collectively can improve upon their individual sensory precision. Similar to the limits set by Berg and Purcell, the physical limits to collective gradient sensing have been recently derived \cite{mugler2016limits,ellison2016cell} by using a multicellular version of the local excitation-global inhibition (LEGI) communication model \cite{levchenko2002models}, one of the simplest adaptive mechanisms of gradient sensing. With these studies the physical limits of cell sensing have been extended from single cells to multicellular collectives.
-
-In parallel to research on cell sensory precision, studies on collective cell  migration have also advanced. Biological processes such as development, cellular migration, pathogenic response, and cancer progression all involve many cells acting in a coordinated way \cite{scarpa2016collective,friedl2010plasticity,rasmussen2006quorum,boelens2014exosome,cheung2013collective,vader2014extracellular,szabo2016modelling}. Simple mechanical models successfully explain observed collective behaviors such as cell streaming, cell sorting, cell sheet migration, wound healing, and cell aggregation \cite{kabla2012collective,szabo2010collective,basan2013alignment,janulevicius2015short}. These models accurately model collective cell migration but fail to explicitly include the affects of multicellular sensing in driving the mechanics at play. Cells are often capable of intercellular communication, so understanding how communicated information is translated into mechanical action is of prime interest.
-
-How the phenomena of collective sensing and multicellular migration are connected remains an open question \cite{varennes2016sense,defranco2008migrating,haeger2015collective}. Recent studies by Camley et al.\ \cite{camley2016emergent} and Malet-Engra et al.\ \cite{malet2015collective} have started to address this need for modeling collective sensing and migration. In the study of Camley et al.\ individual cell measurements act to polarize cells in a cluster outwards causing tension, and when intercellular communication is added the tension on the cluster adapts to the chemical concentration. Both studies do not take into account the inherent stochasticity of cell sensing and intercellular communication. However, individual cell measurements of the environment are error-prone while propagation of single cell measurements also adds noise to the system. These studies also treat cells or clusters as perfect circles, neglecting natural geometric fluctuations in the size and shapes of cells that occur during migration.
-
-Here we focus our attention on stochastic processes governing collective gradient sensing and cell motility. First, the limits to collective gradient sensing are briefly reviewed and our implementation of multicellular LEGI described. Information gained from collective sensing then must be used to direct cell motion. We develop a model which takes into account the fluctuating shape of cells while coupling cell motility to noisy collective gradient sensing. We model intercellular communication via the direct exchange of messenger molecules between cells. Candidate mediators of such intercellular communication have been recently identified in \textit{Drosophila} development \cite{ramel2013rab11}, and other studies suggest intercellular communication's involvement in organoid branching, angiogenesis, and cancer \cite{ellison2016cell,gerhardt2003vegf,hsu2000cadherin,friedl2009collective}. We study cluster migration in shallow gradients where the change in concentration across a cell width is very small relative to the background concentration. This regime is of prime interest since experiments show that collectives can respond to these shallow gradients whereas single cells cannot \cite{ellison2016cell,malet2015collective,rosoff2004new}. By explicitly modeling the stochastic processes of sensing and migration this model places constraints on the collective behavior of cells and predicts an optimal cluster size for fastest chemotaxis. We conclude by discussing our model's implications for cell migration experiments.
-
+We address this question using simple physical models of EC and IC. Cell collectives respond to graded profiles of freely diffusing molecules, and we quantify the migratory behavior of one-dimensional (1D) cell chains, two-dimensional (2D) cell sheets, and three-dimensional (3D) cell clusters [Fig.\ \ref{fig:1}(a)], configurations designed to mimic physiological multicellular structures such as filaments and ducts \cite{cheung2013collective,friedl2009collective,bardeesy2002pancreatic}. Collectives performing EC and IC are found to have very similar mean speed, with polarization strength scaling linearly with the number of cells regardless of chemotactic mechanism or dimensionality. However, 1D and 2D EC collectives have higher chemotactic precision than IC collectives: we find that for $N$ cells, the relative error in EC scales as
+$\{N^{-2}, N^{-3/2}, N^{-1}\}$ for 1D, 2D, and 3D, respectively, whereas in IC it scales as $N^{-1}$ for any dimension. We explain the physical origin of this difference and discuss its implications.
 
 \begin{figure}
     \centering
-        \includegraphics[width=0.8\textwidth]{../fig/ch2_fig1.png}
-    \caption{Model implementation. (A) Cell polarization is biased by multicellular sensing. On average, the cells on the left and right edges will measure negative and positive values of $R$, respectively. This causes the left-edge (Cell 1) and right-edge (Cell 3) cells to polarize in the direction of the gradient, while cells in the middle (Cell 2) are on average not polarized since $\bar{R} \approx 0$. Polarization vectors $\vec{p}$ are red, repulsion vectors $\vec{q}$ are black. (B) Simulations are implemented using the Cellular Potts Model (CPM). Cells comprise of simply connected lattice points. There are adhesion energies associated with different types of contact: cell-cell, $\alpha$ (blue-dashed line), and cell-ECM, $\beta$ (yellow-dashed line). Cell motility is modeled by the addition/removal of lattice points (pink). Each cell has a center-of-mass (white dot), a polarization vector, $\vec{p}$ (red) and a repulsion vector, $\vec{q}$ (black).} \label{fig:model}
+        \includegraphics[width=0.8\textwidth]{../fig/ch3_fig1.pdf}
+    \caption{(a) We study the chemotactic performance of 1D chains, 2D sheets, and 3D clusters of cells. (b) In individual-based chemotaxis (IC), cells in the collective polarize based on their own gradient measurement. (c) In emergent chemotaxis (EC), cell polarization depends on intercellular interactions: cells on the edge polarize based on their measurement of the concentration, and cells in the bulk do not polarize. In both mechanisms the total polarization $\vec{P}$ will fluctuate in magnitude and direction due to noise in cell measurements.} \label{fig:1}
 \end{figure}
 
-
-\section{MODEL}
-
-Communication between cells and collective sensing can improve upon an individual cell's ability to sense the environment \cite{ellison2016cell}, and in turn this information may be used to direct cell motion. To describe collective sensing, we will use the well-established local excitation--global inhibition (LEGI) mechanism \cite{mugler2016limits,levchenko2002models}.
-
-\subsection{Limits to Multicellular Sensing}
-
-Individual cells measure spatial gradients by comparing concentration measurements $c$ made by receptors or groups of receptors on the cell surface \cite{mugler2016limits,jilkine2011comparison}. For simplicity, we assume that a cell of size $a$ compares the number of diffusing molecules within two different regions of size $b$ which run parallel to the chemical gradient $\bar{g}$.
-The relative error in each compartment's measurement is
-$ \left(\sigma_c / \bar{c} \right)^2 \sim 1 / \left( b\bar{c}DT \right) $ \cite{berg1977physics},
-where $D$ is the diffusion coefficient, and $T$ is the measurement integration time. Assuming that the measurements made in each compartment are independent, then the difference in counts is proportional to the gradient
-$\Delta\bar{n} = \bar{n}_2 - \bar{n}_1 \sim ab^3\bar{g}$.
-In the limit that the gradient is very small relative to the background concentration $a\bar{g}\ll\bar{c}$, the relative error in gradient sensing simplifies to
-\begin{equation} \label{eq:g}
-\frac{\sigma_g}{\bar{g}} = \frac{\sigma_{\Delta n}}{\Delta \bar{n}} \sim \sqrt{\frac{\bar{c}}{b(a\bar{g})^2DT}}.
-\end{equation}
-Eq.\ \ref{eq:g} has been extensively derived and generalized to systems with different geometries \cite{endres2008accuracy,endres2009accuracy,hu2010physical} and in all such cases a term of the form in Eq.\ \ref{eq:g} appears as the fundamental limit, with the length scale $b$ dictated by the particular sensory mechanism and geometry. In the case of multicellular gradient sensing, we consider the cells on opposite ends of a chain of cells as the two compartments comparing concentration measurements. Then in Eq.\ \ref{eq:g} $b \to a$ and $a \to Na$ where $N$ is the number of cells in the chain. The relative error for the multicellular cluster becomes \cite{mugler2016limits}
-\begin{equation} \label{eq:G1}
-\frac{\sigma_g}{\bar{g}} \sim \sqrt{\frac{\bar{c}}{a(Na\bar{g})^2DT}}.
-\end{equation}
-There is a crucial effect that is neglected in formulating Eq.\ \ref{eq:G1} which is the mechanism by which the cells communicate their measurements across the collective. Communication will introduce additional noise to the gradient sensing process thereby altering the expression for the relative error. In the case of a single cell it is reasonable to assume that measurements from different compartments can be reliably transmitted, but with the increased size of the multicellular cluster we cannot make the same assumption. Using the multicellular LEGI paradigm \cite{levchenko2002models} to model intercellular communication, the physical limits to communication-aided collective gradient sensing have been derived \cite{ellison2016cell, mugler2016limits}, which we expand upon below.
-
-\subsection{Multicellular LEGI Model}
-
-In the LEGI model cells produce two chemical species, a ``local'' species $X$, and a ``global'' species $Y$, in response to the chemoattractant $S$. The local species $X$ remains within an individual cell and represents that cell's measurement of its local chemical concentration. This species can be a molecule produced or activated in response to attractant-bound receptors, or the bound receptors themselves. The global species $Y$ can diffuse at the rate $\gamma$ between neighboring cells and therefore represents the average $X$ population among neighboring cells. $Y$ molecules may only be exchanged when two or more cells are in direct contact with one another. Recent experiments in epithelial cells identified this global species as either calcium or a small molecule involved in calcium signaling (such as IP3), and identified the intercell diffusion mechanism as mediated by gap junctions \cite{ellison2016cell}. Finally, $X$ activates a downstream reporter molecule $R$, while $Y$ inhibits $R$.
-
-Let $x_k$, $y_k$, and $R_k$ represent the molecule populations in $X$, $Y$, and $R$ in the $k^\text{th}$ cell. The chemical reactions in cell $k$ are
+We first consider IC [Fig.\ \ref{fig:1}(b)]. Due to the chemoattractant molecules in the environment, each cell $i$ becomes polarized with vector $\vec{p}_i$ in its desired direction of motion \cite{jilkine2011comparison}. The components of $\vec{p}_i$ reflect the difference in concentration $c(\vec{r},t)$ between the front and back of the cell in each respective direction. This concentration difference will fluctuate due to the particulate nature of diffusion. Focusing on this extrinsic source of noise, we treat each cell as a sphere of radius $a$ through which molecules freely diffuse, akin to the ``perfect instrument'' described by Berg and Purcell \cite{berg1977physics}.
+The concentration difference is encoded internally as a weighted count of the molecules within the cell volume $U_i$. The weighting function will depend on the sensory network, but will generally be positive at the front and negative at the back; here we choose cosine for simplicity. Orienting our coordinate system such that $\hat{z}$ is parallel to the gradient, the components of $\vec{p}_i$ become
 \begin{equation}
-    \begin{aligned}
-        s_k &\xrightarrow{\kappa} s_k + x_k \hspace{20pt} x_k \xrightarrow{\mu} \emptyset \\
-        s_k &\xrightarrow{\kappa} s_k + y_k \hspace{20pt} y_k \xrightarrow{\mu} \emptyset \hspace{20pt} y_k \rightleftharpoons_{\gamma_{j,k}}^{\gamma_{k,j}} y_{j} .
-    \end{aligned}
+p_{i\alpha}(t) = \int_{U_i} d^3r \ w_\alpha c(\vec{r},t) , \label{eq:ICcell}
+%    p_{x}(\vec{r},t) &= \int d^3r' \ \sin\theta' \cos\phi' \ c(\vec{r}+\vec{r}',t) , \label{eq:ICcell1} \\
+%    p_{y}(\vec{r},t) &= \int d^3r' \ \sin\theta' \sin\phi' \ c(\vec{r}+\vec{r}',t) , \label{eq:ICcell2} \\
+%    p_{z}(\vec{r},t) &= \int d^3r' \ \cos\theta' \ c(\vec{r}+\vec{r}',t) . \label{eq:ICcell3}
 \end{equation}
-The production and degradation rates for $X$ and $Y$ are $\kappa$ and $\mu$, respectively. The global reporter molecule exchange rate $\gamma$ is dependent on the length of the interface $\mathcal{C}$ made between adjacent cells, and on the exchange rate per unit contact-length $\Gamma$,
-$$\gamma_{j,k} = \int_{\mathcal{C}} \Gamma dl . $$
-In the limit of strong communication ($\gamma \gg \mu$) and many cells, the relative error of gradient sensing is limited from below by \cite{mugler2016limits}
-\begin{equation} \label{eq:G2}
-\frac{\sigma_g}{\bar{g}} \sim \sqrt{\frac{\bar{c}}{a(n_0a\bar{g})^2DT}},
-\end{equation}
-where $n_0$ sets an effective number of cells over which information can be reliably conveyed. In our model communication between cells improves with increased diffusion of $Y$ molecules and so $n_0^2 \propto \gamma/\mu$ \cite{ellison2016cell, mugler2016limits}. As collectives grow larger than $n_0$ cells the relative error ceases to improve, saturating to the limit set by Eq.\ \ref{eq:G2}; unlike Eq.\ \ref{eq:G1} where the effects of communication are ignored and the relative error decreases without bound.
+where $\alpha\in\{x,y,z\}$, and in spherical coordinates the cosine is $w_\alpha = \{\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta\}$.
+%The $r'$ coordinate is relative to the center of the cell, $r_i$ is relative to the center of the collective, and the integral is over the volume of the cell.
+The concentration is a random variable of the form
+$c(\vec{r},t) = c(0,t) + \vec{r}\cdot\vec{g}(\vec{r},t)$,
+which obeys regular diffusion $\dot{c} = D\nabla^2c+\eta_c$ with $D$ the diffusion coefficient and $\eta_c$ the Langevin noise due to the diffusive fluctuations in concentration \cite{gardiner1985handbook,fancher2016fundamental}. The mean concentration is
+$\bar{c}(\vec{r}) = c_0 + \vec{r}\cdot\vec{g}$,
+and first we consider a constant gradient
+$\vec{g} = g \hat{z}$ that is shallow ($ag \ll c_0$). Cells are assumed to preferentially adhere to one another, hence the polarization of a collective of $N$ cells is the sum of its constituent cells' polarization vectors $\vec{P}(t) = \sum_{i=1}^N \vec{p}_i(t)$.
 
-In the limit of shallow gradients, which are of primary interest in studying collective sensing, $R$ effectively reports the difference in $X$ and $Y$ molecule populations \cite{ellison2016cell} and so we will model the downstream readout as $R_k = x_k-y_k$. A negative (positive) difference indicates that the cell is below (above) the average measured concentration relative to nearby cells as shown by the reported average $R$ values for each cell in Fig.\ \ref{fig:model}A.
+The collectives exist at low Reynolds number, hence their velocity $\vec{v}$ is proportional to the motility force, and in turn the polarization $\vec{P}$.
+%their movement is overdamped and can be modeled as
+%$\lambda \vec{\text{v}} = \vec{F}$
+%where $\lambda$ is the coefficient of friction and $\vec{F}$ is the motility force that the collective exerts. The total polarization drives its movement and thus
+%$\vec{\text{v}} \propto \vec{P}$.
+Therefore, understanding the behavior of $\vec{P}$ will inform us of the collective migratory performance. We focus on two measures of performance: the mean and the relative error of the polarization in the gradient direction $P_z$, where the relative error is defined
+\begin{equation} \label{eq:error1}
+    \epsilon^2
+    = \frac{\text{Var}[P_z]}{\langle P_z \rangle^2}
+    = \frac{\text{Var}[v_z]}{\langle v_z \rangle^2}.
+\end{equation}
+To investigate $\langle P_z\rangle$ and $\epsilon^2$ for the IC model,
+we first perform particle-based simulations of the chemoattractant in the presence of the permeable cells \cite{supinfo,ch3code}. We find that the total mean polarization $\langle \vec{P} \rangle$ points solely in the gradient direction with equal magnitude regardless of dimensionality [Fig.\ \ref{fig:2}(a), blue data points]. Indeed, Eq.\ \ref{eq:ICcell} indicates that a single cell will have mean polarization proportional to the concentration difference across the cell,
+$\langle \vec{p}_i \rangle = \pi a^4g \hat{z}/3$,
+regardless of the cell's location.
+Therefore the mean collective polarization is geometry-independent, depending only on the number of cells present,
+\begin{equation} \label{eq:ICmean}
+    \langle \vec{P} \rangle_\text{IC} = \frac{\pi}{3} a^4gN \ \hat{z},
+\end{equation}
+as shown in Fig.\ \ref{fig:2}(a) (blue lines).
 
-The chemical concentration is modeled as a space-dependent field $E(r_1,r_2)$, and in this case has a constant gradient in the $r_1$-direction,
-\begin{gather*}
-    E(r_1,r_2) = \bar{g}r_1 + \bar{c}.
-\end{gather*}
-The average signal in the $k^\text{th}$ cell's local environment is $\bar{s}_k = \int_{A_k} dr_1 dr_2 \ E(r_1,r_2)$ where $A_k$ is the area of the $k^\text{th}$ cell. Since diffusion is a Poisson process the variance in the measured signal $s_k$ is equal to the mean, $\sigma_{s_k}^2 = \bar{s}_k$. At each time step we sample $s_k$ for each cell from a Gaussian distribution with mean and variance $\bar{s}_k$, which corresponds to instantaneous sensory readout \cite{ellison2016cell}. The dynamics of the local reporter satisfy the stochastic differential equation
-\begin{equation} \label{eq:xdot}
-    \dot{x}_k = \kappa s_k - \mu x_k + \eta_{x_k}.
-\end{equation}
-The first term in Eq.\ \ref{eq:xdot} is due to the production of $X$ molecules due to the signal $S$, the second term represents molecule degradation, and the third term $\eta_{x_k}$ accounts for the noise inherent to these reactions. The noise term is equal to
-$\eta_{x_k} = \sqrt{\kappa\bar{s}_k}\xi_{1,k} - \sqrt{\mu \bar{x}_k} \xi_{2,k}$ since both production and degradation are stochastic processes \cite{gillespie2000chemical}.
-In Eq.\ \ref{eq:xdot} and subsequent stochastic equations $\xi_{i,k}$ and $\chi_{j,k}$ are unit Gaussian random variables representing the noise in molecule populations. For the local reporter, the steady-state solution is simply
-\begin{equation} \label{eq:xss}
-    x_{k}^{ss} = \left( \kappa/\mu \right) s_k + \left( 1/\mu \right) \eta_{x_k}.
-\end{equation}
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=0.8\textwidth]{../fig/ch3_fig2.pdf}
+    \caption{(a) Mean cluster polarization and (b) relative error for both mechanisms of collective chemotaxis in every configuration. Points are simulation data, colored lines are analytical predictions. 1D EC data plotted with respect to $N-1$.} \label{fig:2}
+\end{figure}
 
-The dynamics of the global species can be modeled in similar fashion,
-\begin{equation} \label{eq:ydot}
-    \dot{y}_k = \kappa s_k - \mu y_k - y_k \sum_{\langle j,k \rangle} \gamma_{j,k} + \sum_{\langle j,k \rangle} y_j \ \gamma_{j,k} + \eta_{y_k} .
+We next investigate the relative error for IC collectives. Simulations show that the error decreases with cluster size as
+$\epsilon^2 \sim N^{-1}$
+for all three geometries [Fig.\ \ref{fig:2}(b), blue data points]. Indeed this is the result that one would obtain if the cells were independent sensors \cite{simons2004many}. However, they are not independent: their noise is correlated by fluctuations in the concentration \cite{fancher2016fundamental,mugler2016limits}. To understand why correlations do not affect the relative error we investigate the model analytically.
+
+We linearize the concentration $c(\vec{r},t) = \bar{c}(\vec{r}) + \delta c(\vec{r},t)$ as well as the cell polarization
+$\vec{p}_i(t) = \langle \vec{p}_i \rangle + \delta\vec{p}(t)$,
+and by Fourier transforming in both space and time we derive analytic expressions for
+$\text{Var}[P_z]$ and thereby $\epsilon^2$ \cite{supinfo}. Since
+$P_z = \sum_{i=1}^N p_{iz}$,
+the variance in the total polarization is a linear combination of all cell polarization variances and covariances present in the collective,
+\begin{equation} \label{eq:ICvar1}
+    \text{Var}[P_z] =
+    \sum_{i} \text{Var}[p_{iz}]
+    + \sum_{i\neq j} \text{Cov}[p_{iz},p_{jz}]
+    \equiv V + C ,
 \end{equation}
-The first summation term in Eq.\ \ref{eq:ydot} accounts for the loss of $y_k$ due to the diffusion out to neighboring cells, and similarly the second summation term accounts for the increase in $y_k$ due to diffusion into cell $k$ from its neighbors. The notation $\langle j,k \rangle$ represents the set of all nearest neighbor pairs. The noise term $\eta_{y_k}$ in the molecule dynamics depends on the production, degradation and diffusion of $Y$ molecules. In steady-state we can express the noise as
-\begin{equation*}
-    \eta_{y_k} = \sqrt{\kappa \bar{s}_k} \xi_4 - \sqrt{\mu\bar{y}_k} \xi_5 + \sum_{j=1}^N \left[ \chi_{j,k} \sqrt{\gamma_{j,k}} \left( \sqrt{\bar{y}_j}-\sqrt{\bar{y}_k} \right) \right] .
-\end{equation*}
-Similarly to $\eta_{x_k}$, the noise in $y_k$ also depends on production and degradation while an extra term is required to account for the noise in $Y$ molecule exchange. Eq.\ \ref{eq:ydot} can be simplified by noting that exchange rates between cells are symmetric $\gamma_{j,k}=\gamma_{k,j}$, $\gamma_{i,i}=0$, and by defining the sum of all the exchange rates between cell $k$ and all other cells as $G_k = \sum_{j=1}^N \gamma_{j,k}$. The steady-state solution for the global reporter is more involved than the local reporter, and can be written as a matrix equation
-\begin{equation} \label{eq:yss}
-    M\vec{y}^{ss} = \kappa\vec{s} + \vec{\eta}_y,
-\end{equation}
-where $M$ is a square, symmetric matrix that governs the degradation and exchange of $Y$ molecules in all cells,
-\begin{equation} \label{eq:Mmatrix}
-    M =
-    \begin{bmatrix}
-     \mu+G_1 & -\gamma_{1,2} & \cdots & -\gamma_{1,N} \\
-     -\gamma_{2,1} & \mu+G_2 & \cdots & -\gamma_{2,N} \\
-     \vdots  & \vdots  & \ddots & \vdots  \\
-     -\gamma_{N,1} & -\gamma_{N,2} & \cdots & \mu+G_N
-    \end{bmatrix}.
-\end{equation}
+The variance and covariance for cells within the collective are derived from the power spectrum in polarization cross correlations, taking the general form
+\begin{align} \label{eq:ICvar2}
+\begin{split}
+    \text{Cov}[p_{i\alpha},p_{j\alpha}] &= \frac{1}{T}
+    \lim_{\omega \to 0} \int \frac{d\omega'}{2\pi}
+    \langle\delta\tilde{p}_{i\alpha}^*(\omega')\delta\tilde{p}_{j\alpha}(\omega) \rangle
+    \ ,
+\end{split}
+\end{align}
+with $T$ the cell's measurement integration time and $\text{Var}[p_{i\alpha}] = \text{Cov}[p_{i\alpha},p_{i\alpha}]$ \cite{fancher2016fundamental,mugler2016limits,bialek2005physical}. Eq.\ \ref{eq:ICvar2} assumes that the integration time is larger than the timescale of molecule diffusion over the radius $R$ of the collective,
+$T \gg \tau_D = R^2/D$, though we relax this assumption in later simulations.
+Following this procedure we find that $V$ and $C$ for IC are \cite{supinfo}
+\begin{align}
+    V_\text{IC} &= \frac{4\pi a^5c_0}{45DT} N  \label{eq:ICV} , \\
+    C_\text{IC} &= -\frac{\pi a^5c_0}{18DT} \sum_{i \neq j}^N \frac{3\cos^2\Theta_{ij}-1}{n^3_{ij}} . \label{eq:ICC}
+\end{align}
+Here
+$n_{ij}$ % \equiv \|\vec{r}_i-\vec{r}_j\|/a$
+is the number of cell radii separating the centers of cells $i$ and $j$, and $\Theta_{ij}$ is the angle between the gradient direction and a line connecting the two cells.
+% and the gradient ($\cos\Theta_{ij}=\hat{r}_{ij}\cdot\hat{g}$).
+
+$V_\text{IC}$ scales with $N$ since each cell is involved in gradient sensing. However, Eq.\ \ref{eq:ICC} %shows that the covariance between a pair of cells is proportional to
+%$-(3\cos^2\Theta_{ij}-1)/n^3_{ij}$
+reveals an angular dependence on the correlations between two IC cells. A pair of cells can be correlated or anti-correlated depending on their locations relative to the gradient. For example, if a pair of cells is parallel to the gradient then
+$\cos^2\Theta_{ij} = 1$,
+resulting in a negative covariance, indicating that their gradient measurements are anti-correlated. In contrast, if two cells are perpendicular to the gradient then
+$\cos^2\Theta_{ij} = 0$,
+resulting in a positive covariance and correlations between the two cells. The resulting contribution of $C_\text{IC}$ to $\text{Var}[P_z]$ is dimensionality-dependent since the angles made between pairs of cells is determined by geometry, whereas $V_\text{IC}$ is dimension-independent.
+
+For a 1D chain of IC cells, every pair is parallel to the gradient resulting in anti-correlated measurements which we find in total scale as $N$ \cite{supinfo}. As dimensionality increases, more and more pairs of cells will be perpendicular to the gradient resulting in reduced anti-correlations in the collective. This culminates in 3D clusters having zero cell-cell covariance contribution to the total cluster variance \cite{supinfo}. This results in $\epsilon^2 \sim N^{-1}$ regardless of dimensionality, indicating that IC cells behave as effectively independent gradient sensors, even with diffusion-mediated cross-correlations. The scalings for $V$ and $C$ are summarized in Table \ref{table:1}. The resulting $\epsilon^2$ predictions are plotted in Fig.\ \ref{fig:2}(b) (blue lines), and we see excellent agreement with the simulations.
 
 
-\begin{table*}[b]
-\centering
-\footnotesize
-\begin{tabular}{ |c|c|c| }
-\hline
-Parameter & Value & Notes \\ \hline
-Concentration $\bar{c}$ & $10 \text{nM}$ & Assumes $\bar{c} \gg a\bar{g}$ for shallow gradients \cite{malet2015collective,ellison2016cell} \\
-Gradient $\bar{g}$ & $0.04 \text{nM/}\mu\text{m}$ & \\ \hline
-LEGI Molecule Production Rate $\kappa$ & $19.72 \text{min}^{-1}$ & Assumes $ \{\kappa,\mu\} \gg r$ \\
-LEGI Molecule Degradation Rate $\mu$ & $19.72 \text{min}^{-1}$ & i.e.\ biochemical signaling is faster than motility response \\ \hline
-Global Reporter Exchange Rate $\Gamma$ & $80 (\mu\text{m} \ \text{min})^{-1}$ & Varied in Fig.\ \ref{fig:results} \\ \hline
-Polarization Bias Strength $\epsilon$ & 0.8 & Varied in Fig.\ \ref{fig:heat} \\ \hline
-Polarization Decay Rate $r$ & $3.94 \text{min}^{-1}$ & Sets polarization memory time, as used in \cite{szabo2010collective} \\ \hline
-Relaxed Cell Area $A_0$ & $315 \mu\text{m}^2$ & Assumes cell radius $10 \mu\text{m}$ \cite{leber2009molecular} \\ \hline
-Relaxed Cell Perimeter $P_0$ & $3.6\sqrt{A_0} \mu\text{m}$ & Assumes circular resting shape \\ \hline
-Cell-cell Contact Energy $\alpha$ & 1.0 & Sets energy scale \\
-Cell-ECM Contact Energy $\beta$ & 3.5 & $2\beta > \alpha$ for cell adhesion \cite{graner1992simulation} (Varied in Fig.\ \ref{fig:heat}) \\ \hline
-Area Energy Cost $\lambda_A$ & 1.5  & Prevents ``stringy'' cell-shapes \\
-Area Energy Cost $\lambda_P$ & 0.01 & \\ \hline
+\begin{table}[t]
+\normalsize
+\begin{tabular}{cc|l|l|l|l|}
+\cline{3-6}
+& & $\langle P_z \rangle$ & $V$ & $C$ &
+$\epsilon^2$ \\ \cline{1-6}
+\multicolumn{1}{ |c| }{ }&&&&&\\[-1em]
+\multicolumn{1}{ |c  }{\multirow{3}{*}{IC} } &
+\multicolumn{1}{ |c| }{ 1D } & $N^{1}$ & $N^{1}$ & $-N^{1}$ & $N^{-1}$ \\
+\multicolumn{1}{ |c| }{ }&&&&&\\[-1em]
+\cline{2-6}
+\multicolumn{1}{ |c| }{ }&&&&&\\[-1em]
+\multicolumn{1}{ |c  }{} &
+\multicolumn{1}{ |c| }{ 2D } & $N^{1}$ & $N^{1}$ & $-N^{1}$ & $N^{-1}$ \\
+\cline{2-6}
+\multicolumn{1}{ |c| }{ }&&&&&\\[-1em]
+\multicolumn{1}{ |c  }{} &
+\multicolumn{1}{ |c| }{ 3D } & $N^{1}$ & $N^{1}$ & $0$ & $N^{-1}$ \\
+\hhline{|==|=|=|=|=|}
+\multicolumn{1}{ |c| }{ }&&&&&\\[-1em]
+\multicolumn{1}{ |c  }{\multirow{3}{*}{EC} } &
+\multicolumn{1}{ |c| }{ 1D } & $N^1$ & $N^0$ & $-N^{-1}$ & $N^{-2}$ \\
+\cline{2-6}
+\multicolumn{1}{ |c| }{ }&&&&&\\[-1em]
+\multicolumn{1}{ |c  }{} &
+\multicolumn{1}{ |c| }{ 2D } & $N^1$ & $N^{1/2}$ & $N^{1/2}$ & $N^{-3/2}$\\
+\cline{2-6}
+\multicolumn{1}{ |c| }{ }&&&&&\\[-1em]
+\multicolumn{1}{ |c  }{} &
+\multicolumn{1}{ |c| }{ 3D } & $N^1$ & $N^{2/3}$ & $N^1$ & $N^{-1}$ \\
+\cline{1-6}
+
 \end{tabular}
-\caption{Table of parameter values. Energy costs are in units of $k_B T$, where $k_B T$ is the thermal energy of the CPM Monte Carlo scheme.}
-\label{table:param}
-\end{table*}
+\caption{Summary of scaling behavior. $N$ dependence of the leading order term for the mean $\langle P_z \rangle$, and the variance ($V$) and covariance ($C$) contributions to the relative error $\epsilon^2 = (V+C)/\langle P_z \rangle^2$. $C$ for EC in 2D has a $\log$ correction \cite{supinfo}.}
+\label{table:1}
+\end{table}
 
 
-\subsection{Connecting Gradient Sensing to Cell Motility}
-
-To describe collective migration, we integrate the output of multicellular LEGI gradient sensing with cell motility. Cells in motion have a distinct front and are polarized along the direction of the front to back. Cells within the cluster have their polarization biased by a combination of the LEGI readout and intercellular repulsion due to contact inhibition of locomotion (CIL). CIL is the phenomenon where cells that come into contact cease to form protrusions in the direction of contact \cite{mayor2010keeping}. This is a very simple way for cells to translate the noisy, error-prone gradient measurements into collective cell motility \cite{camley2016emergent,malet2015collective,theveneau2010collective}.
-
-In order to connect sensing to motility, we couple individual cell polarization $\vec{p}$ to both the LEGI downstream readout $R$ and what we will call the cell's repulsion vector $\vec{q}$. The cell's polarization vector represents the desired direction of motion \cite{jilkine2011comparison} and modeling collective behavior using cell polarization has been done previously\cite{szabo2010collective,camley2016emergent}. Information about the cell's surroundings are naturally expressed by the repulsion vector $\vec{q}$ \cite{camley2016emergent}. The repulsion vector is representative of contact inhibition of locomotion (CIL) \cite{mayor2010keeping}. CIL demonstrates that cells are aware of their immediate surroundings. The repulsion vector for cell $k$ is a unit vector that points away from all of cell $k$'s neighbors.
-\begin{equation}
-    \vec{q}_k = \left( \frac{1}{\sum_{\langle j,k \rangle} L_{j,k}|\vec{x}_k - \vec{x}_j|} \right)
-    \sum_{\langle j,k \rangle} L_{j,k} \left( \vec{x}_k - \vec{x}_j \right),
-\end{equation}
-where $L_{j,k}$ is the contact length made between cell $k$ and its neighboring cell $j$. In our model cell polarization will change as a function of time depending on a combination of the repulsion vector and the LEGI downstream readout,
-\begin{equation} \label{eq:polarVec}
-    \frac{d\vec{p}_k}{dt} = r \left[ -\vec{p}_k + \epsilon \frac{R_k}{\sigma_R} \vec{q}_k \right].
-\end{equation}
-The first term in Eq.\ \ref{eq:polarVec} models the decay of cell polarization. In the absence of any stimulus an individual cell will undergo a persistent random walk with a timescale $1/r$ \cite{szabo2010collective}. The second term acts to align or anti-align the cell’s polarization vector with the repulsion vector, with alignment strength $\epsilon$ based on the cell's readout $R_k$. The magnitude of $R_k$ is normalized by its standard deviation $\sigma_R$. The net effect is illustrated in Fig.\ \ref{fig:model}A.
-
-In the presence of a gradient, cells on the edge near the lower-end of the chemical concentration will tend to be polarized into the cluster (Cell 1 in Fig.\ \ref{fig:model}A), whereas cells on the higher concentration edge tend to be polarized outwards (Cell 3 in Fig.\ \ref{fig:model}A). Cells in the center of the cluster (Cell 2 in Fig.\ \ref{fig:model}A) are on average unpolarized. The net effect is that the cells on the edges of the cluster will drive motion in the direction of increasing chemical concentration. It is important to note that in this model single cells are unable to chemotax since the multicellular LEGI mechanism requires more than one cell to detect a gradient, and similarly without neighboring cells there is no repulsion vector to bias the cell's polarization.
-
-
-\subsection{Computational Implementation}
-
-
-% \begin{table*}[hb]
-% \centering
-% \footnotesize
-% \begin{tabular}{ |c|c|c| }
-% \hline
-% Parameter & Value & Notes \\ \hline
-% Concentration $\bar{c}$ & $10 \text{nM}$ & Assumes $\bar{c} \gg a\bar{g}$ for shallow gradients \cite{malet2015collective,ellison2016cell} \\
-% Gradient $\bar{g}$ & $0.04 \text{nM/}\mu\text{m}$ & \\ \hline
-% LEGI Molecule Production Rate $\kappa$ & $19.72 \text{min}^{-1}$ & Assumes $ \{\kappa,\mu\} \gg r$ \\
-% LEGI Molecule Degradation Rate $\mu$ & $19.72 \text{min}^{-1}$ & i.e.\ biochemical signaling is faster than motility response \\ \hline
-% Global Reporter Exchange Rate $\Gamma$ & $80 (\mu\text{m} \ \text{min})^{-1}$ & Varied in Fig.\ \ref{fig:results} \\ \hline
-% Polarization Bias Strength $\epsilon$ & 0.8 & Varied in Fig.\ \ref{fig:heat} \\ \hline
-% Polarization Decay Rate $r$ & $3.94 \text{min}^{-1}$ & Sets polarization memory time, as used in \cite{szabo2010collective} \\ \hline
-% Relaxed Cell Area $A_0$ & $315 \mu\text{m}^2$ & Assumes cell radius $10 \mu\text{m}$ \cite{leber2009molecular} \\ \hline
-% Relaxed Cell Perimeter $P_0$ & $3.6\sqrt{A_0} \mu\text{m}$ & Assumes circular resting shape \\ \hline
-% Cell-cell Contact Energy $\alpha$ & 1.0 & Sets energy scale \\
-% Cell-ECM Contact Energy $\beta$ & 3.5 & $2\beta > \alpha$ for cell adhesion \cite{graner1992simulation} (Varied in Fig.\ \ref{fig:heat}) \\ \hline
-% Area Energy Cost $\lambda_A$ & 1.5  & Prevents ``stringy'' cell-shapes \\
-% Area Energy Cost $\lambda_P$ & 0.01 & \\ \hline
-% \end{tabular}
-% \caption{Table of parameter values. Energy costs are in units of $k_B T$, where $k_B T$ is the thermal energy of the CPM Monte Carlo scheme.}
-% \label{table:param}
-% \end{table*}
-
-
-Computational simulations are conducted in order to understand the dynamics that evolve from the model of collective sensing and migration. The source code for the simulations can be found here \cite{ch2code}. The implementation chosen is the Cellular Potts Model (CPM) \cite{graner1992simulation,swat2012multi} although other cellular automata models are possible as well \cite{ermentrout1993cellular,maire2015molecular,mente2015analysis}. The CPM is widely used for simulating cell-centric systems. Despite its relative simplicity, this computational implementation can qualitatively reproduce diverse biological phenomena \cite{maree2007cellular}. The CPM is a very good implementation for simulating systems wherein cell geometry is crucial to the dynamics of the system. Using CPM many studies, some involving cell polarization and mechanical-based coupling, successfully reproduce epithelial cell streaming, cell sorting, chemotaxis and collective migration \cite{maclaren2015models,kabla2012collective,szabo2010collective}.
-
-In the CPM cells exist on a discrete lattice and are represented as groupings of lattice points. Simply-connected groups of lattice sites $x$ with the same integer values for their \textit{lattice label} $\sigma(x)>0$ comprise a single cell. The extracellular matrix (ECM) is labeled with the lattice label $\sigma(x)=0$. Cells have a desired size and perimeter from which they can fluctuate, and cells adhere to their neighboring environment with an associated adhesion energy. The energy of the whole system is the sum of contributions from adhesion $J_{i,j}$, area-restriction $\lambda_A$, and perimeter-restriction $\lambda_P$ terms,
-\begin{equation}
-    u = \sum_{\langle x,x' \rangle} J_{\sigma(x),\sigma(x')} + \sum_{i=1}^N \left( \lambda_A (\delta A_i)^2 + \lambda_P (\delta P_i)^2 \right),
-\end{equation}
-\begin{equation}
-    J_{\sigma(x),\sigma(x')} =
+Next we turn our attention to EC, the mechanism in which grouped cells sense and migrate differently than individuals.
+Often cells in a cluster differentiate, with edge cells polarized and bulk cells unpolarized \cite{malet2015collective,cai2016modeling}. In accordance with previous studies \cite{camley2016emergent,varennes2016collective},
+we assume that cell interactions are mediated by contact inhibition of locomotion \cite{mayor2010keeping}. The interactions result in edge cells polarized away from their neighbors, and interior cells that remain uninvolved in chemical sensing and do not polarize [Fig.\ \ref{fig:1}(c)]. The edge cells polarize with strength proportional to the local concentration which, again like Berg and Purcell's perfect instrument \cite{berg1977physics}, is estimated by counting the molecules present within their cell volume. Hence we define the polarization of the $i$th cell in the collective as
+\begin{equation} \label{eq:ECcell1}
+    \vec{p}_i(t) =
     \begin{cases}
-        0 &\sigma(x)=\sigma(x') \ \text{(within the same cell)}, \\
-        \alpha &\sigma(x)\sigma(x')>0 \ \text{(cell-cell contact)}, \\
-        \beta &\sigma(x)\sigma(x')=0 \ \text{(cell-ECM contact)}.
+         \hat{r}_i \int_{U_i} d^3r \ c(\vec{r},t) &i \in \{ N_\text{edge} \} \\
+        0 &i \in \{ N_\text{bulk} \} \ ,
     \end{cases}
 \end{equation}
-The parameters $\alpha$ and $\beta$ characterize intercellular adhesiveness, and in order to ensure that it is energetically favorable for cells to remain in contact, we restrict $\beta > 2\alpha$ \cite{szabo2010collective}. $\beta$ represents the cell-ECM contact energy, a larger value corresponds to an ECM that is more difficult to traverse. Heterogeneities in the microenvironment could be represented by a spatially dependent $\beta$; here we take $\beta$ to be a constant. The area- and perimeter-restriction energy terms prevent cells from growing or shrinking to unphysical sizes as well as branching or stretching into unphysical shapes. Cells fluctuate in shape and size around the desired area $A_0$ and perimeter $P_0$ with $\delta A_i \equiv A_i-A_0$ (and similarly for $\delta P_i$). The resulting dynamics evolve from the minimization of the system's energy under thermal fluctuations.
+where $\hat{r}_i$ points radially outwards from the collective. Eq.\ \ref{eq:ECcell1} dictates that $\vec{p}_i$ is dependent on a cell's location relative to the collective. As illustrated in Fig.\ \ref{fig:1}(c), only the cells on the edge sense the chemoattractant, polarizing with a larger magnitude on the high concentration side of the collective, and the total polarization depends only on the cells along the edge:
+$\vec{P} = \sum_i \vec{p}_i \ , \ \forall i \in \{N_\text{edge}\}$.
 
-Cell dynamics are a consequence of minimizing the energy of the whole system. This is a random process that is sensitive to thermal fluctuations and is modeled using a Monte Carlo process. In a system of $n$ lattice sites, one \textit{Monte Carlo} time step (MC step) is composed of $n$ \textit{elementary} steps. Each elementary step consists of an attempt to copy the lattice label of a randomly chosen lattice site onto that of a randomly chosen neighboring site as illustrated by the pink lattice site in Fig.\ \ref{fig:model}B. The new configuration resulting from the copy is accepted with probability $P$, which depends on the change in the system's energy accrued in copying over the lattice label,
-\begin{equation} \label{eq:prob}
-    P =
+Simulations for EC show that the mean polarization $\langle P_z \rangle$ scales with $N$ for all geometries [Fig.\ \ref{fig:2}(a), red points] even though $N_\text{edge}$ is dependent on the dimensionality of the collective. Our analytical solution helps us understand this result. For 1D EC, only the two opposing cells are polarized so $\langle\vec{P}\rangle$ can be solved for exactly, but for 2D and 3D we take the continuum limit of
+$\vec{P} = \sum_i \vec{p}_i$,
+assuming the collective is much larger than a single cell $R \gg a$ \cite{supinfo}. The resulting expressions are
+\begin{equation} \label{eq:ECmean}
+    \langle \vec{P} \rangle_\text{EC} = f_d a^4gN \ \hat{z},
+\end{equation}
+%\begin{align}
+%    \langle \vec{P} \rangle_\text{EC} &= \frac{8\pi}{3} a^4g(N-1) \ \hat{z} \ \ \ \text{(1D)} , \\
+%    \langle \vec{P} \rangle_\text{EC} &= \frac{2\pi^2}{3} a^4gN \ \hat{z} \
+%    \ \ \ \ \ \ \ \ \text{(2D)} , \\
+%    \langle \vec{P} \rangle_\text{EC} &= \frac{16\pi}{9} a^4gN \ \hat{z} \
+%    \ \ \ \ \ \ \ \ \text{(3D)} ,
+%\end{align}
+where the prefactors are $f_d = \{8\pi/3, 2\pi^2/3, 16\pi/9\}$ for $d=\{1,2,3\}$ dimensions, and for $d=1$ we have taken $N-1\to N$ for large $N$. Eq.\ \ref{eq:ECmean} is shown in Fig.\ \ref{fig:2}(b) (red lines), and we see good agreement. $\langle P_z \rangle$ scales with $N$ because it depends on the product of
+$N_\text{edge} \sim N^{(d-1)/d}$
+and the distance spanned in the gradient direction
+$R \sim N^{1/d}$,
+resulting in a mean polarization which is geometry invariant \cite{malet2015collective}.
+
+Comparing EC and IC shows that $\langle P_z \rangle \sim N$ regardless of collective migration mechanism or geometry as seen in Fig.\ \ref{fig:2}(a). $\langle P_z \rangle$ has the same parameter dependency for both EC and IC, namely $a^4g$, which is the average change in the number of chemoattractant molecules across a cell. Although
+$\langle P_z \rangle_\text{EC} \approx 6 \langle P_z \rangle_\text{IC}$
+meaning that EC speed is faster than IC, this relatively small difference may be difficult to detect in biological systems. Moreover, both mechanisms have the same $N$ scaling.
+%which should carry over to experiments. This implies that both EC and IC collectives of cells should on average migrate at roughly the same speed in response to a chemoattractant, and so in experimental assays the two mechanisms may be indistinguishable.
+Does the same equivalence between EC and IC also hold for the relative error?
+
+Interestingly, simulations show that the EC relative error does depend on geometry and in fact outperforms IC in terms of scaling in 1D and 2D [Fig.\ \ref{fig:2}(b), red points]. Only in 3D does the relative error appear to scale the same as IC. In order to understand the dimension dependence of the EC relative error we again investigate the model analytically.
+Following the procedure outlined by Eqs.\ \ref{eq:ICvar1} and \ref{eq:ICvar2} we find analytic expressions for $\text{Var}[P_z] = V + C$ for EC \cite{supinfo},
+\begin{align}
+    V_\text{EC} &= \frac{16\pi a^5c_0}{15DT} \sum_{i=1}^{N_\text{edge}} \cos^2\Theta_i \label{eq:ECV} , \\
+    C_\text{EC} &= \frac{8\pi a^5c_0}{9DT} \sum_{i \neq j}^{N_\text{edge}} \frac{\cos\Theta_i\cos\Theta_j}{n_{ij}} , \label{eq:ECC}
+\end{align}
+with $\Theta_i$ the angle $\hat{r}_i$ makes with the gradient. Both $V_\text{EC}$ and $C_\text{EC}$ depend on dimensionality simply because $N_\text{edge} \sim N^{(d-1)/d}$. From Eqs.\ \ref{eq:ECV} and \ref{eq:ECC} we see that
+$V \sim N_\text{edge}$,
+and that $C$ depends on the angles edge cells make with the gradient. The angular dependence means that cells along the front and back sides of the cluster (relative to the gradient) are strongly anti-correlated since $\cos\Theta_i\cos\Theta_j \approx -1$,
+whereas pairs of edge cells near the middle are very weakly correlated ($\cos\Theta_i\cos\Theta_j \approx 0$). Unlike in the case of IC, the scaling of $C$ with $N$ increases with dimensionality \cite{supinfo} as summarized in Table \ref{table:1}, and the resulting $\epsilon^2$ predictions show good agreement with the simulation results [Fig.\ \ref{fig:2}(b)].
+
+The dimension dependence of the EC relative error can be understood by thinking of the collective as one large detector whose sensory surface is comprised of two halves. If both halves were to take measurements of their local concentrations and then polarize in opposing directions with strengths proportional to their measurements, then $\epsilon^2$ would depend on the size of each half
+$a_\text{eff}$
+and their separation distance
+$A_\text{eff}$ according to $\epsilon^2  \sim a^{-1}_\text{eff}A^{-2}_\text{eff}$ \cite{mugler2016limits}.
+The size of each half is independent of $N$ for a 1D chain (each half is a single cell), but it scales as
+$a_\text{eff} \sim N^{1/d}$ for $d = 2$ or $3$ dimensions.
+The separation distance scales with the radius of the collective for all $d$,
+$A_\text{eff} \sim N^{1/d}$. This results in
+$\epsilon^2 \sim \{N^{-2}, N^{-3/2}, N^{-1}\}$ for $d=\{1,2,3\}$ [Fig.\ \ref{fig:2}(b), black lines],
+which agree with the scalings seen in simulations and analytics.
+
+Thus, the physical origin of the advantage of EC over IC lies in how the errors scale with the collective size $N$. In IC, all $N$ cells contribute to the sensing, and cross-correlations between them scale either linearly or sublinearly with $N$, leading to a scaling $\epsilon \sim 1/\sqrt{N}$ that is characteristic of independent sensors. But in EC, only $N_\text{edge} \sim N^{(d-1)/d}$ cells contribute to the sensing, leading to a sublinear scaling with $N$ of the variance contributions of the individual cells. The total variance of the collective, then, depends on the cross-correlations, which are geometry-specific: in 1D they are dwarfed by the individual variances, in 2D they are commensurate, and in 3D they dominate (Table \ref{table:1}). As a result, 1D and 2D EC collectives benefit from a variance that scales subextensively, i.e., sublinearly with $N$.
+
+%We have derived analytical expressions of
+%$\text{Var}[P] = V + C$
+%for one, two and three dimensional systems of EC and IC collectives. For IC we find that $V \sim N$ and $C$ scales linearly with $N$ or weaker in all configurations. To leading order $\text{Var}[P] \sim N$ for IC resulting in $\epsilon^2 \sim N^{-1}$ regardless of dimensionality. For EC, the $V$ dependence on collective size depends on
+%$N_\text{edge} \sim N^{(d-1)/d}$.
+%The $N$ dependence of $C$ also changes with dimensionality. $C$ scales as
+%$N^{-1}, N^{1/2}, N$
+%in one, two and three dimensions, respectively. A 1D chain of EC cells has $\text{Var}[P] \sim N^0$ with $V$ the dominant contribution. For 2D, $V$ and $C$ scale the same and both contribute to $\text{Var}[P] \sim N^{1/2}$. In 3D cells are more densely packed, and $C$ is the dominant contribution to the variance resulting in $\text{Var}[P] \sim N$. Therefore, EC relative error scales as
+%$N^{-2}, N^{-3/2}, N^{-1}$
+%for one, two and three dimensions, so EC is more precise than its individual-based counterpart in one and two dimensions.
+%
+Our analytical treatment relies on several assumptions which we now relax using the simulations. In Fig.\ \ref{fig:2} the integration time $T$ is larger than the timescale for molecule diffusion $\tau_D$.
+%, $T = 2 \tau_D$.
+We find that reducing $T$ to as much as two orders of magnitude smaller than $\tau_D$ still results in the expected relative error scalings, with 1D and 2D EC outperforming IC \cite{supinfo}. Similarly, using an exponential concentration profile instead of a linear one does not change the relative error scaling behavior \cite{supinfo}.
+
+In our model, IC polarization is adaptive to the background concentration as observed in the Ras signalling pathway for \textit{Dictyostelium discoideum} chemotaxis \cite{takeda2012incoherent}. On the other hand, our EC model is non-adaptive. Cell polarization increases with background concentration causing tension in the collective [Fig.\ \ref{fig:1}(c)], as previously studied \cite{camley2016emergent}. However, adaptive collective sensing has been observed in mammary epithelial cells \cite{ellison2016cell}. Our EC model could be made adaptive by replacing the integrand in Eq.\ \ref{eq:ECcell1} with
+$c(\vec{r}+\vec{r}',t)-c_0$.
+This change does not affect the properties of $\vec{P}$ since the background concentration cancels out when summing over all edge cells, but it does remove the internal tension in the collective.
+
+% EC migration can be adaptive or non-adaptive to the background concentration: in non-adaptive EC, as modeled in Eq.\ \ref{eq:ECcell1},
+% $\|\vec{p}\|$
+% will increase with the background concentration, whereas for adaptive EC it remains fixed. Adaptive sensing has been observed in mammary epithelial cells
+% \cite{ellison2016cell} and in the Ras signalling pathway for \textit{Dictyostelium discoideum} chemotaxis \cite{takeda2012incoherent}.
+% Our model can be made adaptive by replacing the integrand in Eq.\ \ref{eq:ECcell1} with
+% $c(\vec{R}+\vec{r}',t)-c_0$.
+% This change does not affect the properties of $\vec{P}$ since the background concentration cancels out when summing over all edge cells, but it does remove the internal tension present in the collective.
+
+Besides the advantage revealed here in terms of chemotactic precision, another benefit of EC is in terms of cell differentiation. In EC only edge cells need to be involved in chemical sensing and polarization, freeing bulk cells from the obligation of receptor and protein production necessary for chemotaxis. Bulk cells are free to differentiate into other phenotypes, possibly serving different uses for the collective. This is in stark contrast with IC where every cell must be of the polarized phenotype, leaving no cells with the freedom to differentiate.
+
+The two EC advantages of improved chemotactic precision and the possibility of cell differentiation may be why EC-style collective migration is more prevalent than IC. For example, EC has been observed in two dimensional collectives of malignant lymphocytes \cite{malet2015collective} and in border cell migration \cite{cai2016modeling}. In cancer, metastatic invasion sometimes occurs in the form of chains of cells leaving the tumor with a leader cell at the front \cite{cheung2013collective,friedl2009collective}, analogous to our 1D EC model. Two-dimensional EC migration may also be implicated in tumorigenesis and metastasis in pancreatic ductal cells given the cylindrical surface-like geometry of pancreas ducts
+\cite{bardeesy2002pancreatic}.
+
+How can our predictions be tested in experiments? The chemotactic index (CI), commonly defined as
+$\text{CI} \equiv \langle \cos\theta \rangle$ where $\theta$ is the angle between the trajectory and the gradient \cite{van2007biased}, is actually a simple monotonic function of $\epsilon^2$. For small deviations from perfect chemotaxis, we have
+$\text{CI} \approx 1 - \langle \theta^2 \rangle/2 = 1 - \text{Var}[\theta]/2$.
+If $v_z$ and $v_x$ are the components of the velocity of the collective parallel and perpendicular to the gradient, respectively, then $\theta \approx v_x/v_z$ with $\langle v_z\rangle > 0$ and $\langle v_x\rangle = 0$, resulting in
+$\text{Var}[\theta] = \text{Var}[v_z] / \langle v_z\rangle^2 = \epsilon^2$.
+Therefore the relative error and chemotactic index are related as
+$\text{CI} = 1 - \epsilon^2/2$ for small errors.
+With this relationship the predicted scalings of $\epsilon^2$ for EC and IC may be tested with chemotaxis experiments. Additionally, the
+CI scaling behavior could be used to determine whether an EC- or IC-style migration is at play in an unknown system.
+
+We have shown how the fluctuations in a diffusing attractant concentration set physical limits to collective chemotactic performance. By focusing on two fundamental classes of collective chemotaxis, we have found that the mean speed scales with the size of the collective irrespective of the mechanism or geometry, but that an emergent mechanism outperforms an individual-based one for 1D and 2D geometries in terms of chemotactic precision.
+This advantage arises due to the ways that errors accumulate in the two mechanisms: in an emergent strategy, fewer cells contribute their sensory noise to the collective, and in 1D and 2D the cross-correlations between cells remain low, ultimately leading to a subextensive scaling of polarization variance with collective size. As such, the performance advantage is an inherent property of the emergent mechanism, and we suspect that it not only helps explain the prevalence of emergent chemotaxis in cellular systems, but that it also is detectable using standard measures such as the chemotactic index.
+%which cells chemotax individually and adhere (IC) and the other in which cells take on a different behavior when grouped (EC). The mean polarization, and thereby mean velocity, for EC collectives is found to have the same size-dependence as IC, but a distinction between the two classes occurs in regards to chemotactic precision.
+%The scaling of the relative error (Eq.\ \ref{eq:error1}) with collective size for EC is dimension-dependent,
+%$\epsilon^2 \sim N^{-2+(d-1)/2}$,
+%whereas for IC it scales as $\epsilon^2 \sim N^{-1}$ regardless of geometry. One and two-dimensional EC collectives have lower relative error than IC, suggesting that the improved chemotactic precision along with the ability for cell differentiation to occur may explain the prevelance of EC migration in cellular biology. We also connected our theoretical scalings to experimental observables, such as mean speed and chemotactic index, in the hopes that our findings can be tested with future experiments.
+
+
+\newpage
+
+
+\begin{center}
+\textbf{\large Supplementary Information for \\ ``Emergent versus Individual-based Multicellular Chemotaxis''}
+\end{center}
+
+% \renewcommand{\thefigure}{S\arabic{figure}}
+% \renewcommand{\theequation}{S\arabic{equation}}
+% \setcounter{equation}{0}
+% \setcounter{figure}{0}
+
+% \renewcommand{\bibnumfmt}[1]{[S#1]}
+% \renewcommand{\citenumfont}[1]{S#1}
+
+
+\section{Particle-based Simulations}
+
+We perform computational simulations in order to test the properties of EC and IC for one, two and three dimensional collectives. In the simulation, particles move randomly inside a 3D volume and boundaries are set to produce the desired concentration profiles. Cells are placed at fixed positions in the 3D volume in either one, two or three dimensional configurations. For a linear concentration profile, one boundary produces particles, and the opposing one is an absorbing boundary while all other boundaries periodic. For an exponential concentration, the same boundaries are used and particles are also allowed to degrade.
+
+At each time-step of the simulation particles randomly move and are produced. In a given time-step particles move in a random direction with a probability
+$p = D\Delta t/b^2$,
+with $b$ the particle hopping distance, $D$ the diffusion coefficient, and $\Delta t$ the time-step. A particle is produced during that time-step with probability
+$q = k\Delta t$,
+with $k$ the production rate. The time-step $\Delta t$ is set such that $p + q \leq 1$. In the case of an exponential concentration profile, particles may also degrade during a time-step. Particles degrade with probability
+$r = \beta \Delta t$, with $\beta$ the degradation rate. In this case $\Delta t$ is set such that $p + q + r \leq 1$.
+
+The simulation code used for this paper can be found at \url{https://doi.org/10.5281/zenodo.401040}, and the most up-to-date version of the code can be found at \url{https://github.com/varennes/particletrack}.
+
+
+\section{Analytic Results}
+
+We consider collectives in one, two and three dimensions of radius $R$ comprised of $N$ cells. Each cell is taken to be a permeable sphere of radius $a$ through which molecules of the surrounding chemical concentration $c(\vec{r},t)$ can freely diffuse. The chemical concentration is taken to be
+\begin{equation}
+    c(\vec{r},t) = c(0,t) + \vec{r}\cdot\vec{g}(\vec{r},t)
+\end{equation}
+with $\vec{g}$ parallel to the \textit{z} axis. The chemical concentration obeys normal diffusion
+\begin{equation} \label{eq:diffeq}
+    \dot{c} = D\nabla^2c+\eta_c
+\end{equation}
+with $D$ the diffusion coefficient, and $\eta_c$ the Langevin noise due to fluctuations in concentration. We linearize the concentration $c(\vec{r},t) = \bar{c}(\vec{r}) + \delta c(\vec{r},t)$ with
+\begin{equation} \label{eq:meanc}
+    \bar{c}(\vec{r}) = c_0 + \vec{r}\cdot\vec{g}
+\end{equation}
+where $c_0$ is the mean concentration at the origin. The Langevin noise term $\eta_c$, and the Fourier transformed fluctuation in the concentration $\delta\tilde{c}(\vec{k},\omega)$ have the following properties (see Ref.\ [23] of the main text):
+\begin{gather}
+    \langle\tilde{\eta}_c(\vec{k}',\omega')\tilde{\eta}_c(\vec{k},\omega) \rangle = 2D \ 2\pi\delta(\omega-\omega') \int d^3y \ \vec{k}\cdot\vec{k}' \ \bar{c}(\vec{y}) \ e^{i\vec{y}\cdot\left(\vec{k}-\vec{k}'\right)} \ ,
+    \label{eq:c1} \\
+    \langle\delta\tilde{c}(\vec{k}',\omega')\delta\tilde{c}(\vec{k},\omega) \rangle = \frac{\langle\tilde{\eta}_c(\vec{k}',\omega')\tilde{\eta}_c(\vec{k},\omega) \rangle}{(Dk^2-i\omega)(Dk'^2+i\omega')} \ .
+    \label{eq:c2}
+\end{gather}
+
+Next, we define the cell polarization vectors for individual-based chemotaxis (IC) and emergent chemotaxis (EC). Collectives of $N$ cells form shapes of different dimensionality: a chain of cells of length $2R$ (1D), a disc of cells with radius $R$ (2D), and a sphere of cells of radius $R$ (3D).
+
+
+\subsection{Individual-based Chemotaxis}
+
+In the IC mechanism, cells independently measure the chemoattractant gradient in order to set their polarization vector $\vec{p}$. For a spherically-shaped cell with volume $U_i$, $\vec{p}_i$ is defined as
+\begin{equation}
+    p_{i\alpha}(t) = \int_{U_i} d^3r \ w_\alpha c(\vec{r},t) ,
+\end{equation}
+where $\alpha\in\{x,y,z\}$, and in spherical coordinates the cosine is $w_\alpha = \{\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta\}$.
+The $x, y, z$ components are written as
+\begin{align}
+    p_{ix}(t) &= \int d\Omega' \ \sin\theta' \cos\phi' \int_0^a dr' \ r'^2 \ c(\vec{r}_i+\vec{r}',t)  \label{eq:3DMWpx} \\
+    p_{iy}(t) &= \int d\Omega' \ \sin\theta' \sin\phi' \int_0^a dr' \ r'^2 \ c(\vec{r}_i+\vec{r}',t)  \label{eq:3DMWpy} \\
+    p_{iz}(t) &= \int d\Omega' \ \cos\theta' \int_0^a dr' \ r'^2 \ c(\vec{r}_i+\vec{r}',t), \label{eq:3DMWpz}
+\end{align}
+where $d\Omega' = \sin\theta'd\theta'd\phi'$. The $r'$ coordinates are relative to the center of the respective cell, and the $r_i$ coordinates are relative to the center of the collective.
+Using the mean concentration (Eq.\ \ref{eq:meanc}) with a constant gradient $\vec{g} = g \hat{z}$, we calculate the mean polarization of a single cell:
+\begin{align*}
+    \langle p_{iz} \rangle &= \int d\Omega' \ \cos\theta' \int_0^a dr' \ r'^2 \ \bar{c}(\vec{r}_i+\vec{r}') \\
+    &= \int_0^a dr' \ r'^2 \int d\Omega' \ \cos\theta' (c_0+gr_i\cos\theta_i+gr'\cos\theta') \\
+    &= \frac{\pi}{3} a^4 g \ .
+\end{align*}
+The means for the $x$ and $y$ components are $\langle p_{ix} \rangle = \langle p_{iy} \rangle = 0$ since they are perpendicular to the gradient. On average, cells performing IC migration will only polarize in the $z$ direction. The mean for a collective of IC cells is
+\begin{equation}
+    \langle \vec{P} \rangle = \frac{\pi}{3} a^4 g N \ \hat{z} \ .
+\end{equation}
+
+
+\subsection{Emergent Chemotaxis}
+
+In EC, cells along the edge of the cluster polarize outwards, whereas cells in the interior are not involved in chemical sensing and remain unpolarized:
+\begin{equation}
+    \vec{p}_i(t) =
     \begin{cases}
-        e^{-\left( \Delta u - w \right)} &\ \Delta u - w > 0 , \\
-        1 &\ \Delta u - w \leq 0 .
+         \hat{r}_i \int_{U_i} d^3r \ c(\vec{r},t) &i \in \{ N_\text{edge} \} \\
+        0 &i \in \{ N_\text{bulk} \} \ ,
     \end{cases}
 \end{equation}
-The term $\Delta u$ is the change in energy of the system due to the proposed lattice label copy. $w$ is the \textit{bias} term which acts to bias cell motion in the direction of polarization. The bias term in the CPM model is required in order for cell clusters to exhibit directed motion \cite{szabo2010collective},
-\begin{equation} \label{eq:w}
-    w = \sum_{k=\sigma(a),\sigma(b)} \frac{\Delta\vec{x}_{k(a \to b)} \cdot \vec{p}_k}{ |\Delta\vec{x}_{k(a \to b)}| |\Delta\vec{x}_{k(\Delta t)}|}.
+where $\hat{r}$ points radially outwards from the collective. In order to break down $\vec{p}_i(\vec{r},t)$ into component vectors we must be mindful of the dependence of $\hat{r}_i$ on the cell location. For an edge cell the unit vector $\hat{r}_i$ points in the direction of the cell's location in the collective,
+$\hat{r}_i = \sin\Theta_i\cos\Phi_i \hat{x} + \sin\Theta_i\sin\Phi_i \hat{y} + \cos\Theta_i \hat{z}$
+where $\Theta_i$ is the polar angle made with the gradient direction and $\Phi_i$ is the azimuthal angle along the collective. The cell component vectors are
+\begin{align}
+    p_{ix}(t) &= \sin\Theta_i\cos\Phi_i \ p_i(t) , \\
+    p_{iy}(t) &= \sin\Theta_i\sin\Phi_i \ p_i(t) \ , \\
+    p_{iz}(t) &= \cos\Theta_i \ p_i(t) \ ,
+\end{align}
+with $p_i(t) = \int_{U_i} d^3r \ c(\vec{r},t)$ and $i \in \{ N_\text{edge}\}$. The total polarization of the collective,
+$\vec{P} = \vec{P}_x + \vec{P}_y + \vec{P}_z$,
+is a sum of all the component vectors:
+\begin{align}
+    P_x(t) &= \sum_i^{N_\text{edge}} \sin\Theta_i\cos\Phi_i \ p_i(t) \ , \label{eq:PECx} \\
+    P_y(t) &= \sum_i^{N_\text{edge}} \sin\Theta_i\cos\Phi_i \ p_i(t) \ , \label{eq:PECy} \\
+    P_z(t) &= \sum_i^{N_\text{edge}} \cos\Theta_i \ p_i(t) \ . \label{eq:PECz}
+\end{align}
+
+For an edge cell, the mean polarization is equal to the average number of molecules the cell counts within its spherical body:
+\begin{align*}
+    \langle \vec{p}_i \rangle &= \int_{U_i} d^3r \ \bar{c}(\vec{r}) \ \hat{r}_i \\
+    &= \frac{4\pi}{3}a^3 (c_0+gR\cos\Theta_i) \ \hat{r}_i \ ,
+\end{align*}
+where $\Theta_i$ is the angle the cell's location makes with the gradient direction. The mean for a cluster of EC cells will depend on the dimensionality of the cluster. For a 1D chain of cells, only the two cells on the opposite ends of the chain are polarized, and $\langle P \rangle$ is the difference in the mean number of molecules counted in between the two edge cells:
+\begin{equation} \label{eq:1DECmean}
+    \text{1D}: \langle \vec{P} \rangle = \frac{8\pi}{3}a^4g (N-1) \ \hat{z} \ .
 \end{equation}
-The summation in Eq.\ \ref{eq:w} is over the cells involved in the elementary time step: $a$ is the lattice site being copied, and $b$ is the lattice site being changed. The change in the cell's center of mass position during the elementary time step is $\Delta\vec{x}_{k(a \to b)}$, whereas $\Delta\vec{x}_{k(\Delta t)}$ is the cell's change in the center of mass during a MC step. The cell polarization vector $\vec{p}_k$ is updated at every MC step in accordance with Eq.\ \ref{eq:polarVec}. The dot product acts to bias cell motion since movement that is parallel to the polarization vector will result in a more positive $w$ which in turn results in a higher acceptance probability (Eq.\ \ref{eq:prob}).
 
-In addition to calculating the energy of the system, at each MC step the $X$ and $Y$ molecule populations in each cell are sampled by solving Eq.\ \ref{eq:xss} and \ref{eq:yss}. In doing so our model accounts for fluctuations in molecule numbers, cell shape, and cell-cell contact. With this computational implementation cells on the edges of the cluster are polarized in the direction of increasing chemical concentration, and cells near the center of the cluster have no net polarization, resulting in collective migration in the direction of increasing chemical concentration.
-
-
-\section{Results}
-
-
-\begin{figure}[ht]
-    \centering
-        \includegraphics[width=0.8\textwidth]{../fig/ch2_fig2.png}
-    \caption{Characterizing the emergent multicellular migration. (A) Snapshot from simulation. Individual cells are distinguished by color and white arrows represent their polarization vectors. The cluster centroid is initially located along the gray dashed line and must cross the black dashed line in order to record a first-passage time event. (B) A heat-map of MFPT in units of minutes as a function of cell-ECM adhesion energy, $\beta$ and polarization bias strength, $\epsilon$. Warmer colors represent higher MFPT values (colorbar). Parameter values for the heat-map: $N = 20$, $\bar{c} = 10\text{nM}$, $g = 0.004\text{nM}/\mu\text{m}$, $\Gamma = 80 (\mu\text{m min.})^{-1}$. Illustrations in (C) represent cluster migratory behavior in their respective regimes of parameter space. Larger values of $\epsilon$ correspond to larger cell polarization vectors (red arrows), whereas larger values of $\beta$ correspond to an ECM that is more difficult to traverse. (D) Mean cluster size
-    $\langle N_\text{sub} \rangle$
-    as a function of the total number of cells in the system $N$. Regime 1: $\beta = 1.5$, $\epsilon = 1.0$. Regime 2: $\beta = 3.5$, $\epsilon = 0.8$} \label{fig:heat}
-\end{figure}
-
-
-We simulate clusters of various sizes migrating in response to shallow constant chemical gradients over a fixed distance (Fig.\ \ref{fig:heat}A, Movie S1). The simulation results were calibrated using the cluster migration data from Malet-Engra et al.\ \cite{malet2015collective} and assuming a typical cell radius $a = 10 \mu\text{m}$. Similar to the experimental study, initial simulations were conducted with a gradient and background concentration equivalent to $\bar{g} = 0.001 \text{nM}/\mu\text{m}$ and $\bar{c} = 1 \text{nM}$. We found that increasing the gradient and background concentration values to those reported in Table \ref{table:param} (see pg.\ 11), which still maintain the limit
-$a\bar{g} \ll \bar{c}$,
-decreased computation cost while yielding the same qualitative results. Therefore all results presented here use the values of $\bar{c}$ and $\bar{g}$ in Table \ref{table:param}. The simulation timescale was then calibrated such that clusters of cells migrate with velocities on the same order as those in the study by Malet-Engra et al. All simulation parameter values used are presented and motivated in Table \ref{table:param} unless specified otherwise.
-
-In order to quantify model behavior, statistics on the simulated mean first-passage time (MFPT) for migrating clusters are collected. The first-passage time is the time it takes for the center of mass of a cluster of cells to cross a threshold distance. First it is important to understand the effects of the various parameters in our model on simulations results. Across simulations, two crucial parameters emerge: $\beta$ the cell-ECM adhesion energy, and $\epsilon$ the polarization bias strength. When these two parameters are varied three distinct phases of collective cell migration are clear (regimes 1, 2, and 3 in Fig.\ \ref{fig:heat}B).
-
-Fig.\ \ref{fig:heat}B shows that for sufficiently large $\beta$ the mean first-passage time remains relatively constant as $\beta$ and $\epsilon$ grow in proportion to one another. In this phase, regime 2 of Fig.\ \ref{fig:heat}B, cells migrate as a collective as illustrated in Fig.\ \ref{fig:heat}C. However if the adhesion energy is further increased while the bias strength remains fixed the MFPT starts to increase (regime 3 of Fig.\ \ref{fig:heat}B). This is due to the increased energy cost in cells making protrusions into the ECM. If $\beta$ is increased further the cluster cells will eventually stop moving since protrusions become highly improbable as dictated by the CPM (Fig.\ \ref{fig:heat}C). The other large MFPT phase is due to increasing $\epsilon$
-while keeping $\beta$ fixed (regime 1 of Fig.\ \ref{fig:heat}B).
-In this case the cell's polarization becomes large enough to overcome the intercell adhesion energy causing the cluster of cells to scatter as illustrated in Fig.\ \ref{fig:heat}C. To further characterize whether a cluster will scatter or remain persistently connected, we track the mean subcluster size $\langle N_\text{sub} \rangle$, defined as the average cluster size weighted by the number of cells present in each constituent cluster (Fig.\ \ref{fig:heat}D). Although cells' initial configuration is that of a single cluster, partial scattering may occur stochastically and reversibly, leading to a value of $\langle N_\text{sub} \rangle$ that is less than the cluster size $N$. As seen in Fig.\ \ref{fig:heat}D, the persistence $\langle N_\text{sub} \rangle/N$ is largely independent of $N$, and clusters in the parameter space of regime 2 are more persistent than those corresponding to regime 1 where cells are likely to scatter permanently. Overall, we see that there is a large region in parameter space which yields physically realistic behavior, and the model breaks down in the limits where we would expect it to. With this in mind we further examine simulations within regime 2 of parameter space.
-
-
-\begin{figure}[ht]
-    \centering
-        \includegraphics[width=0.45\textwidth]{../fig/ch2_fig3.png}
-    \caption{Tradeoff between sensing and drag leads to a minimum mean first-passage time (MFPT) with cluster size. $\Gamma_0 = 0.80 (\mu\text{m} \ \text{min})^{-1}$. (A) MFPT for various values of the exchange rate per unit contact-length $\Gamma$. (B) Relative error in gradient sensing for various values of $\Gamma$. (C) Area $A$ and perimeter $P$ scaling relationships with the number of cells $N$ in a cluster. (D) MFPT results in A on a log-log scale, compared with the geometric prediction arising from C. All error bars represent standard deviation.} \label{fig:results}
-\end{figure}
-
-
-Next we examine the MFPT as a function of cluster size (Fig.\ \ref{fig:results}A). Starting from $N=2$ we see that for sufficiently large $\Gamma$ (red curve), as the number of cells increases the MFPT decreases. This can be understood from our description of multicellular sensing (Eq.\ \ref{eq:G1}): before reaching the critical number of cells in a cluster, the error in gradient sensing decreases as $\sigma_R/\bar{R} \sim N^{-1}$ and so the cluster's ability to more precisely measure the gradient increases. The decreased sensing error translates into more accurately directed cell polarization vectors causing the MFPT to decrease. Fig.\ \ref{fig:results}B shows the relative error vs.\ the number of cells in the cluster that are parallel to the gradient direction, $N_g$. In the small-cluster regime and for fast communication (yellow curve) there is a decrease in relative error with $N_g$, that is in close agreement with the theoretical prediction for the scaling of $N_g^{-1}$
-(Eq.\ \ref{eq:G1}). Since the global-reporter exchange rate between cells is very large compared to the degradation rate
-($\gamma\gg\mu$)
-it is expected that the effects of communication can be neglected as was the case in deriving Eq.\ \ref{eq:G1}. However, as the cluster grows in size the effects of communication can no longer be neglected. As illustrated in Fig.\ \ref{fig:results}B the relative error reaches a lower limit as predicted by Eq.\ \ref{eq:G2} at which sensory precision will no longer increase with increased cluster size.
-
-As the number of cells increases the MFPT tends to saturate to a minimal value and may even begin to increase (Fig.\ \ref{fig:results}A). The MFPT reaches a minimum around $N \sim 10-100$ cells depending on the choice of $\Gamma$, the global molecule exchange rate per unit contact-length. Communication between cells improves as $\Gamma$ increases since more $Y$ molecules can be quickly transmitted between cells, pushing the point of saturation to larger cluster sizes. From these results we see that the model predicts an optimal cluster size for fastest migration. This prediction is in contrast with similar studies which in some cases predict a saturation in velocity and therefore constant MFPT as a function of cluster size \cite{camley2016emergent,malet2015collective}. The dependence of MFPT on cluster size is further explored in the Discussion.
-
-In the limit that $\Gamma a / \mu \lesssim 1$ ($a$ being the cell radius) intercellular communication within the cluster is highly localized, and increasing the size of the cluster will not improve sensory precision. If this is the case then the cluster will have outgrown its optimal size for gradient detection. Instead of the cluster acting as one cohesive gradient-sensing device the cluster will comprise several independent gradient sensors which cannot reliably share information with one another. Therefore, in the small $\Gamma$ limit we expect the MFPT to monotonically increase with increasing $N$ due to increased drag on the cluster. Indeed, simulation results confirm our expectations in the large $N$, small $\Gamma$ limit (Fig.\ \ref{fig:results}A, blue curve).
-
-Next we asked if the MFPT had any dependence on the geometrical properties of the migrating clusters \cite{camley2015collective}. The mean first-passage time should scale proportionally with the drag experienced on the cluster, whereas it should be inversely related to the force driving migration,
-\begin{equation} \label{eq:fpt1}
-    \langle\tau\rangle \sim \frac{\text{drag}}{\text{force}}.
+In order to calculate the mean total polarization for two and three dimensional clusters we assume that the cluster size is relatively large ($a\ll R$) and approximate the sum as an integral. For a 2D disc of cells the sum
+$\vec{P} = \sum_i^{N_\text{edge}} \vec{p}_i$
+becomes an integral over the circumference of the cluster. The circumference and the total number of cells along the edge are related by $2\pi R = 2a N_\text{edge}$, and so a segment along the perimeter of length $R\theta$ is equivalent in length to $2a n$ with $n$ the number of edge cells in that segment. Hence $n =\frac{R}{2a}\theta$ allowing us to write integrals for $\vec{P}(t)$ as
+\begin{equation}
+    \vec{P}(t) = \frac{R}{2a} \int_0^{2\pi} d\theta \ \vec{p}_i(t) \ .
 \end{equation}
-The drag on the cluster should scale with the area of the cluster, $\text{drag} \propto A(N)$, and the driving force should scale with the perimeter of the cluster since we know that only cells on the edges of the cluster are polarized in the desired direction, $\text{force} \propto P(N)$. Although the size and shape of clusters will fluctuate we can obtain from many simulations how the average area $\langle A \rangle$ and perimeter $\langle P \rangle$ scale with $N$.
-Fig.\ \ref{fig:results}C shows that both scale with powers of $N$, i.e.\ $\langle A \rangle \sim N^d$ and $\langle P \rangle \sim N^f$. We find $d = 1.004 \pm 0.001$, which makes sense since the average area of the should scale linearly with the number of cells. We also find $f = 0.700 \pm 0.021$, which is intriguing because for a circular cluster we would expect $f = 1/2$. The larger value of $f$ reflects the elongated and amoebic shape of the cluster (Fig.\ \ref{fig:heat}A), which causes its perimeter-to-area ratio to be larger than that expected for a circle.
+The mean polarization will point only in the $z$ direction with magnitude
+\begin{equation*}
+    \langle P_z \rangle = \frac{R}{2a} \int_0^{2\pi} d\theta \ \langle p_z \rangle = \frac{R}{2a} \int_0^{2\pi} d\theta \ \cos\theta \left( \frac{4\pi}{3}a^3 (c_0+gR\cos\theta) \right) = \frac{2\pi^2}{3} a^2gR^2 \ .
+\end{equation*}
+Using the relation $N = (R/a)^2$, the mean of the total polarization is
+\begin{equation} \label{eq:2DECmean}
+    \text{2D}: \langle\vec{P}\rangle = \frac{2\pi^2}{3} a^4gN \ \hat{z} \ .
+\end{equation}
 
-Given these geometric scalings, Eq.\ \ref{eq:fpt1} then makes a prediction: the MFPT should scale as $\langle\tau\rangle \sim N^{d-f} = N^{0.304 \pm 0.021}$. We compare this prediction to the MFPT data, on a log-log scale, in Fig.\ \ref{fig:results}D. We see that in the large $N$, small $\Gamma$ limit, the prediction agrees well with the data (blue and green curves). This demonstrates that the slowdown of large, poorly communicating clusters is dominated by the geometrical aspects of cluster propulsion and drag.
+Similarly, in 3D we approximate the sum as an integral of the spherical surface of the cluster. A patch on the surface of area $\Omega R^2$ encompasses
+$n = \Omega R^2 / (\pi a^2)$ edge cells. The total polarization can therefore be written as an integral over the surface of a spherical cluster:
+\begin{equation}
+    \vec{P}(t) = \frac{R^2}{\pi a^2} \int d\Omega \ \vec{p}_i(t) \ .
+\end{equation}
+The mean polarization will point only in the $z$ direction with magnitude
+\begin{equation*}
+    \langle P_z \rangle = \frac{R^2}{\pi a^2} \int d\Omega \ \langle p_z \rangle = \frac{R^2}{\pi a^2} \int d\Omega \ \cos\theta \left( \frac{4\pi}{3}a^3 (c_0+gR\cos\theta) \right) = \frac{16\pi}{9} agR^3 \ .
+\end{equation*}
+For a spherical cluster, $N = (R/a)^3$ and the mean of the total cluster polarization is
+\begin{equation} \label{eq:3DECmean}
+    \text{3D}: \langle\vec{P}\rangle = \frac{16\pi}{9} a^4gN \ \hat{z} \ .
+\end{equation}
 
-In summary, in the limit that communication between cells is strong ($\Gamma a / \mu \gg 1$), information can be reliably transferred over $n_0 \gg 1$ cells. As long as cluster sizes $N$ remain smaller than $n_0$ cells, there will be an improvement in the sensory capability of the cluster with size, and an associated decrease in the MFPT $\langle\tau\rangle$.  As the critical size $n_0$ is reached, sensory ability will cease to improve with size, and $\langle\tau\rangle$ will reach a minimum. Further addition of cells will cause $\langle\tau\rangle$ to increase according to
-$\langle\tau\rangle \sim \text{drag}/\text{force}$, since the drag is proportional to the cluster area, whereas the force is proportional only to the cluster perimeter.
+
+\subsection{Variance in Cell \& Cluster Polarization}
+
+Here we derive the variance in cell and collective polarizations. The first section gives a general outline for how this is done for either collective migration mechanism. The following sections will derive the specific expressions for IC, and EC and provide scaling arguments for 1D, 2D and 3D geometries.
 
 
-\section{Discussion}
+\subsubsection{General Outline}
+Since the total collective polarization is a sum of the cell polarization for IC or EC, the variance in the total polarization takes the general form:
+\begin{equation} \label{eq:PVAR1}
+\begin{split}
+    \text{Var}[P_\alpha] &=
+    \underbrace{\sum_{i=1}^N \text{Var}[p_{i,\alpha}]}_\text{variance contribution}
+    + \underbrace{\sum_{i\neq j} \text{Cov}[p_{i,\alpha},p_{j,\alpha}]}_\text{covariance contribution} \\
+    &\equiv V + C \ ,
+\end{split}
+\end{equation}
+with $\alpha \in \{ x,y,z\}$.
+In order to derive an expression for the variance in collective polarization we must first understand the fluctuations occurring in single cell measurements. The fluctuations in the $i^\text{th}$ cell's polarization vector are calculated by linearizing each component,
+$p_{i,\alpha}(t) = \bar{p}_{i,\alpha} + \delta p_{i,\alpha}(t)$
+and taking the Fourier transform. The Fourier transform of $\delta p_{i,\alpha}(t)$ takes the general form
+\begin{equation}
+    \delta\tilde{p}_{i,\alpha}(\omega) = \int d^3x_i \int \frac{d^3k}{(2\pi)^3} f(\theta_i,\phi_i) \ \delta\tilde{c}(\vec{k},\omega) \ e^{-i\vec{k}\cdot(\vec{x}_i+\vec{x})}
+\end{equation}
+where the functional form of $f(\theta_i,\phi_i)$ is dictated by the migration mechanism (EC or IC) and the component $\alpha$.
+The cross-spectrum between the $i^\text{th}$ and $j^\text{th}$ cells is
+$\langle \delta\tilde{p}_{i,\alpha}^*(\omega') \delta\tilde{p}_{j,\alpha}(\omega) \rangle$. Utilizing the cross-spectrum we can derive an expression for the variance and covariance in the long-time averaged cell polarization by calculating the power spectrum
+\begin{equation} \label{eq:sij1}
+    S_{ij,\alpha}(\omega=0) = \lim_{\omega \to 0} \int \frac{d\omega'}{2\pi}
+    \langle \delta\tilde{p}_{i,\alpha}^*(\omega') \delta\tilde{p}_{j,\alpha}(\omega) \rangle \ .
+\end{equation}
+The cell polarization variance and covariance is given by:
+\begin{align}
+    \text{Var}[p_{i,\alpha}] &= \frac{1}{T} S_{ii,\alpha}(0) \ , \\
+    \text{Cov}[p_{i,\alpha},p_{j,\alpha}] &= \frac{1}{T} S_{ij,\alpha}(0) \ ,
+\end{align}
+where $T$ is the averaging time.
+With the above expressions for the cell polarization variance and covariance we can solve for Eq.\ \ref{eq:PVAR1} and in turn calculate the relative error for the whole collective. In subsequent sections we show the derivation only for the $z$ component of the polarization since it is parallel to the gradient. The expressions $x$ and $y$ components will be equal to to the $z$ component since the fluctuations in concentration are symmetric in each direction.
 
-We have developed a model in which collective sensing of noisy chemical gradients induces multicellular migration. The model includes the stochastic processes of ligand diffusion, intercellular communication and cell shape fluctuations.
-In the model cells are polarized based on collective gradient information and contact-mediated interactions, leading to biased migration despite the fact that individual cells do not chemotax. We find that the antagonistic effects of sensing and drag result in a minimum mean first-passage time (MFPT) as a function of cluster size, i.e.\ an optimal size for fastest migration. The optimal size is governed by the strength of cell-cell communication, with stronger communication leading to both a larger optimal size and a decreased migration time (Fig.\ \ref{fig:results}D).
 
-Whereas previous models have idealized cell or cluster geometries as perfect circles \cite{ camley2016emergent, camley2015collective}, our use of the cellular Potts model has allowed us to capture natural fluctuations in cell and cluster shape. As a result, we have found that while migrating, clusters adopt a shape that is (i) elongated in the gradient direction and (ii) non-convex (see Fig.\ \ref{fig:heat}A). Both features lead to a cluster perimeter-to-area ratio that is significantly larger than that expected for a circle or other convex shape with aspect ratio near unity. Importantly, we have found that the area and perimeter scalings remain predictive of MFPT in the communication-limited regime (Fig.\ \ref{fig:results}D), even with the observed non-circular and fluctuating geometries.
+\subsection{Individual-based Chemotaxis}
+For IC the variance in $P_z$ is
+\begin{equation}
+    \text{Var}[P_z] = \sum_{i=1}^N \text{Var}[p_{i,z}] + \sum_{i\neq j} \text{Cov}[p_{i,z},p_{j,z}] \equiv V_\text{IC} + C_\text{IC} \ .
+\end{equation}
+The Fourier-transformed fluctuations in IC cell polarization is
+\begin{equation}
+    \delta\tilde{p}_{j,z}(\vec{k},\omega) = \int_V d^3x \int \frac{d^3k}{(2\pi)^3} \cos\theta
+    \delta\tilde{c}(\vec{k},\omega)
+    e^{-i\vec{k}\cdot(\vec{x_i}+\vec{x})} \ .
+\end{equation}
+The cross-spectrum for the $z$-component between two cells is
+\begin{equation} \label{eq:pij1}
+\begin{split}
+    \langle\delta\tilde{p}_{i,z}^*(\omega')\delta\tilde{p}_{j,z}(\omega) \rangle = \int_V d^3x d^3x' \int \frac{d^3kd^3k'}{(2\pi)^6}
+    \cos\theta \cos\theta'
+    \langle \delta\tilde{c}^*(\vec{k}',\omega')\delta\tilde{c}(\vec{k},\omega) \rangle
+    e^{-i\vec{k}\cdot(\vec{x}_j+\vec{x})} e^{i\vec{k}'\cdot(\vec{x}_i+\vec{x}')} \ .
+\end{split}
+\end{equation}
+We can rewrite Eq.\ \ref{eq:pij1} by noting that only the relative locations of cell $i$ and $j$ are relevant for the cross-spectrum. Let $\vec{r}_{ij} = \vec{x}_i - \vec{x}_j$ and $r_{ij} = |\vec{r}_{ij}|$.
+\begin{equation} \label{eq:sij2}
+\begin{split}
+    \langle \delta\tilde{p}_{i,z}^*(\omega')\delta\tilde{p}_{j,z}(\omega) \rangle = \int_V d^3x d^3x' \int \frac{d^3kd^3k'}{(2\pi)^6}
+    \cos\theta \cos\theta' \\
+    \langle \delta\tilde{c}^*(\vec{k}',\omega') \delta\tilde{c}(\vec{k},\omega) \rangle
+    e^{-i\vec{k}\cdot\vec{x}} e^{i\vec{k}'\cdot(\vec{r}_{ij}+\vec{x}')}
+\end{split}
+\end{equation}
+Plugging in Eq.\ \ref{eq:c2} for
+$\langle \delta\tilde{c}^*(\vec{k}',\omega') \delta\tilde{c}(\vec{k},\omega) \rangle$
+and writing $\cos\theta$ in terms of spherical harmonic $Y_1^0(\hat{x})$ yields
+\begin{align*}
+    \langle\delta\tilde{p}_{i,z}^*(\omega')\delta\tilde{p}_{j,z}(\omega) \rangle &= \int_V d^3x d^3x' \int \frac{d^3kd^3k'}{(2\pi)^6}
+    \frac{4\pi}{3} Y_1^0(\hat{x})Y_1^0(\hat{x}') \ 2D \\ &\frac{2\pi\delta(\omega-\omega')}{(Dk^2-i\omega)(Dk'^2+i\omega')} \int d^3y \vec{k}\cdot\vec{k}' \bar{c}(\vec{y}) e^{i\vec{y}\cdot(\vec{k}-\vec{k}')}
+    e^{-i\vec{k}\cdot\vec{x}} e^{i\vec{k}'\cdot(\vec{r}_{ij}+\vec{x}')} \\
+    &= \frac{4D}{3(2\pi)^5} 2\pi\delta(\omega-\omega') \int_V d^3x d^3x' \int d^3kd^3k'd^3y \ Y_1^0(\hat{x})Y_1^0(\hat{x}') \\
+    &\frac{\bar{c}(\vec{y}) \ \vec{k}\cdot\vec{k}'\ e^{i\vec{y}\cdot(\vec{k}-\vec{k}')}}{(Dk^2-i\omega)(Dk'^2+i\omega')} e^{-i\vec{k}\cdot\vec{x}} e^{i\vec{k}'\cdot(\vec{r}_{ij}+\vec{x}')}
+\end{align*}
+Plugging in the above expression for
+$\langle\delta\tilde{p}_{i,z}^*(\omega')\delta\tilde{p}_{j,z}(\omega) \rangle$
+into $S_{ij,z}(0)$ (Eq.\ \ref{eq:sij1}) and using the specified mean concentration from Eq.\ \ref{eq:meanc}:
+\begin{equation}
+\begin{split}
+    S_{ij,z}(0) = \frac{4}{3(2\pi)^5D} \int_V d^3x d^3x' \int d^3kd^3k'd^3y \ Y_1^0(\hat{x})Y_1^0(\hat{x}') \frac{\vec{k}\cdot\vec{k}'}{k^2k'^2} \\
+    (c_0+\vec{g}\cdot\vec{y}) \ e^{i\vec{y}(\vec{k}-\vec{k}')} \ e^{-i\vec{k}\cdot\vec{x}} e^{i\vec{k}'\cdot(\vec{r}_{ij}+\vec{x}')} \ .
+\end{split}
+\end{equation}
+We can break up the expression for $S_{ij,z}(0)$ into two terms: one dependent on the background concentration, the other on the gradient.
+\begin{equation} \label{eq:sij3}
+\begin{split}
+    S_{ij,z}(0) = \frac{4}{3(2\pi)^5D} \int_V d^3x d^3x' \int d^3kd^3k' \ Y_1^0(\hat{x})Y_1^0(\hat{x}') \frac{\vec{k}\cdot\vec{k}'}{k^2k'^2} \ e^{-i\vec{k}\cdot\vec{x}} \\
+    e^{i\vec{k}'\cdot(\vec{r}_{ij}+\vec{x}')}
+    \left((2\pi)^3 \delta^3(\vec{k}-\vec{k}') c_0 + \int d^3y \ \vec{g}\cdot\vec{y} \ e^{i\vec{y}(\vec{k}-\vec{k}')} \right)
+\end{split}
+\end{equation}
+Let $S_{ij}^1$ represent the background concentration term and $S_{ij}^2$ represent the gradient dependent term in the power spectrum such that $S_{ij,z}(0) = S_{ij}^1 + S_{ij}^2$.
+\begin{equation} \label{eq:Sij1MW}
+    S_{ij}^1 = \frac{4c_0}{3(2\pi)^2D} \int_V d^3x d^3x' \int d^3k \ Y_1^0(\hat{x})Y_1^0(\hat{x}') \frac{1}{k^2} \ e^{-i\vec{k}\cdot\vec{x}} \
+    e^{i\vec{k}\cdot(\vec{r}_{ij}+\vec{x}')}
+\end{equation}
+\begin{equation} \label{eq:Sij2MW}
+\begin{split}
+    S_{ij}^2 = \frac{4c_0}{3(2\pi)^5D} \int_V d^3x d^3x' \int d^3kd^3k'd^3y \ Y_1^0(\hat{x})Y_1^0(\hat{x}') \frac{\vec{k}\cdot\vec{k}'}{k^2k'^2} \ \vec{g}\cdot\vec{y} \\
+    e^{i\vec{y}(\vec{k}-\vec{k}')} \
+    e^{-i\vec{k}\cdot\vec{x}} \
+    e^{i\vec{k}'\cdot(\vec{r}_{ij}+\vec{x}')}
+\end{split}
+\end{equation}
+The following expansions will prove useful:
+\begin{align}
+    e^{-i\vec{k}\cdot\vec{r}} &= 4\pi \sum_{l,m} (-i)^l j_l(kr) Y_l^{m}(\hat{k}) Y_l^{m*}(\hat{r}) \ , \label{eq:planewave} \\
+    \vec{a}\cdot\vec{b} &= \frac{4\pi}{3} ab \sum_{m=-1}^1 Y_1^m(\hat{a}) Y_1^{m*}(\hat{b}) \ . \label{eq:dotprod}
+\end{align}
+Starting with Eq.\ \ref{eq:Sij1MW} we expand all the exponential terms, and we use these expansions in order to evaluate the angular integrals in $S_{ij}^1$.
+\begin{equation}
+\begin{split}
+    S_{ij}^1 = \frac{2^5(2\pi)c_0}{3D} \int_V d^3x d^3x' \int d^3k \ Y_1^{0*}(\hat{x})Y_1^{0*}(\hat{x}') \ \frac{1}{k^2} \\
+    \left(\sum_{l_1,m_1}i^{-l_1} j_{l_1}(xk) Y_{l_1}^{m_1}(\hat{x}) Y_{l_1}^{m_1*}(\hat{k}) \right)
+    \left(\sum_{l_2,m_2}i^{l_2} j_{l_2}(r_{ij}k) Y_{l_2}^{m_2}(\hat{k}) Y_{l_2}^{m_2*}(\hat{r}_{ij}) \right) \\
+    \left(\sum_{l_3,m_3}i^{l_3} j_{l_3}(x'k) Y_{l_3}^{m_3}(\hat{k}) Y_{l_3}^{m_3*}(\hat{x}') \right)
+\end{split}
+\end{equation}
+The angular integrals over $\hat{x}$ and $\hat{x}'$ eliminate the summations over $l_1,m_1$ and $l_3,m_3$.
+\begin{equation} \label{eq:Sij3MW}
+\begin{split}
+    S_{ij}^1 = \frac{2^5(2\pi)c_0}{3D} \int_0^a dx dx' \int d^3k \ \frac{1}{k^2} x^2 x'^2 \ j_{1}(xk) j_{1}(x'k) \ Y_{1}^{0*}(\hat{k}) Y_{1}^{0}(\hat{k}) \\
+    \left(\sum_{l_2,m_2}i^{l_2} j_{l_2}(r_{ij}k') Y_{l_2}^{m_2}(\hat{k}') Y_{l_2}^{m_2*}(\hat{r}_{ij}) \right)
+\end{split}
+\end{equation}
+The product of the two spherical harmonics is
+\begin{equation*}
+    Y_{1}^{0*}(\hat{k}) Y_{1}^{0*}(\hat{k}) = \frac{1}{\sqrt{4\pi}} \left( Y_0^0(\hat{k}) + \frac{2\sqrt{5}}{5} Y_2^0(\hat{k}) \right) \ .
+\end{equation*}
+Therefore when evaluating the $\hat{k}$ integral in Eq.\ \ref{eq:Sij3MW} only the $l_2=0,m_2=0$ and $l_2=2,m_2=0$ terms of the summation will be non-zero.
+\begin{equation}
+\begin{split}
+    S_{ij}^1 = \frac{2^5(2\pi)c_0}{3D\sqrt{4\pi}} \int_0^a dx dx' \int_0^\infty dk \ x^2 x'^2 \ j_{1}(xk) j_{1}(x'k) \\ \left(j_0(r_{ij}k) Y_0^0(\hat{r}_{ij}) - \frac{2\sqrt{5}}{5} j_2(r_{ij}k) Y_2^0(\hat{r}_{ij}) \right)
+\end{split}
+\end{equation}
+The integrals over $x$ and $x'$ evaluate to:
+\begin{equation*}
+    \int_0^a dx \ x^2 j_1(kx) = \frac{1}{k^3}\left(2-2\cos(ak)-ak\sin(ak) \right) \equiv \frac{1}{k^3} h(ak) \ .
+\end{equation*}
+Note that
+$Y_0^0(\Theta_{ij},\Phi_{ij}) = \frac{1}{\sqrt{4\pi}}$
+, and
+$Y_2^0(\Theta_{ij},\Phi_{ij}) = \frac{1}{2} \sqrt{\frac{5}{4\pi}} (3\cos^2\Theta_{ij}-1)$.
+The angle $\Theta_{ij}$ is the angle $\hat{r}_{ij}$ makes relative to the gradient direction $\hat{g}$, $\cos\Theta_{ij} = \hat{r}_{ij}\cdot\hat{g}$. The expression for $S_{ij}^1$ reduces to
+\begin{equation}
+    S_{ij}^1 = \frac{2^4c_0}{3D} \int_0^\infty dk \ \frac{h^2(ak)}{k^6} \ \left[j_0(r_{ij}k) - j_2(r_{ij}k) (3\cos^2\Theta_{ij}-1) \right]
+\end{equation}
+We can make the integral dimensionless by making the variable substitutions $u \equiv ak$ and $n_{ij} \equiv r_{ij}/a$.
+\begin{equation}
+    S_{ij}^1 = \frac{2^4c_0a^5}{3D} \int_0^\infty du \ \frac{h^2(u)}{u^6} \left[j_0\left(n_{ij}u\right) - j_2\left(n_{ij}u\right) (3\cos^2\Theta_{ij}-1) \right] \label{eq:s1u1}
+\end{equation}
+We can break up Eq.\ \ref{eq:s1u1} into two integrals and evaluate them individually. Note that the exact solution to either integral depends parametrically on $n_{ij}$ and that $n_{ij}$ is the number of cells radii separating two cells. If we are evaluating the cross-correlations in one cell then $i=j$ and $n_{ii}=0$; on the other hand, if $i\neq j$ then $n_{ij} \geq 2$ in order to eliminate the possibility of overlapping cells. In either case the expression simplifies to:
+\begin{equation}
+    S_{ij}^1 =
+    \begin{cases}
+        \frac{4\pi c_0a^5}{45D} &\ i=j \\
+        -\frac{\pi c_0a^5}{18D} \frac{1}{n_{ij}^3}(3\cos^2\Theta_{ij}-1) &\ i \neq j, \ n_{ij} \geq 2
+    \end{cases} \ .
+\end{equation}
+Doing the same set of expansions for $S_{ij}^2$ in Eq.\ \ref{eq:Sij2MW}, and performing the same kind of analysis reveals that the gradient depedendent term is asymmetric under exchange of $i$ and $j$. Therefore when calculating the cluster polarization variance all the $S_{ij}^2$ terms will cancel. The variance contributions $V$ and $C$ are
+\begin{align}
+    V_\text{IC} &= \sum_{i=1}^N \frac{1}{T} S_{ii,z}(0) = \frac{4\pi a^5c_0}{45DT} N \ , \label{eq:ICV1} \\
+    C_\text{IC} &= \sum_{i\neq j}^N \frac{1}{T} S_{ij,z}(0) = -\frac{\pi a^5c_0}{18DT} \sum_{i\neq j}^N \frac{(3\cos^2\Theta_{ij}-1)}{n_{ij}^3} \ \label{eq:ICC1},
+\end{align}
+resulting in the IC collective total variance
+\begin{equation} \label{eq:VIC}
+    \text{Var}[P_z] = \frac{\pi a^5c_0}{9DT} \left[ \frac{4}{5}N - \frac{1}{2}\sum_{i\neq j}^N \frac{(3\cos^2\Theta_{ij}-1)}{n_{ij}^3} \right] \ ,
+\end{equation}
+as in Eqs.\ 6 and 7 in the main text.
+Next we will show how Eq.\ \ref{eq:VIC} scales for collectives in one, two and three dimensional configurations.
 
-To the extent possible, our model has been constructed and parameterized using current experiments on collective migration. Intercellular communication is modeled as a direct exchange of messenger molecules between cells since this type of  communication has been implicated in development, organoid branching, angiogenesis, and cancer \cite{ramel2013rab11,ellison2016cell,gerhardt2003vegf,hsu2000cadherin,friedl2009collective}. The chemical concentration and gradient values are selected to ensure that our simulations are in the shallow gradient regime, where experiments show that collectives can respond whereas single cells cannot \cite{ellison2016cell,malet2015collective,rosoff2004new}. Cell size, chemical concentration, chemical gradient, cell-cell contact energy, and cell-ECM contact energy values are taken from previous experimental studies of collective cell behavior (Table \ref{table:param}).
 
-How do our model predictions compare to experiments? There have been many studies on collective migration \cite{cheung2013collective,puliafito2015three,defranco2008migrating,ramel2013rab11} though only one (to our knowledge), by Malet-Engra et al.\ \cite{malet2015collective}, measures migratory properties as a function of cluster size. The experiments conducted by Malet-Engra et al.\ reveal that beyond a minimum cluster size, the cluster velocity saturates to a maximal value and then remains constant with increasing cluster size. In our study, we find that when communication is strong, the MFPT -- which is inversely related to the mean velocity -- also saturates to a minimal value and remains constant for a large range of cluster sizes. As shown in Fig.\ \ref{fig:results}A (red curve), as the cluster size increases from about 30 to 200 cells the MFPT remains relatively constant, in qualitative agreement with the aforementioned experimental results. This saturation regime occurs when communication is sufficiently strong to suppress, over a large range of cluster sizes, the drag-induced slowdown. Our findings thus suggest that sensory information is reliably transferred throughout the clusters of lymphocytes studied by Malet-Engra et al., and that communication is strong enough that drag does not strongly constrain migration speed for the cluster sizes analyzed.
+\subsubsection{One Dimensional Chain}
+
+For a one-dimensional chain of IC cells each cell is aligned parallel to the gradient and the angular dependence of $C_\text{IC}$ (Eq.\ \ref{eq:ICC1}) vanishes,
+\begin{equation}
+    C_\text{IC} = -\frac{\pi a^5c_0}{18DT} \sum_{i\neq j}^N \frac{2}{n_{ij}^3} \ .
+\end{equation}
+We evaluate the sum:
+\begin{equation*}
+    \sum_{i\neq j}^N \frac{1}{n_{ij}^3} = 2 \sum_{i<j}^N \frac{1}{n_{ij}^3} = 2 \sum_{i=1}^{N-1} \frac{N-i}{(2i)^3} = \frac{1}{4}(N H_{N-1}^{(3)} - H_{N-1}^{(2)}) \ ,
+\end{equation*}
+with $H_n^{(m)} = \sum_{k=1}^n \frac{1}{k^m}$ the generalized harmonic number. This results in a total variance of the form
+\begin{equation}
+    \text{Var}[P_z] = \frac{\pi a^5c_c}{9DT} \left[ \frac{4}{5}N - \frac{1}{8} \left( N H_{N-1}^{(3)} - H_{N-1}^{(2)} \right) \right] \ .
+\end{equation}
+For large $N$, $H_{N-1}^{(i)}$ approaches a constant for $i \geq 2$. Therefore, we see that $\text{Var}[P_z]$ scales with $N$ for 1D IC collectives as in Table I of the main text.
+
+
+\subsubsection{Two Dimensional Sheet}
+
+For a two-dimensional sheet of IC cells, pairs of cells can now make a variety of angles with the gradient, and the angular dependence of $C_\text{IC}$ cannot be easily simplified. In order to find the $N$ scaling for $C_\text{IC}$ we calculate the sum numerically. Since the covariances rapidly fall-off as $1/n^3_{ij}$, we only track nearest neighbor pairs that are less than 3 cell radii apart. The resulting numerical solution to the sum in $C_\text{IC}$ is
+\begin{equation*}
+    \sum_{i\neq j}^N \frac{3\cos^2\Theta_{ij}-1}{n_{ij}^3}
+    = 2 \sum_{i<j}^N \frac{3\cos^2\Theta_{ij}-1}{n_{ij}^3}
+    = \frac{1}{4} (1.70 N - 2.67 \sqrt{N} + 0.89) \ .
+\end{equation*}
+Therefore the expression for $C_\text{IC}$ (Eq.\ \ref{eq:ICC1}) simplifies to
+\begin{equation}
+    C_\text{IC} = -\frac{\pi a^5c_0}{18DT} (0.43 N - 0.67 \sqrt{N} + 0.22) \ .
+\end{equation}
+The covariance contribution, $C_\text{IC}$, to leading order scales linearly with $N$.
+The total variance becomes
+\begin{equation}
+    \text{Var}[P_z] = \frac{\pi a^5c_c}{9DT} \left( 0.59 N + 0.33 \sqrt{N} - 0.11 \right) \ .
+\end{equation}
+We see that for large $N$, $\text{Var}[P_z]$ scales with $N$ for 2D IC collectives as in Table I in the main text.
+
+
+\subsubsection{Three Dimensional Cluster}
+
+To obtain a scaling for $C_\text{IC}$ in a three dimensional cluster we assume that cluster is large, such that $a \ll R$ and $N \gg 1$. For a given cell we can calculate its contribution to $C_\text{IC}$ by considering the covariance contribution it makes with a set of cells a fixed distance away from it. The equidistant cells form a spherical shell with the principal cell in the center. Adapting Eq.\ \ref{eq:ICC1} for a cell and its spherical shell of covariance pairs yields:
+\begin{equation}
+    C_\text{cell} = -\frac{\pi a^5c_0}{18DT} \frac{1}{n_\text{shell}^3} \sum_{i_\text{shell}} 3\cos^2\Theta_{i}-1 \ ,
+\end{equation}
+with $n_\text{shell}$ the radius of the shell in terms of cell radii.
+Going to continuum we can calculate the contribution from the cell and all its pairs
+\begin{equation}
+    C_\text{cell} = -\frac{\pi a^5c_0}{18DT n_\text{shell}^3} \int_0^{2\pi} d\phi \int_0^{\pi} d\theta \ \sin\theta (3\cos^2\theta-1) = -\frac{\pi^2 a^5c_0}{9DT n_\text{shell}^3} \int_0^\pi d\theta \ (3\cos^2\sin\theta - \sin\theta) = 0 \ .
+\end{equation}
+In the last step, we see that the integral vanishes. Thus, the contribution from a single cell and its shell of pairs sum to zero. Repeating this argument for all cells in the cluster results in the total $C_\text{IC} = 0$. Therefore for 3D clusters there is no covariance contribution to the total variance, and $\text{Var}[P_z] = V_\text{IC} \sim N$ as in Table I of the main text.
+
+
+\subsection{Emergent Chemotaxis Clusters}
+For EC the variance in $P_z$ is
+\begin{equation}
+    \text{Var}[P_z] = \sum_{i=1}^N \text{Var}[p_{i,z}] + \sum_{i\neq j} \text{Cov}[p_{i,z},p_{j,z}] \equiv V_\text{EC} + C_\text{EC} \ .
+\end{equation}
+The Fourier-transformed fluctuations in IC cell polarization is
+\begin{equation}
+    \delta\tilde{p}_{i,z}(\vec{k},\omega) = \cos\Theta_i \int_V d^3x \int \frac{d^3k}{(2\pi)^3}
+    \delta\tilde{c}(\vec{k},\omega)
+    e^{-i\vec{k}\cdot(\vec{x_i}+\vec{x})} \ ,
+\end{equation}
+with $\Theta_i$ the angle cell $i$ makes with the gradient.
+The cross-spectrum for the $z$-component between two cells is
+\begin{equation} \label{eq:pijEC1}
+\begin{split}
+    \langle\delta\tilde{p}_i^*(\vec{k}',\omega')\delta\tilde{p}_j(\vec{k},\omega) \rangle = \cos\Theta_i \cos\Theta_j \int_V d^3x d^3x' \int \frac{d^3kd^3k'}{(2\pi)^6}
+    \langle \delta\tilde{c}^*(\vec{k}',\omega')\delta\tilde{c}(\vec{k},\omega) \rangle
+    e^{-i\vec{k}\cdot(\vec{x}_j+\vec{x})} e^{i\vec{k}\cdot(\vec{x}_i+\vec{x}')}
+\end{split}
+\end{equation}
+Following the same procedure as in the case of IC, we get an expression for $S_{ij}^1$ for EC:
+\begin{equation} \label{eq:SijEC1}
+    S_{ij}^1 =
+    \begin{cases}
+        \frac{16\pi c_0a^5}{15D} \cos^2\Theta_i &\ i=j \\
+        \frac{8\pi c_0a^5}{9D} \frac{1}{n_{ij}} \cos\Theta_i \cos\Theta_j &\ i \neq j, \ n_{ij} \geq 2
+    \end{cases} \ .
+\end{equation}
+Since again $S^2_{ij}=0$ by symmetry, the variance for any configuration of EC cells is
+\begin{align}
+    V_\text{EC} &= \frac{16\pi a^5c_0}{15DT} \sum_{i=1}^{N_\text{edge}} \cos^2\Theta_i \ , \label{eq:ECV1} \\
+    C_\text{EC} &= \frac{8\pi a^5c_0}{9DT} \sum_{i\neq j} \frac{\cos\Theta_i \cos\Theta_j}{n_{ij}} \ , \label{eq:ECC1}
+\end{align}
+as in Eqs.\ 10 and 11 in the main text. The resulting total variance is
+\begin{equation} \label{eq:ECvarP}
+    \text{Var}[P_z] = \frac{8\pi a^5c_0}{3DT} \left[ \frac{2}{5} \sum_{i=1}^{N_\text{edge}} \cos^2\Theta_i +  \frac{1}{3} \sum_{i\neq j} \frac{\cos\Theta_i \cos\Theta_j}{n_{ij}} \right] \ .
+\end{equation}
+
+
+\subsubsection{One Dimensional Chain}
+
+For a one-dimensional chain of cells only the two cells on the opposing ends are polarized. The cell variance contribution to the total variance therefore does not change with increasing cluster size,
+\begin{equation}
+    V_\text{EC} = \frac{16\pi a^5c_0}{15DT} \sum_{i=1}^{N_\text{edge}} \cos^2\Theta_i = \frac{32\pi a^5c_0}{15DT} \ .
+\end{equation}
+Therefore $V_\text{EC} \sim N^0$ for 1D collectives. For $C_\text{EC}$ the distance between the two edge cells increases by two cell radii for each cell added to the chain:
+\begin{equation}
+    C_\text{EC} = \frac{8\pi a^5c_0}{9DT} \sum_{i\neq j} \frac{\cos\Theta_i \cos\Theta_j}{n_{ij}} = -\frac{8\pi a^5c_0}{9DT} \frac{1}{2(N-1)} \ .
+\end{equation}
+So $C_\text{EC} \sim N^{-1}$ for 1D collectives. To leading order in $N$ the total collective variance depends only on $V_\text{EC}$:
+\begin{equation}
+    \text{Var}[P_z] = \frac{32\pi a^5c_0}{15DT} \ ,
+\end{equation}
+and so $\text{Var}[P_z]$ does not depend on collective size for 1D EC as in Table I of the main text.
+
+\subsubsection{Two Dimensional Sheet}
+
+In order to evaluate the variance for a two-dimensional disc of cells we will approximate the sums as integrals over the circumference of the disc as we did in evaluating the mean polarization. Assuming that $a \ll R$ Eq.\ \ref{eq:ECV1} can be written as an integral
+\begin{equation}
+    V_\text{EC} = \frac{16\pi a^5c_0}{15DT} \frac{R}{2a} \int_0^{2\pi} d\theta \ \cos^2\theta \ .
+\end{equation}
+Using the relation $N=(R/a)^2$ yields
+\begin{equation}
+    V_\text{EC} = \frac{8\pi^2 a^5c_0}{15DT} \sqrt{N} \ .
+\end{equation}
+Hence for 2D EC, the variance contribution $V_\text{EC}$ scales as $\sqrt{N}$.
+In order to determine how $C_\text{EC}$ scales with $N$ we approximate the sums over $i$ and $j$ as a double integral, again assuming that $a \ll R$.
+\begin{equation}
+    C_\text{EC} = \frac{16\pi a^5c_0}{9DT}
+    \left( \frac{R}{2a^2} \right) \int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \int_{\theta_1+\Delta/2}^{2\pi} d\theta_2 \ \frac{\cos\theta_1 \cos\theta_2}{n(\theta_1,\theta_2)}
+\end{equation}
+Here $\Delta = 2a/R$ is the anguler separation between two edge cells, and
+\begin{equation*}
+    n(\theta_1,\theta_2) = \frac{2R}{a} \sin \left( \frac{1}{2}(\theta_2-\theta_1) \right)
+\end{equation*}
+is the number of cell radii separating two edge cells. Using this expression for $n(\theta_1,\theta_2)$ we evaluate the integral over $\theta_2$:
+\begin{equation}
+    \begin{split}
+        \left( \frac{R}{2a^2} \right) \int_{\Delta/2}^{2\pi-\Delta/2} &d\theta_1 \int_{\theta_1+\Delta/2}^{2\pi} d\theta_2 \ \frac{\cos\theta_1 \cos\theta_2}{n(\theta_1,\theta_2)} \\
+        &= \frac{R}{8a} \int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \cos\theta_1 [ -4\left( \cos(\theta_1/2) + \cos(\theta_1+\Delta/2) \right)
+        -2 \cos\theta_1 \log\left( \tan(\Delta/4) \tan(\theta_1/4) \right) ]
+    \end{split}
+\end{equation}
+Breaking up the integral into four separate terms we find:
+\begin{align*}
+    &\int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \cos\theta_1 \cos(\theta_1/2) = 0 \ , \\
+    &\int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \cos\theta_1 \cos(\theta_1+\Delta/2) = -\frac{1}{2}\cos(\Delta/2) (\Delta+\sin\Delta-2\pi) \ , \\
+    &\int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \cos\theta_1 \log\left( \tan(\Delta/4)\right) = -\frac{1}{2} (\Delta+\sin\Delta-2\pi) \tan(\Delta/4) \ , \\
+    &\int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \cos\theta_1 \log\left( \tan(\theta_1/4) \right) = 0 \ .
+\end{align*}
+The first and last integrals are equal to zero since the integrands are odd functions over the range $[0,2\pi]$. With these results, the whole expression simplifies to
+\begin{equation}
+    C_\text{EC} = \frac{16\pi a^5c_0}{9DT} \frac{1}{4}\sqrt{N} \left( \frac{1}{2}\log N + \log 2 -2 \right) \left( \pi - \frac{2}{\sqrt{N}} \right)
+\end{equation}
+Keeping only the leading order terms in $N$ yields
+\begin{equation}
+    C_\text{EC} = \frac{2\pi a^5c_0}{9DT} \sqrt{N} \log N \ .
+\end{equation}
+The resulting total variance is
+\begin{equation}
+    \text{Var}[P_z] = \frac{8\pi a^5c_0}{3DT} \sqrt{N} \left[ \frac{\pi}{5} +  \frac{1}{12} \log N \right] \ ,
+\end{equation}
+which to to leading order scales as $\sqrt{N} \log N$ as in Table I of the main text.
+
+
+\subsubsection{Three Dimensional Cluster}
+
+For the three-dimensional cluster, numerical methods must be used in order to find the scaling properties of the variance. We numerically evaluate the total variance (Eq.\ \ref{eq:ECvarP}) on a cubic lattice and obtain the following results.
+
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=0.8\textwidth]{../fig/ch3_si1.pdf}
+    \caption{$\text{Var}[P_z]$ for a 3D cluster of EC cells. Cluster variance shown in red. Pink circles are the single cell variance contributions $V$, and pink diamonds are the cell-cell covariance contributions $C$.} \label{fig:S2}
+\end{figure}
+
+The numerical results [Fig.\ \ref{fig:S2}] show that $V \sim N^{2/3}$ since the number of edge cells also scales as $N^{2/3}$. We also find that $C \sim N$; the covariance contribution to the total cluster polarization grows linearly with $N$. For large clusters the $N$ scaling dominates the behavior of $\text{Var}[P_z]$. Therefore, in 3D the leading order scaling for the variance is
+$\text{Var}[P_z] \sim N$ as in Table I of the main text.
+
+
+\section{Testing Analytic Model Assumptions}
 
 
 \begin{figure}[ht]
     \centering
-        \includegraphics[width=0.7\textwidth]{../fig/ch2_fig4.png}
-    \caption{Prediction to distinguish collective from individual chemotaxis in experiments. (A) Expected MFPT behavior for cluster migration driven by collective sensing. (B) Expected MFPT behavior for cluster migration driven by local interactions.} \label{fig:mfpt}
+        \includegraphics[width=0.8\textwidth]{../fig/ch3_si2.pdf}
+    \caption{(a) Short-time integration relative error results. Data points are of simulations for $T= \frac{1}{100} \tau_D$. (b) Exponential concentration profile relative error results. The mean concentration profile is $\bar{c}(z) = c_0 e^{-z/\lambda}$, the lengthscale $\lambda=\sqrt{D/\beta}$ is set by the diffusion coefficient $D$ and the molecule decay rate $\beta$. Lines are from original analytical predictions using $T > \tau_D$ and a linear concentration profile.} \label{fig:S1}
 \end{figure}
 
+Simulations are performed to test model behavior when assumptions used to derive analytic results are relaxed. In Fig.\ \ref{fig:S1}(a) we relax the assumption that the integration time $T$ must be larger than the timescale for diffusion $\tau_D \sim R^2/D$. We find that $\epsilon^2$ scales the same way as previously predicted for both EC and IC, even when $T = \tau_D/100$. The only exception is that $\epsilon^2$ for 3D EC [Fig.\ \ref{fig:S1}(a), red circles] has a more negative power-law dependence on $N$ than the expected $\sim N^{-1}$. The shorter integration time results in decreased correlations between edge cells which when $T>\tau_D$ results in $C\sim N$. Hence with
+$T < \tau_D$
+the total variance is less dependent on $C$, and $V \sim N^{2/3}$ becomes the dominant contribution to $\text{Var}[P]$. This results in a steeper scaling of $\epsilon^2$ closer to
+$\text{Var}[P]/\langle P \rangle^2 \sim N^{2/3}/N^2 = N^{-4/3}$.
+Interestingly, we see that relaxing the assumption $T \gg \tau_D$ results in improved precision for EC over IC not just in 1D and 2D but also in 3D configurations.
 
-Furthermore, our results suggest a simple experimental test that can distinguish whether cluster chemotaxis is purely collective or individually driven. Broadly speaking, cluster migration (i) can emerge collectively from cells that communicate, either chemically or mechanically, but do not chemotax alone (as in our model), or (ii) it can result from many individual agents that take independent measurements of the environment and through physical coupling or local interactions produce collective migration \cite{coburn2013tactile,vicsek1995novel} (a so-called ``many wrongs'' mechanism \cite{simons2004many}). As illustrated in Fig.\ \ref{fig:mfpt}A, our results suggest that in the former case, one would observe a minimum in the migration time as a function of the cluster size, with the optimal size determined by the length scale of collective information processing within the cluster. In contrast, as illustrated in Fig.\ \ref{fig:mfpt}B, in the latter case migration is driven by the integrated measurements of many effectively independent agents, and thus one would observe a monotonic decrease in the migration time as a function of the cluster size \cite{simons2004many}. Distinguishing the dependence in Fig.\ \ref{fig:mfpt}A from that in Fig.\ \ref{fig:mfpt}B using microscopy would provide phenomenological evidence of purely collective chemotaxis without relying on molecular-level details.
-
-An important feature of our model and its analysis is that the timescale of sensing is faster than the timescale of cell response and motility (Table \ref{table:param}). However, in actuality the duration of cells' sensing timescales relative to their response timescales is unknown \cite{ellison2016cell}. If the motility timescale is shorter than that of sensing for a specific cell type than the MFPT dependence on cluster size may be more complicated than predicted. For short response timescales we expect migratory behavior to be more strongly diffusive, but to still remain biased in the direction of the gradient over periods of time larger than the sensing timescale.
-
-In our model, the precision of multicellular migration is determined in part by noise arising from ligand diffusion at the initial sensory stage. As such, the model respects the fundamental limits to the precision of collective gradient sensing set by the physics of diffusion, which were recently tested in collectives of epithelial cells \cite{ellison2016cell, mugler2016limits}. It will be interesting to see how these and similar limits translate from the domain of sensing to that of migration, and whether they depend on the underlying migration mechanism (purely collective, individually driven, or a mixture thereof).
+In Fig.\ \ref{fig:S1}(b) we change the concentration profile from linear to exponential which has a mean concentration of
+$\bar{c}(z) = c_0 e^{-z/\lambda}$.
+The lengthscale $\lambda=\sqrt{D/\beta}$ depends on the diffusion coefficient and the molecule degradation rate $\beta$. In Fig.\ \ref{fig:S1}(b) the simulation results are for $\lambda > a$. We find that $\epsilon^2$ is in very good agreement with our original analytic predictions. The only exception is that due to the exponential profile, $\langle P \rangle$ for 1D EC (Fig.\ \ref{fig:S1}(b), red squares) is non-linear in $N$ causing the relative error data to scale less steeply than the expected $N^{-2}$.
