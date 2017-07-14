@@ -1,10 +1,13 @@
 
 \chapter{Limits to Collective Chemotaxis}
 
+In this chapter we transition from studying single-cell chemotaxis to that of multicellular collectives.
+
 Collective migration is ubiquitous in cell biology, occurring in organism development \cite{theveneau2010collective,cai2016modeling,bianco2007two,montell2008morphogenetic},
 tissue morphogenesis \cite{ellison2016cell} and metastatic invasion
 \cite{kim2013cooperative,friedl2009collective,friedl2012classifying,deisboeck2009collective}.
-Collective migration often occurs in response to chemical cues in the environment, a process known as chemotaxis. The simplest way for cells to collectively chemotax is by individual detection and response to the chemical attractant: each cell measures the spatial difference in chemoattractant across its body and moves in the perceived direction of the gradient, while short-range coupling keeps the group together. Groups performing this type of \textit{individual-based chemotaxis} (IC) are found not only in cell biology \cite{kulesa1998neural} but also in ecological systems such as bird flocks \cite{simons2004many}.
+Collective migration often occurs in response to chemical cues in the environment, a process known as chemotaxis. The simplest way for cells to collectively chemotax is by individual detection and response to the chemical attractant: each cell measures the gradient through the spatial difference in chemoattractant across its body and moves in the perceived direction of the gradient, while short-range coupling keeps the group together. Groups performing this type of \textit{individual-based chemotaxis} (IC) are found not only in cell biology \cite{kulesa1998neural} but also in ecological systems such as bird flocks \cite{simons2004many}.
+IC is sometimes referred to as ``many wrongs'', as alluded to in Ch.\ 1.
 However, recent experiments have uncovered an alternative type of chemotaxis, in which cells grouped together chemotax differently than if they were alone \cite{haeger2015collective,malet2015collective,leber2009molecular,gaggioli2007fibroblast}.
 For example, outer cells may polarize while inner cells do not, a mechanism observed in neural crest cells \cite{theveneau2010collective} and considered in several recent modeling studies
 \cite{malet2015collective,camley2016emergent,varennes2016collective}. This type of \textit{emergent chemotaxis} (EC) behavior seen in cell collectives presupposes a machinery within cells which allows for behavior to change once a cell is in a group. Since this machinery may come at a cost, this raises the question of whether EC offers any fundamental advantage over IC.
@@ -36,10 +39,6 @@ and first we consider a constant gradient
 $\vec{g} = g \hat{z}$ that is shallow ($ag \ll c_0$). Cells are assumed to preferentially adhere to one another, hence the polarization of a collective of $N$ cells is the sum of its constituent cells' polarization vectors $\vec{P}(t) = \sum_{i=1}^N \vec{p}_i(t)$.
 
 The collectives exist at low Reynolds number, hence their velocity $\vec{v}$ is proportional to the motility force, and in turn the polarization $\vec{P}$.
-%their movement is overdamped and can be modeled as
-%$\lambda \vec{\text{v}} = \vec{F}$
-%where $\lambda$ is the coefficient of friction and $\vec{F}$ is the motility force that the collective exerts. The total polarization drives its movement and thus
-%$\vec{\text{v}} \propto \vec{P}$.
 Therefore, understanding the behavior of $\vec{P}$ will inform us of the collective migratory performance. We focus on two measures of performance: the mean and the relative error of the polarization in the gradient direction $P_z$, where the relative error is defined
 \begin{equation} \label{eq:error1}
     \epsilon^2
@@ -47,8 +46,8 @@ Therefore, understanding the behavior of $\vec{P}$ will inform us of the collect
     = \frac{\text{Var}[v_z]}{\langle v_z \rangle^2}.
 \end{equation}
 To investigate $\langle P_z\rangle$ and $\epsilon^2$ for the IC model,
-we first perform particle-based simulations of the chemoattractant in the presence of the permeable cells \cite{supinfo,ch3code}. We find that the total mean polarization $\langle \vec{P} \rangle$ points solely in the gradient direction with equal magnitude regardless of dimensionality [Fig.\ \ref{fig:2}(a), blue data points]. Indeed, Eq.\ \ref{eq:ICcell} indicates that a single cell will have mean polarization proportional to the concentration difference across the cell,
-$\langle \vec{p}_i \rangle = \pi a^4g \hat{z}/3$,
+we first perform particle-based simulations of the chemoattractant in the presence of the permeable cells \cite{ch3code}. A complete description of the simulations used can be found in Section \ref{sct:ch3_sim}. We find that the total mean polarization $\langle \vec{P} \rangle$ points solely in the gradient direction with equal magnitude regardless of dimensionality [Fig.\ \ref{fig:2}(a), blue data points]. Indeed, Eq.\ \ref{eq:ICcell} indicates that a single cell will have mean polarization proportional to the concentration difference across the cell,
+$\langle \vec{p}_i \rangle = \pi a^4g/3 \ \hat{z}$,
 regardless of the cell's location.
 Therefore the mean collective polarization is geometry-independent, depending only on the number of cells present,
 \begin{equation} \label{eq:ICmean}
@@ -64,7 +63,7 @@ as shown in Fig.\ \ref{fig:2}(a) (blue lines).
 
 We next investigate the relative error for IC collectives. Simulations show that the error decreases with cluster size as
 $\epsilon^2 \sim N^{-1}$
-for all three geometries [Fig.\ \ref{fig:2}(b), blue data points]. Indeed this is the result that one would obtain if the cells were independent sensors \cite{simons2004many}. However, they are not independent: their noise is correlated by fluctuations in the concentration \cite{fancher2016fundamental,mugler2016limits}. To understand why correlations do not affect the relative error we investigate the model analytically.
+for all three geometries [Fig.\ \ref{fig:2}(b), blue data points]. This is the result that one would obtain if the cells were independent sensors \cite{simons2004many}. However, they are not independent: their noise is correlated by fluctuations in the concentration \cite{fancher2016fundamental,mugler2016limits}. To understand why correlations do not affect the relative error we investigate the model analytically.
 
 We linearize the concentration $c(\vec{r},t) = \bar{c}(\vec{r}) + \delta c(\vec{r},t)$ as well as the cell polarization
 $\vec{p}_i(t) = \langle \vec{p}_i \rangle + \delta\vec{p}(t)$,
@@ -112,6 +111,7 @@ For a 1D chain of IC cells, every pair is parallel to the gradient resulting in 
 
 \begin{table}[t]
 \normalsize
+\begin{center}
 \begin{tabular}{cc|l|l|l|l|}
 \cline{3-6}
 & & $\langle P_z \rangle$ & $V$ & $C$ &
@@ -141,10 +141,10 @@ $\epsilon^2$ \\ \cline{1-6}
 \multicolumn{1}{ |c  }{} &
 \multicolumn{1}{ |c| }{ 3D } & $N^1$ & $N^{2/3}$ & $N^1$ & $N^{-1}$ \\
 \cline{1-6}
-
 \end{tabular}
 \caption{Summary of scaling behavior. $N$ dependence of the leading order term for the mean $\langle P_z \rangle$, and the variance ($V$) and covariance ($C$) contributions to the relative error $\epsilon^2 = (V+C)/\langle P_z \rangle^2$. $C$ for EC in 2D has a $\log$ correction \cite{supinfo}.}
 \label{table:1}
+\end{center}
 \end{table}
 
 
@@ -167,13 +167,6 @@ assuming the collective is much larger than a single cell $R \gg a$ \cite{supinf
 \begin{equation} \label{eq:ECmean}
     \langle \vec{P} \rangle_\text{EC} = f_d a^4gN \ \hat{z},
 \end{equation}
-%\begin{align}
-%    \langle \vec{P} \rangle_\text{EC} &= \frac{8\pi}{3} a^4g(N-1) \ \hat{z} \ \ \ \text{(1D)} , \\
-%    \langle \vec{P} \rangle_\text{EC} &= \frac{2\pi^2}{3} a^4gN \ \hat{z} \
-%    \ \ \ \ \ \ \ \ \text{(2D)} , \\
-%    \langle \vec{P} \rangle_\text{EC} &= \frac{16\pi}{9} a^4gN \ \hat{z} \
-%    \ \ \ \ \ \ \ \ \text{(3D)} ,
-%\end{align}
 where the prefactors are $f_d = \{8\pi/3, 2\pi^2/3, 16\pi/9\}$ for $d=\{1,2,3\}$ dimensions, and for $d=1$ we have taken $N-1\to N$ for large $N$. Eq.\ \ref{eq:ECmean} is shown in Fig.\ \ref{fig:2}(b) (red lines), and we see good agreement. $\langle P_z \rangle$ scales with $N$ because it depends on the product of
 $N_\text{edge} \sim N^{(d-1)/d}$
 and the distance spanned in the gradient direction
@@ -183,7 +176,6 @@ resulting in a mean polarization which is geometry invariant \cite{malet2015coll
 Comparing EC and IC shows that $\langle P_z \rangle \sim N$ regardless of collective migration mechanism or geometry as seen in Fig.\ \ref{fig:2}(a). $\langle P_z \rangle$ has the same parameter dependency for both EC and IC, namely $a^4g$, which is the average change in the number of chemoattractant molecules across a cell. Although
 $\langle P_z \rangle_\text{EC} \approx 6 \langle P_z \rangle_\text{IC}$
 meaning that EC speed is faster than IC, this relatively small difference may be difficult to detect in biological systems. Moreover, both mechanisms have the same $N$ scaling.
-%which should carry over to experiments. This implies that both EC and IC collectives of cells should on average migrate at roughly the same speed in response to a chemoattractant, and so in experimental assays the two mechanisms may be indistinguishable.
 Does the same equivalence between EC and IC also hold for the relative error?
 
 Interestingly, simulations show that the EC relative error does depend on geometry and in fact outperforms IC in terms of scaling in 1D and 2D [Fig.\ \ref{fig:2}(b), red points]. Only in 3D does the relative error appear to scale the same as IC. In order to understand the dimension dependence of the EC relative error we again investigate the model analytically.
@@ -210,31 +202,12 @@ which agree with the scalings seen in simulations and analytics.
 
 Thus, the physical origin of the advantage of EC over IC lies in how the errors scale with the collective size $N$. In IC, all $N$ cells contribute to the sensing, and cross-correlations between them scale either linearly or sublinearly with $N$, leading to a scaling $\epsilon \sim 1/\sqrt{N}$ that is characteristic of independent sensors. But in EC, only $N_\text{edge} \sim N^{(d-1)/d}$ cells contribute to the sensing, leading to a sublinear scaling with $N$ of the variance contributions of the individual cells. The total variance of the collective, then, depends on the cross-correlations, which are geometry-specific: in 1D they are dwarfed by the individual variances, in 2D they are commensurate, and in 3D they dominate (Table \ref{table:1}). As a result, 1D and 2D EC collectives benefit from a variance that scales subextensively, i.e., sublinearly with $N$.
 
-%We have derived analytical expressions of
-%$\text{Var}[P] = V + C$
-%for one, two and three dimensional systems of EC and IC collectives. For IC we find that $V \sim N$ and $C$ scales linearly with $N$ or weaker in all configurations. To leading order $\text{Var}[P] \sim N$ for IC resulting in $\epsilon^2 \sim N^{-1}$ regardless of dimensionality. For EC, the $V$ dependence on collective size depends on
-%$N_\text{edge} \sim N^{(d-1)/d}$.
-%The $N$ dependence of $C$ also changes with dimensionality. $C$ scales as
-%$N^{-1}, N^{1/2}, N$
-%in one, two and three dimensions, respectively. A 1D chain of EC cells has $\text{Var}[P] \sim N^0$ with $V$ the dominant contribution. For 2D, $V$ and $C$ scale the same and both contribute to $\text{Var}[P] \sim N^{1/2}$. In 3D cells are more densely packed, and $C$ is the dominant contribution to the variance resulting in $\text{Var}[P] \sim N$. Therefore, EC relative error scales as
-%$N^{-2}, N^{-3/2}, N^{-1}$
-%for one, two and three dimensions, so EC is more precise than its individual-based counterpart in one and two dimensions.
-%
 Our analytical treatment relies on several assumptions which we now relax using the simulations. In Fig.\ \ref{fig:2} the integration time $T$ is larger than the timescale for molecule diffusion $\tau_D$.
-%, $T = 2 \tau_D$.
 We find that reducing $T$ to as much as two orders of magnitude smaller than $\tau_D$ still results in the expected relative error scalings, with 1D and 2D EC outperforming IC \cite{supinfo}. Similarly, using an exponential concentration profile instead of a linear one does not change the relative error scaling behavior \cite{supinfo}.
 
 In our model, IC polarization is adaptive to the background concentration as observed in the Ras signalling pathway for \textit{Dictyostelium discoideum} chemotaxis \cite{takeda2012incoherent}. On the other hand, our EC model is non-adaptive. Cell polarization increases with background concentration causing tension in the collective [Fig.\ \ref{fig:1}(c)], as previously studied \cite{camley2016emergent}. However, adaptive collective sensing has been observed in mammary epithelial cells \cite{ellison2016cell}. Our EC model could be made adaptive by replacing the integrand in Eq.\ \ref{eq:ECcell1} with
 $c(\vec{r}+\vec{r}',t)-c_0$.
 This change does not affect the properties of $\vec{P}$ since the background concentration cancels out when summing over all edge cells, but it does remove the internal tension in the collective.
-
-% EC migration can be adaptive or non-adaptive to the background concentration: in non-adaptive EC, as modeled in Eq.\ \ref{eq:ECcell1},
-% $\|\vec{p}\|$
-% will increase with the background concentration, whereas for adaptive EC it remains fixed. Adaptive sensing has been observed in mammary epithelial cells
-% \cite{ellison2016cell} and in the Ras signalling pathway for \textit{Dictyostelium discoideum} chemotaxis \cite{takeda2012incoherent}.
-% Our model can be made adaptive by replacing the integrand in Eq.\ \ref{eq:ECcell1} with
-% $c(\vec{R}+\vec{r}',t)-c_0$.
-% This change does not affect the properties of $\vec{P}$ since the background concentration cancels out when summing over all edge cells, but it does remove the internal tension present in the collective.
 
 Besides the advantage revealed here in terms of chemotactic precision, another benefit of EC is in terms of cell differentiation. In EC only edge cells need to be involved in chemical sensing and polarization, freeing bulk cells from the obligation of receptor and protein production necessary for chemotaxis. Bulk cells are free to differentiate into other phenotypes, possibly serving different uses for the collective. This is in stark contrast with IC where every cell must be of the polarized phenotype, leaving no cells with the freedom to differentiate.
 
@@ -253,31 +226,11 @@ CI scaling behavior could be used to determine whether an EC- or IC-style migrat
 
 We have shown how the fluctuations in a diffusing attractant concentration set physical limits to collective chemotactic performance. By focusing on two fundamental classes of collective chemotaxis, we have found that the mean speed scales with the size of the collective irrespective of the mechanism or geometry, but that an emergent mechanism outperforms an individual-based one for 1D and 2D geometries in terms of chemotactic precision.
 This advantage arises due to the ways that errors accumulate in the two mechanisms: in an emergent strategy, fewer cells contribute their sensory noise to the collective, and in 1D and 2D the cross-correlations between cells remain low, ultimately leading to a subextensive scaling of polarization variance with collective size. As such, the performance advantage is an inherent property of the emergent mechanism, and we suspect that it not only helps explain the prevalence of emergent chemotaxis in cellular systems, but that it also is detectable using standard measures such as the chemotactic index.
-%which cells chemotax individually and adhere (IC) and the other in which cells take on a different behavior when grouped (EC). The mean polarization, and thereby mean velocity, for EC collectives is found to have the same size-dependence as IC, but a distinction between the two classes occurs in regards to chemotactic precision.
-%The scaling of the relative error (Eq.\ \ref{eq:error1}) with collective size for EC is dimension-dependent,
-%$\epsilon^2 \sim N^{-2+(d-1)/2}$,
-%whereas for IC it scales as $\epsilon^2 \sim N^{-1}$ regardless of geometry. One and two-dimensional EC collectives have lower relative error than IC, suggesting that the improved chemotactic precision along with the ability for cell differentiation to occur may explain the prevelance of EC migration in cellular biology. We also connected our theoretical scalings to experimental observables, such as mean speed and chemotactic index, in the hopes that our findings can be tested with future experiments.
 
 
-\newpage
+\section{Particle-based Simulations} \label{sct:ch3_sim}
 
-
-\begin{center}
-\textbf{\large Supplementary Information for \\ ``Emergent versus Individual-based Multicellular Chemotaxis''}
-\end{center}
-
-% \renewcommand{\thefigure}{S\arabic{figure}}
-% \renewcommand{\theequation}{S\arabic{equation}}
-% \setcounter{equation}{0}
-% \setcounter{figure}{0}
-
-% \renewcommand{\bibnumfmt}[1]{[S#1]}
-% \renewcommand{\citenumfont}[1]{S#1}
-
-
-\section{Particle-based Simulations}
-
-We perform computational simulations in order to test the properties of EC and IC for one, two and three dimensional collectives. In the simulation, particles move randomly inside a 3D volume and boundaries are set to produce the desired concentration profiles. Cells are placed at fixed positions in the 3D volume in either one, two or three dimensional configurations. For a linear concentration profile, one boundary produces particles, and the opposing one is an absorbing boundary while all other boundaries periodic. For an exponential concentration, the same boundaries are used and particles are also allowed to degrade.
+Computational simulations are performed to test the properties of EC and IC for one, two and three dimensional collectives. In the simulation, particles move randomly inside a 3D volume and boundaries are set to produce the desired concentration profiles. Cells are placed at fixed positions in the 3D volume in either one, two or three dimensional configurations. For a linear concentration profile, one boundary produces particles, and the opposing one is an absorbing boundary while all other boundaries periodic. For an exponential concentration, the same boundaries are used and particles are also allowed to degrade.
 
 At each time-step of the simulation particles randomly move and are produced. In a given time-step particles move in a random direction with a probability
 $p = D\Delta t/b^2$,
