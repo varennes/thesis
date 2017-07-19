@@ -12,28 +12,7 @@ However, recent experiments have uncovered an alternative type of chemotaxis, in
 For example, outer cells may polarize while inner cells do not, a mechanism observed in neural crest cells \cite{theveneau2010collective} and considered in several recent modeling studies
 \cite{malet2015collective,camley2016emergent,varennes2016collective}. This type of \textit{emergent chemotaxis} (EC) behavior seen in cell collectives presupposes a machinery within cells which allows for behavior to change once a cell is in a group. Since this machinery may come at a cost, this raises the question of whether EC offers any fundamental advantage over IC.
 
-We address this question using simple physical models of EC and IC. Cell collectives respond to graded profiles of freely diffusing molecules, and we quantify the migratory behavior of one-dimensional (1D) cell chains, two-dimensional (2D) cell sheets, and three-dimensional (3D) cell clusters [Fig.\ \ref{fig:1}(a)], configurations designed to mimic physiological multicellular structures such as filaments and ducts \cite{cheung2013collective,friedl2009collective,bardeesy2002pancreatic}. Collectives performing EC and IC are found to have very similar mean speed, with polarization strength scaling linearly with the number of cells regardless of chemotactic mechanism or dimensionality. However, 1D and 2D EC collectives have higher chemotactic precision than IC collectives: we find that for $N$ cells, the relative error in EC scales as
-$\{N^{-2}, N^{-3/2}, N^{-1}\}$ for 1D, 2D, and 3D, respectively, whereas in IC it scales as $N^{-1}$ for any dimension. We explain the physical origin of this difference and discuss its implications.
-
-\begin{figure}
-    \centering
-        \includegraphics[width=0.8\textwidth]{../fig/ch3_fig1.pdf}
-    \caption{(a) We study the chemotactic performance of 1D chains, 2D sheets, and 3D clusters of cells. (b) In individual-based chemotaxis (IC), cells in the collective polarize based on their own gradient measurement. (c) In emergent chemotaxis (EC), cell polarization depends on intercellular interactions: cells on the edge polarize based on their measurement of the concentration, and cells in the bulk do not polarize. In both mechanisms the total polarization $\vec{P}$ will fluctuate in magnitude and direction due to noise in cell measurements.} \label{fig:1}
-\end{figure}
-
-We first consider IC [Fig.\ \ref{fig:1}(b)]. Due to the chemoattractant molecules in the environment, each cell $i$ becomes polarized with vector $\vec{p}_i$ in its desired direction of motion \cite{jilkine2011comparison}. The components of $\vec{p}_i$ reflect the difference in concentration $c(\vec{r},t)$ between the front and back of the cell in each respective direction. This concentration difference will fluctuate due to the particulate nature of diffusion. Focusing on this extrinsic source of noise, we treat each cell as a sphere of radius $a$ through which molecules freely diffuse, akin to the ``perfect instrument'' described by Berg and Purcell \cite{berg1977physics}.
-The concentration difference is encoded internally as a weighted count of the molecules within the cell volume $U_i$. The weighting function will depend on the sensory network, but will generally be positive at the front and negative at the back; here we choose cosine for simplicity. Orienting our coordinate system such that $\hat{z}$ is parallel to the gradient, the components of $\vec{p}_i$ become
-\begin{equation}
-    p_{i\alpha}(t) = \int_{U_i} d^3r \ w_\alpha c(\vec{r},t) , \label{eq:ICcell}
-\end{equation}
-where $\alpha\in\{x,y,z\}$, and in spherical coordinates the cosine is $w_\alpha = \{\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta\}$.
-%The $r'$ coordinate is relative to the center of the cell, $r_i$ is relative to the center of the collective, and the integral is over the volume of the cell.
-The concentration is a random variable of the form
-$c(\vec{r},t) = c(0,t) + \vec{r}\cdot\vec{g}(\vec{r},t)$,
-which obeys regular diffusion $\dot{c} = D\nabla^2c+\eta_c$ with $D$ the diffusion coefficient and $\eta_c$ the Langevin noise due to the diffusive fluctuations in concentration \cite{gardiner1985handbook,fancher2016fundamental}. The mean concentration is
-$\bar{c}(\vec{r}) = c_0 + \vec{r}\cdot\vec{g}$,
-and first we consider a constant gradient
-$\vec{g} = g \hat{z}$ that is shallow ($ag \ll c_0$). Cells are assumed to preferentially adhere to one another, hence the polarization of a collective of $N$ cells is the sum of its constituent cells' polarization vectors $\vec{P}(t) = \sum_{i=1}^N \vec{p}_i(t)$.
+We address this question using simple physical models of EC and IC. Cell collectives respond to graded profiles of freely diffusing molecules, and we quantify the migratory behavior of one-dimensional (1D) cell chains, two-dimensional (2D) cell sheets, and three-dimensional (3D) cell clusters [Fig.\ \ref{fig:ch3_1}(a)], configurations designed to mimic physiological multicellular structures such as filaments and ducts \cite{cheung2013collective,friedl2009collective,bardeesy2002pancreatic}.
 
 The collectives exist at low Reynolds number, hence their velocity $\vec{v}$ is proportional to the motility force, and in turn the polarization $\vec{P}$.
 Therefore, understanding the behavior of $\vec{P}$ will inform us of the collective migratory performance. We focus on two measures of performance: the mean and the relative error of the polarization in the gradient direction $P_z$, where the relative error is defined
@@ -42,27 +21,69 @@ Therefore, understanding the behavior of $\vec{P}$ will inform us of the collect
     = \frac{\text{Var}[P_z]}{\langle P_z \rangle^2}
     = \frac{\text{Var}[v_z]}{\langle v_z \rangle^2}.
 \end{equation}
+In either model, cells sense and polarize in response the chemoattractant diffusing in the environment.
+The chemoattractant concentration is a random variable of the form
+$c(\vec{r},t) = c(0,t) + \vec{r}\cdot\vec{g}(\vec{r},t)$,
+which obeys regular diffusion $\dot{c} = D\nabla^2c+\eta_c$ with $D$ the diffusion coefficient and $\eta_c$ the Langevin noise due to the diffusive fluctuations in concentration \cite{gardiner1985handbook,fancher2016fundamental}. The mean concentration is
+$\bar{c}(\vec{r}) = c_0 + \vec{r}\cdot\vec{g}$,
+and first we consider a constant gradient
+$\vec{g} = g \hat{z}$ that is shallow ($ag \ll c_0$). Cells are assumed to preferentially adhere to one another, hence the polarization of a collective of $N$ cells is the sum of its constituent cells' polarization vectors $\vec{P}(t) = \sum_{i=1}^N \vec{p}_i(t)$, although the exact form of $\vec{p}_i$ will depend on the model.
+The cell polarization will fluctuate due to the particulate nature of diffusion. Focusing on this extrinsic source of noise, we treat each cell as a sphere of radius $a$ through which molecules freely diffuse, akin to the ``perfect instrument'' described by Berg and Purcell \cite{berg1977physics}.
+
+Collectives performing EC and IC are found to have very similar mean speed, with polarization strength scaling linearly with the number of cells regardless of chemotactic mechanism or dimensionality. However, 1D and 2D EC collectives have higher chemotactic precision than IC collectives: we find that for $N$ cells, the relative error in EC scales as
+$\{N^{-2}, N^{-3/2}, N^{-1}\}$ for 1D, 2D, and 3D, respectively, whereas in IC it scales as $N^{-1}$ for any dimension. We explain the physical origin of this difference and discuss its implications.
+
+\begin{figure}
+    \centering
+        \includegraphics[width=0.8\textwidth]{../fig/ch3_fig1.pdf}
+    \caption{(a) We study the chemotactic performance of 1D chains, 2D sheets, and 3D clusters of cells. (b) In individual-based chemotaxis (IC), cells in the collective polarize based on their own gradient measurement. (c) In emergent chemotaxis (EC), cell polarization depends on intercellular interactions: cells on the edge polarize based on their measurement of the concentration, and cells in the bulk do not polarize. In both mechanisms the total polarization $\vec{P}$ will fluctuate in magnitude and direction due to noise in cell measurements.} \label{fig:ch3_1}
+\end{figure}
+
+
+\section{Individual-based Chemotaxis}
+
+We first consider IC [Fig.\ \ref{fig:ch3_1}(b)]. Due to the chemoattractant molecules in the environment, each cell $i$ becomes polarized with vector $\vec{p}_i$ in its desired direction of motion \cite{jilkine2011comparison}. The components of $\vec{p}_i$ reflect the difference in concentration $c(\vec{r},t)$ between the front and back of the cell in each respective direction.
+% This concentration difference will fluctuate due to the particulate nature of diffusion. Focusing on this extrinsic source of noise, we treat each cell as a sphere of radius $a$ through which molecules freely diffuse, akin to the ``perfect instrument'' described by Berg and Purcell \cite{berg1977physics}.
+The concentration difference is encoded internally as a weighted count of the molecules within the cell volume $U_i$. The weighting function will depend on the sensory network, but will generally be positive at the front and negative at the back; here we choose cosine for simplicity. Orienting our coordinate system such that $\hat{z}$ is parallel to the gradient, the components of $\vec{p}_i$ become
+\begin{equation}
+    p_{i\alpha}(t) = \int_{U_i} d^3r \ w_\alpha c(\vec{r},t) , \label{eq:ICcell}
+\end{equation}
+where $\alpha\in\{x,y,z\}$, and in spherical coordinates the cosine is $w_\alpha = \{\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta\}$.
+% The concentration is a random variable of the form
+% $c(\vec{r},t) = c(0,t) + \vec{r}\cdot\vec{g}(\vec{r},t)$,
+% which obeys regular diffusion $\dot{c} = D\nabla^2c+\eta_c$ with $D$ the diffusion coefficient and $\eta_c$ the Langevin noise due to the diffusive fluctuations in concentration \cite{gardiner1985handbook,fancher2016fundamental}. The mean concentration is
+% $\bar{c}(\vec{r}) = c_0 + \vec{r}\cdot\vec{g}$,
+% and first we consider a constant gradient
+% $\vec{g} = g \hat{z}$ that is shallow ($ag \ll c_0$). Cells are assumed to preferentially adhere to one another, hence the polarization of a collective of $N$ cells is the sum of its constituent cells' polarization vectors $\vec{P}(t) = \sum_{i=1}^N \vec{p}_i(t)$.
+
+% The collectives exist at low Reynolds number, hence their velocity $\vec{v}$ is proportional to the motility force, and in turn the polarization $\vec{P}$.
+% Therefore, understanding the behavior of $\vec{P}$ will inform us of the collective migratory performance. We focus on two measures of performance: the mean and the relative error of the polarization in the gradient direction $P_z$, where the relative error is defined
+% \begin{equation} \label{eq:error1}
+%     \epsilon^2
+%     = \frac{\text{Var}[P_z]}{\langle P_z \rangle^2}
+%     = \frac{\text{Var}[v_z]}{\langle v_z \rangle^2}.
+% \end{equation}
 To investigate $\langle P_z\rangle$ and $\epsilon^2$ for the IC model,
-we first perform particle-based simulations of the chemoattractant in the presence of the permeable cells \cite{ch3code}. A complete description of the simulations used can be found in Section \ref{sct:ch3_sim}. We find that the total mean polarization $\langle \vec{P} \rangle$ points solely in the gradient direction with equal magnitude regardless of dimensionality [Fig.\ \ref{fig:2}(a), blue data points]. Indeed, Eq.\ \ref{eq:ICcell} indicates that a single cell will have mean polarization proportional to the concentration difference across the cell,
+we first perform particle-based simulations of the chemoattractant in the presence of the permeable cells \cite{ch3code}. A complete description of the simulations used can be found in Section \ref{sct:ch3_sim}. We find that the total mean polarization $\langle \vec{P} \rangle$ points solely in the gradient direction with equal magnitude regardless of dimensionality [Fig.\ \ref{fig:ch3_2}(a), blue data points]. Indeed, Eq.\ \ref{eq:ICcell} indicates that a single cell will have mean polarization proportional to the concentration difference across the cell,
 $\langle \vec{p}_i \rangle = \pi a^4g/3 \ \hat{z}$,
 regardless of the cell's location.
 Therefore the mean collective polarization is geometry-independent, depending only on the number of cells present,
 \begin{equation} \label{eq:ICmean}
     \langle \vec{P} \rangle_\text{IC} = \frac{\pi}{3} a^4gN \ \hat{z},
 \end{equation}
-as shown in Fig.\ \ref{fig:2}(a) (blue lines).
+as shown in Fig.\ \ref{fig:ch3_2}(a) (blue lines).
 
 \begin{figure}[ht]
     \centering
         \includegraphics[width=0.8\textwidth]{../fig/ch3_fig2.pdf}
-    \caption{(a) Mean cluster polarization and (b) relative error for both mechanisms of collective chemotaxis in every configuration. Points are simulation data, colored lines are analytical predictions. 1D EC data plotted with respect to $N-1$.} \label{fig:2}
+    \caption{(a) Mean cluster polarization and (b) relative error for both mechanisms of collective chemotaxis in every configuration. Points are simulation data, colored lines are analytical predictions. 1D EC data plotted with respect to $N-1$.} \label{fig:ch3_2}
 \end{figure}
 
 We next investigate the relative error for IC collectives. Simulations show that the error decreases with cluster size as
 $\epsilon^2 \sim N^{-1}$
-for all three geometries [Fig.\ \ref{fig:2}(b), blue data points]. This is the result that one would obtain if the cells were independent sensors \cite{simons2004many}. However, they are not independent: their noise is correlated by fluctuations in the concentration \cite{fancher2016fundamental,mugler2016limits}. To understand why correlations do not affect the relative error we investigate the model analytically.
+for all three geometries [Fig.\ \ref{fig:ch3_2}(b), blue data points]. This is the result that one would obtain if the cells were independent sensors, since both the mean and variance scale with $N$ in that case \cite{simons2004many}. However, they are not independent: their noise is correlated by fluctuations in the concentration \cite{fancher2016fundamental,mugler2016limits}. To understand why correlations do not affect the relative error we investigate the model analytically.
 
-We linearize the concentration $c(\vec{r},t) = \bar{c}(\vec{r}) + \delta c(\vec{r},t)$ as well as the cell polarization
+We begin by linearizing the concentration $c(\vec{r},t) = \bar{c}(\vec{r}) + \delta c(\vec{r},t)$ as well as the cell polarization
 $\vec{p}_i(t) = \langle \vec{p}_i \rangle + \delta\vec{p}(t)$,
 and by Fourier transforming in both space and time we derive analytic expressions for
 $\text{Var}[P_z]$ and thereby $\epsilon^2$ \cite{supinfo}. Since
@@ -91,19 +112,17 @@ Following this procedure we find that $V$ and $C$ for IC are \cite{supinfo}
     C_\text{IC} &= -\frac{\pi a^5c_0}{18DT} \sum_{i \neq j}^N \frac{3\cos^2\Theta_{ij}-1}{n^3_{ij}} . \label{eq:ICC}
 \end{align}
 Here
-$n_{ij}$ % \equiv \|\vec{r}_i-\vec{r}_j\|/a$
-is the number of cell radii separating the centers of cells $i$ and $j$, and $\Theta_{ij}$ is the angle between the gradient direction and a line connecting the two cells.
-% and the gradient ($\cos\Theta_{ij}=\hat{r}_{ij}\cdot\hat{g}$).
+$n_{ij}$
+is the number of cell radii separating the centers of cells $i$ and $j$, and $\Theta_{ij}$ is the angle between the gradient direction and a line connecting the two cells. A detailed derivation of these analytic results can be found in Section \ref{sct:ch3_SI}.
 
-$V_\text{IC}$ scales with $N$ since each cell is involved in gradient sensing. However, Eq.\ \ref{eq:ICC} %shows that the covariance between a pair of cells is proportional to
-%$-(3\cos^2\Theta_{ij}-1)/n^3_{ij}$
+$V_\text{IC}$ scales with $N$ since each cell is involved in gradient sensing and in turn polarizes. On the other hand, Eq.\ \ref{eq:ICC}
 reveals an angular dependence on the correlations between two IC cells. A pair of cells can be correlated or anti-correlated depending on their locations relative to the gradient. For example, if a pair of cells is parallel to the gradient then
 $\cos^2\Theta_{ij} = 1$,
 resulting in a negative covariance, indicating that their gradient measurements are anti-correlated. In contrast, if two cells are perpendicular to the gradient then
 $\cos^2\Theta_{ij} = 0$,
 resulting in a positive covariance and correlations between the two cells. The resulting contribution of $C_\text{IC}$ to $\text{Var}[P_z]$ is dimensionality-dependent since the angles made between pairs of cells is determined by geometry, whereas $V_\text{IC}$ is dimension-independent.
 
-For a 1D chain of IC cells, every pair is parallel to the gradient resulting in anti-correlated measurements which we find in total scale as $N$ \cite{supinfo}. As dimensionality increases, more and more pairs of cells will be perpendicular to the gradient resulting in reduced anti-correlations in the collective. This culminates in 3D clusters having zero cell-cell covariance contribution to the total cluster variance \cite{supinfo}. This results in $\epsilon^2 \sim N^{-1}$ regardless of dimensionality, indicating that IC cells behave as effectively independent gradient sensors, even with diffusion-mediated cross-correlations. The scalings for $V$ and $C$ are summarized in Table \ref{table:1}. The resulting $\epsilon^2$ predictions are plotted in Fig.\ \ref{fig:2}(b) (blue lines), and we see excellent agreement with the simulations.
+For a 1D chain of IC cells, every pair is parallel to the gradient resulting in anti-correlated measurements which we find in total scale as $N$ \cite{supinfo}. As dimensionality increases, more and more pairs of cells will be perpendicular to the gradient resulting in reduced anti-correlations in the collective. This culminates in 3D clusters having zero cell-cell covariance contribution to the total cluster variance \cite{supinfo}. The result is that $\epsilon^2 \sim N^{-1}$ regardless of dimensionality, indicating that IC cells behave as effectively independent gradient sensors, even though there are diffusion-mediated cross-correlations between cells. The scalings for $V$ and $C$ are summarized in Table \ref{table:1}. The resulting $\epsilon^2$ predictions are plotted in Fig.\ \ref{fig:ch3_2}(b) (blue lines), and we see excellent agreement with the simulations.
 
 
 \begin{table}[t]
@@ -145,9 +164,11 @@ $\epsilon^2$ \\ \cline{1-6}
 \end{table}
 
 
+\section{Emergent Chemotaxis}
+
 Next we turn our attention to EC, the mechanism in which grouped cells sense and migrate differently than individuals.
 Often cells in a cluster differentiate, with edge cells polarized and bulk cells unpolarized \cite{malet2015collective,cai2016modeling}. In accordance with previous studies \cite{camley2016emergent,varennes2016collective},
-we assume that cell interactions are mediated by contact inhibition of locomotion \cite{mayor2010keeping}. The interactions result in edge cells polarized away from their neighbors, and interior cells that remain uninvolved in chemical sensing and do not polarize [Fig.\ \ref{fig:1}(c)]. The edge cells polarize with strength proportional to the local concentration which, again like Berg and Purcell's perfect instrument \cite{berg1977physics}, is estimated by counting the molecules present within their cell volume. Hence we define the polarization of the $i$th cell in the collective as
+we assume that cell interactions are mediated by contact inhibition of locomotion \cite{mayor2010keeping}. The interactions result in edge cells polarized away from their neighbors, and interior cells that remain uninvolved in chemical sensing and do not polarize [Fig.\ \ref{fig:ch3_1}(c)]. The edge cells polarize with strength proportional to the local concentration which, again like Berg and Purcell's perfect instrument \cite{berg1977physics}, is estimated by counting the molecules present within their cell volume. Hence we define the polarization of the $i$th cell in the collective as
 \begin{equation} \label{eq:ECcell1}
     \vec{p}_i(t) =
     \begin{cases}
@@ -155,36 +176,36 @@ we assume that cell interactions are mediated by contact inhibition of locomotio
         0 &i \in \{ N_\text{bulk} \} \ ,
     \end{cases}
 \end{equation}
-where $\hat{r}_i$ points radially outwards from the collective. Eq.\ \ref{eq:ECcell1} dictates that $\vec{p}_i$ is dependent on a cell's location relative to the collective. As illustrated in Fig.\ \ref{fig:1}(c), only the cells on the edge sense the chemoattractant, polarizing with a larger magnitude on the high concentration side of the collective, and the total polarization depends only on the cells along the edge:
+where $\hat{r}_i$ points radially outwards from the collective, and $U_i$ is the cell volume. Eq.\ \ref{eq:ECcell1} dictates that $\vec{p}_i$ is dependent on a cell's location relative to the collective. As illustrated in Fig.\ \ref{fig:ch3_1}(c), only the cells on the edge sense the chemoattractant, polarizing with a larger magnitude on the high concentration side of the collective. The total polarization depends only on the cells along the edge:
 $\vec{P} = \sum_i \vec{p}_i \ , \ \forall i \in \{N_\text{edge}\}$.
 
-Simulations for EC show that the mean polarization $\langle P_z \rangle$ scales with $N$ for all geometries [Fig.\ \ref{fig:2}(a), red points] even though $N_\text{edge}$ is dependent on the dimensionality of the collective. Our analytical solution helps us understand this result. For 1D EC, only the two opposing cells are polarized so $\langle\vec{P}\rangle$ can be solved for exactly, but for 2D and 3D we take the continuum limit of
+Simulations for EC show that the mean polarization $\langle P_z \rangle$ scales with $N$ for all geometries [Fig.\ \ref{fig:ch3_2}(a), red points] even though $N_\text{edge}$ is dependent on the dimensionality of the collective. Our analytical solution helps us understand this result. For 1D EC, only the two opposing cells are polarized so $\langle\vec{P}\rangle$ can be solved for exactly, but for 2D and 3D we take the continuum limit of
 $\vec{P} = \sum_i \vec{p}_i$,
 assuming the collective is much larger than a single cell $R \gg a$ \cite{supinfo}. The resulting expressions are
 \begin{equation} \label{eq:ECmean}
     \langle \vec{P} \rangle_\text{EC} = f_d a^4gN \ \hat{z},
 \end{equation}
-where the prefactors are $f_d = \{8\pi/3, 2\pi^2/3, 16\pi/9\}$ for $d=\{1,2,3\}$ dimensions, and for $d=1$ we have taken $N-1\to N$ for large $N$. Eq.\ \ref{eq:ECmean} is shown in Fig.\ \ref{fig:2}(b) (red lines), and we see good agreement. $\langle P_z \rangle$ scales with $N$ because it depends on the product of
+where the prefactors are $f_d = \{8\pi/3, 2\pi^2/3, 16\pi/9\}$ for $d=\{1,2,3\}$ dimensions, and for $d=1$ we have taken $N-1\to N$ for large $N$. Eq.\ \ref{eq:ECmean} is shown in Fig.\ \ref{fig:ch3_2}(b) (red lines), and we see good agreement. $\langle P_z \rangle$ scales with $N$ because it depends on the product of
 $N_\text{edge} \sim N^{(d-1)/d}$
-and the distance spanned in the gradient direction
+and the distance spanned in the gradient direction by the collective
 $R \sim N^{1/d}$,
 resulting in a mean polarization which is geometry invariant \cite{malet2015collective}.
 
-Comparing EC and IC shows that $\langle P_z \rangle \sim N$ regardless of collective migration mechanism or geometry as seen in Fig.\ \ref{fig:2}(a). $\langle P_z \rangle$ has the same parameter dependency for both EC and IC, namely $a^4g$, which is the average change in the number of chemoattractant molecules across a cell. Although
+Comparing EC and IC shows that $\langle P_z \rangle \sim N$ regardless of collective migration mechanism or geometry as seen in Fig.\ \ref{fig:ch3_2}(a). $\langle P_z \rangle$ has the same parameter dependency for both EC and IC, namely $a^4g$, which is the average change in the number of chemoattractant molecules across a cell. Although
 $\langle P_z \rangle_\text{EC} \approx 6 \langle P_z \rangle_\text{IC}$
 meaning that EC speed is faster than IC, this relatively small difference may be difficult to detect in biological systems. Moreover, both mechanisms have the same $N$ scaling.
 Does the same equivalence between EC and IC also hold for the relative error?
 
-Interestingly, simulations show that the EC relative error does depend on geometry and in fact outperforms IC in terms of scaling in 1D and 2D [Fig.\ \ref{fig:2}(b), red points]. Only in 3D does the relative error appear to scale the same as IC. In order to understand the dimension dependence of the EC relative error we again investigate the model analytically.
-Following the procedure outlined by Eqs.\ \ref{eq:ICvar1} and \ref{eq:ICvar2} we find analytic expressions for $\text{Var}[P_z] = V + C$ for EC \cite{supinfo},
+Interestingly, simulations show that the EC relative error does depend on geometry and in fact outperforms IC in terms of scaling in 1D and 2D [Fig.\ \ref{fig:ch3_2}(b), red points]. Only in 3D does the relative error appear to scale the same as IC. In order to understand the dimension dependence of the EC relative error we again investigate the model analytically.
+Following the procedure outlined by Eqs.\ \ref{eq:ICvar1} and \ref{eq:ICvar2} we find analytic expressions for $\text{Var}[P_z] = V + C$ for EC,
 \begin{align}
     V_\text{EC} &= \frac{16\pi a^5c_0}{15DT} \sum_{i=1}^{N_\text{edge}} \cos^2\Theta_i \label{eq:ECV} , \\
     C_\text{EC} &= \frac{8\pi a^5c_0}{9DT} \sum_{i \neq j}^{N_\text{edge}} \frac{\cos\Theta_i\cos\Theta_j}{n_{ij}} , \label{eq:ECC}
 \end{align}
-with $\Theta_i$ the angle $\hat{r}_i$ makes with the gradient. Both $V_\text{EC}$ and $C_\text{EC}$ depend on dimensionality simply because $N_\text{edge} \sim N^{(d-1)/d}$. From Eqs.\ \ref{eq:ECV} and \ref{eq:ECC} we see that
+with $\Theta_i$ the angle $\hat{r}_i$ makes with the gradient. Again, a detailed derivation of these results can be found in Section \ref{sct:ch3_SI}. Both $V_\text{EC}$ and $C_\text{EC}$ depend on dimensionality simply because $N_\text{edge} \sim N^{(d-1)/d}$. From Eqs.\ \ref{eq:ECV} and \ref{eq:ECC} we see that
 $V \sim N_\text{edge}$,
 and that $C$ depends on the angles edge cells make with the gradient. The angular dependence means that cells along the front and back sides of the cluster (relative to the gradient) are strongly anti-correlated since $\cos\Theta_i\cos\Theta_j \approx -1$,
-whereas pairs of edge cells near the middle are very weakly correlated ($\cos\Theta_i\cos\Theta_j \approx 0$). Unlike in the case of IC, the scaling of $C$ with $N$ increases with dimensionality \cite{supinfo} as summarized in Table \ref{table:1}, and the resulting $\epsilon^2$ predictions show good agreement with the simulation results [Fig.\ \ref{fig:2}(b)].
+whereas pairs of edge cells near the middle are very weakly correlated ($\cos\Theta_i\cos\Theta_j \approx 0$). Unlike in the case of IC, the scaling of $C$ with $N$ increases with dimensionality as summarized in Table \ref{table:1}, and the resulting $\epsilon^2$ predictions show good agreement with the simulation results [Fig.\ \ref{fig:ch3_2}(b)].
 
 The dimension dependence of the EC relative error can be understood by thinking of the collective as one large detector whose sensory surface is comprised of two halves. If both halves were to take measurements of their local concentrations and then polarize in opposing directions with strengths proportional to their measurements, then $\epsilon^2$ would depend on the size of each half
 $a_\text{eff}$
@@ -192,19 +213,37 @@ and their separation distance
 $A_\text{eff}$ according to $\epsilon^2  \sim a^{-1}_\text{eff}A^{-2}_\text{eff}$ \cite{mugler2016limits}.
 The size of each half is independent of $N$ for a 1D chain (each half is a single cell), but it scales as
 $a_\text{eff} \sim N^{1/d}$ for $d = 2$ or $3$ dimensions.
-The separation distance scales with the radius of the collective for all $d$,
+The separation distance scales with the radius of the collective in all dimensions,
 $A_\text{eff} \sim N^{1/d}$. This results in
-$\epsilon^2 \sim \{N^{-2}, N^{-3/2}, N^{-1}\}$ for $d=\{1,2,3\}$ [Fig.\ \ref{fig:2}(b), black lines],
+$\epsilon^2 \sim \{N^{-2}, N^{-3/2}, N^{-1}\}$ for $d=\{1,2,3\}$ [Fig.\ \ref{fig:ch3_2}(b), black lines],
 which agree with the scalings seen in simulations and analytics.
 
-Thus, the physical origin of the advantage of EC over IC lies in how the errors scale with the collective size $N$. In IC, all $N$ cells contribute to the sensing, and cross-correlations between them scale either linearly or sublinearly with $N$, leading to a scaling $\epsilon \sim 1/\sqrt{N}$ that is characteristic of independent sensors. But in EC, only $N_\text{edge} \sim N^{(d-1)/d}$ cells contribute to the sensing, leading to a sublinear scaling with $N$ of the variance contributions of the individual cells. The total variance of the collective, then, depends on the cross-correlations, which are geometry-specific: in 1D they are dwarfed by the individual variances, in 2D they are commensurate, and in 3D they dominate (Table \ref{table:1}). As a result, 1D and 2D EC collectives benefit from a variance that scales subextensively, i.e., sublinearly with $N$.
+Thus, the physical origin of the advantage of EC over IC lies in how the errors scale with the collective size $N$. In IC, all $N$ cells contribute to the sensing, and cross-correlations between them scale either linearly or sublinearly with $N$, leading to a scaling $\epsilon^2 \sim 1/N$ that is characteristic of independent sensors. But in EC, only $N_\text{edge} \sim N^{(d-1)/d}$ cells contribute to the sensing, leading to a sublinear scaling with $N$ of the variance contributions of the individual cells. The total variance of the collective, then, depends on the cross-correlations, which are geometry-specific: in 1D they are dwarfed by the individual variances, in 2D they are commensurate, and in 3D they dominate (Table \ref{table:1}). As a result, 1D and 2D EC collectives benefit from a variance that scales subextensively, i.e., sublinearly with $N$.
 
-Our analytical treatment relies on several assumptions which we now relax using the simulations. In Fig.\ \ref{fig:2} the integration time $T$ is larger than the timescale for molecule diffusion $\tau_D$.
-We find that reducing $T$ to as much as two orders of magnitude smaller than $\tau_D$ still results in the expected relative error scalings, with 1D and 2D EC outperforming IC \cite{supinfo}. Similarly, using an exponential concentration profile instead of a linear one does not change the relative error scaling behavior \cite{supinfo}.
+\section{Model Extensions}
 
-In our model, IC polarization is adaptive to the background concentration as observed in the Ras signalling pathway for \textit{Dictyostelium discoideum} chemotaxis \cite{takeda2012incoherent}. On the other hand, our EC model is non-adaptive. Cell polarization increases with background concentration causing tension in the collective [Fig.\ \ref{fig:1}(c)], as previously studied \cite{camley2016emergent}. However, adaptive collective sensing has been observed in mammary epithelial cells \cite{ellison2016cell}. Our EC model could be made adaptive by replacing the integrand in Eq.\ \ref{eq:ECcell1} with
+\begin{figure}[ht]
+    \centering
+        \includegraphics[width=0.8\textwidth]{../fig/ch3_si1.pdf}
+    \caption{(a) Short-time integration relative error results. Data points are of simulations for $T= \frac{1}{100} \tau_D$. (b) Exponential concentration profile relative error results. The mean concentration profile is $\bar{c}(z) = c_0 e^{-z/\lambda}$, the lengthscale $\lambda=\sqrt{D/\beta}$ is set by the diffusion coefficient $D$ and the molecule decay rate $\beta$. Lines are from original analytical predictions using $T > \tau_D$ and a linear concentration profile.} \label{fig:ch3_3}
+\end{figure}
+
+Our analytical treatment relies on several assumptions which we now relax using the simulations. In Fig.\ \ref{fig:ch3_2} the integration time $T$ is larger than the timescale for molecule diffusion $\tau_D$.
+We relax the assumption that the integration time $T$ must be larger than the timescale for diffusion $\tau_D \sim R^2/D$ [Fig.\ \ref{fig:ch3_3}(a)]. We find that $\epsilon^2$ scales the same way as previously predicted for both EC and IC, even when $T = \tau_D/100$. The only exception is that $\epsilon^2$ for 3D EC [Fig.\ \ref{fig:ch3_3}(a), red circles] has a more negative power-law dependence on $N$ than the expected $\sim N^{-1}$. The shorter integration time results in decreased correlations between edge cells which when $T>\tau_D$ results in $C\sim N$. Hence with
+$T < \tau_D$
+the total variance is less dependent on $C$, and $V \sim N^{2/3}$ becomes the dominant contribution to $\text{Var}[P_z]$ in the case of 3D EC. This results in a steeper scaling of $\epsilon^2$ closer to
+$\text{Var}[P_z]/\langle P_z \rangle^2 \sim N^{2/3}/N^2 = N^{-4/3}$.
+Interestingly, we see that relaxing the assumption $T \gg \tau_D$ results in improved precision for EC over IC not just in 1D and 2D but also in 3D configurations.
+
+In Fig.\ \ref{fig:ch3_3}(b) we change the concentration profile from linear to exponential which has a mean concentration of
+$\bar{c}(z) = c_0 e^{-z/\lambda}$.
+The lengthscale $\lambda=\sqrt{D/\beta}$ depends on the diffusion coefficient and the molecule degradation rate $\beta$. In Fig.\ \ref{fig:ch3_3}(b) the simulation results are for $\lambda > a$. We find that $\epsilon^2$ is in very good agreement with our original analytic predictions. The only exception is that due to the exponential profile, $\langle P_z \rangle$ for 1D EC (Fig.\ \ref{fig:ch3_3}(b), red squares) is non-linear in $N$ causing the relative error data to scale less steeply than the expected $N^{-2}$.
+
+In our model, IC polarization is adaptive to the background concentration as observed in the Ras signalling pathway for \textit{Dictyostelium discoideum} chemotaxis \cite{takeda2012incoherent}. On the other hand, our EC model is non-adaptive. Cell polarization increases with background concentration causing tension in the collective [Fig.\ \ref{fig:ch3_1}(c)], as previously studied \cite{camley2016emergent}. However, adaptive collective sensing has been observed in mammary epithelial cells \cite{ellison2016cell}. Our EC model could be made adaptive by replacing the integrand in Eq.\ \ref{eq:ECcell1} with
 $c(\vec{r}+\vec{r}',t)-c_0$.
 This change does not affect the properties of $\vec{P}$ since the background concentration cancels out when summing over all edge cells, but it does remove the internal tension in the collective.
+
+\section{Discussion}
 
 Besides the advantage revealed here in terms of chemotactic precision, another benefit of EC is in terms of cell differentiation. In EC only edge cells need to be involved in chemical sensing and polarization, freeing bulk cells from the obligation of receptor and protein production necessary for chemotaxis. Bulk cells are free to differentiate into other phenotypes, possibly serving different uses for the collective. This is in stark contrast with IC where every cell must be of the polarized phenotype, leaving no cells with the freedom to differentiate.
 
@@ -219,13 +258,13 @@ $\text{Var}[\theta] = \text{Var}[v_z] / \langle v_z\rangle^2 = \epsilon^2$.
 Therefore the relative error and chemotactic index are related as
 $\text{CI} = 1 - \epsilon^2/2$ for small errors.
 With this relationship the predicted scalings of $\epsilon^2$ for EC and IC may be tested with chemotaxis experiments. Additionally, the
-CI scaling behavior could be used to determine whether an EC- or IC-style migration is at play in an unknown system.
+CI scaling behavior could be used to determine whether an EC- or IC-style migration is at play in a system of collective chemotaxis.
 
 We have shown how the fluctuations in a diffusing attractant concentration set physical limits to collective chemotactic performance. By focusing on two fundamental classes of collective chemotaxis, we have found that the mean speed scales with the size of the collective irrespective of the mechanism or geometry, but that an emergent mechanism outperforms an individual-based one for 1D and 2D geometries in terms of chemotactic precision.
 This advantage arises due to the ways that errors accumulate in the two mechanisms: in an emergent strategy, fewer cells contribute their sensory noise to the collective, and in 1D and 2D the cross-correlations between cells remain low, ultimately leading to a subextensive scaling of polarization variance with collective size. As such, the performance advantage is an inherent property of the emergent mechanism, and we suspect that it not only helps explain the prevalence of emergent chemotaxis in cellular systems, but that it also is detectable using standard measures such as the chemotactic index.
 
 
-\section{Particle-based Simulations} \label{sct:ch3_sim}
+\section{Description of Simulations} \label{sct:ch3_sim}
 
 Computational simulations are performed to test the properties of EC and IC for one, two and three dimensional collectives. In the simulation, particles move randomly inside a 3D volume and boundaries are set to produce the desired concentration profiles. Cells are placed at fixed positions in the 3D volume in either one, two or three dimensional configurations. For a linear concentration profile, one boundary produces particles, and the opposing one is an absorbing boundary while all other boundaries periodic. For an exponential concentration, the same boundaries are used and particles are also allowed to degrade.
 
@@ -239,7 +278,7 @@ $r = \beta \Delta t$, with $\beta$ the degradation rate. In this case $\Delta t$
 The simulation code used for this paper can be found at \url{https://doi.org/10.5281/zenodo.401040}, and the most up-to-date version of the code can be found at \url{https://github.com/varennes/particletrack}.
 
 
-\section{Analytic Results}
+\section{Derivation of Analytic Results} \label{sct:ch3_SI}
 
 We consider collectives in one, two and three dimensions of radius $R$ comprised of $N$ cells. Each cell is taken to be a permeable sphere of radius $a$ through which molecules of the surrounding chemical concentration $c(\vec{r},t)$ can freely diffuse. The chemical concentration is taken to be
 \begin{equation}
@@ -694,29 +733,28 @@ For the three-dimensional cluster, numerical methods must be used in order to fi
 
 \begin{figure}[ht]
     \centering
-        \includegraphics[width=0.8\textwidth]{../fig/ch3_si1.pdf}
-    \caption{$\text{Var}[P_z]$ for a 3D cluster of EC cells. Cluster variance shown in red. Pink circles are the single cell variance contributions $V$, and pink diamonds are the cell-cell covariance contributions $C$.} \label{fig:S2}
+        \includegraphics[width=0.8\textwidth]{../fig/ch3_si2.pdf}
+    \caption{$\text{Var}[P_z]$ for a 3D cluster of EC cells. Cluster variance shown in red. Pink circles are the single cell variance contributions $V$, and pink diamonds are the cell-cell covariance contributions $C$.} \label{fig:ch3_4}
 \end{figure}
 
-The numerical results [Fig.\ \ref{fig:S2}] show that $V \sim N^{2/3}$ since the number of edge cells also scales as $N^{2/3}$. We also find that $C \sim N$; the covariance contribution to the total cluster polarization grows linearly with $N$. For large clusters the $N$ scaling dominates the behavior of $\text{Var}[P_z]$. Therefore, in 3D the leading order scaling for the variance is
+The numerical results [Fig.\ \ref{fig:ch3_4}] show that $V \sim N^{2/3}$ since the number of edge cells also scales as $N^{2/3}$. We also find that $C \sim N$; the covariance contribution to the total cluster polarization grows linearly with $N$. For large clusters the $N$ scaling dominates the behavior of $\text{Var}[P_z]$. Therefore, in 3D the leading order scaling for the variance is
 $\text{Var}[P_z] \sim N$ as in Table I of the main text.
 
 
-\section{Testing Analytic Model Assumptions}
+% \section{Testing Analytic Model Assumptions}
+%
+% \begin{figure}[ht]
+%     \centering
+%         \includegraphics[width=0.8\textwidth]{../fig/ch3_si1.pdf}
+%     \caption{(a) Short-time integration relative error results. Data points are of simulations for $T= \frac{1}{100} \tau_D$. (b) Exponential concentration profile relative error results. The mean concentration profile is $\bar{c}(z) = c_0 e^{-z/\lambda}$, the lengthscale $\lambda=\sqrt{D/\beta}$ is set by the diffusion coefficient $D$ and the molecule decay rate $\beta$. Lines are from original analytical predictions using $T > \tau_D$ and a linear concentration profile.} \label{fig:ch3_3}
+% \end{figure}
 
-
-\begin{figure}[ht]
-    \centering
-        \includegraphics[width=0.8\textwidth]{../fig/ch3_si2.pdf}
-    \caption{(a) Short-time integration relative error results. Data points are of simulations for $T= \frac{1}{100} \tau_D$. (b) Exponential concentration profile relative error results. The mean concentration profile is $\bar{c}(z) = c_0 e^{-z/\lambda}$, the lengthscale $\lambda=\sqrt{D/\beta}$ is set by the diffusion coefficient $D$ and the molecule decay rate $\beta$. Lines are from original analytical predictions using $T > \tau_D$ and a linear concentration profile.} \label{fig:S1}
-\end{figure}
-
-Simulations are performed to test model behavior when assumptions used to derive analytic results are relaxed. In Fig.\ \ref{fig:S1}(a) we relax the assumption that the integration time $T$ must be larger than the timescale for diffusion $\tau_D \sim R^2/D$. We find that $\epsilon^2$ scales the same way as previously predicted for both EC and IC, even when $T = \tau_D/100$. The only exception is that $\epsilon^2$ for 3D EC [Fig.\ \ref{fig:S1}(a), red circles] has a more negative power-law dependence on $N$ than the expected $\sim N^{-1}$. The shorter integration time results in decreased correlations between edge cells which when $T>\tau_D$ results in $C\sim N$. Hence with
-$T < \tau_D$
-the total variance is less dependent on $C$, and $V \sim N^{2/3}$ becomes the dominant contribution to $\text{Var}[P]$. This results in a steeper scaling of $\epsilon^2$ closer to
-$\text{Var}[P]/\langle P \rangle^2 \sim N^{2/3}/N^2 = N^{-4/3}$.
-Interestingly, we see that relaxing the assumption $T \gg \tau_D$ results in improved precision for EC over IC not just in 1D and 2D but also in 3D configurations.
-
-In Fig.\ \ref{fig:S1}(b) we change the concentration profile from linear to exponential which has a mean concentration of
-$\bar{c}(z) = c_0 e^{-z/\lambda}$.
-The lengthscale $\lambda=\sqrt{D/\beta}$ depends on the diffusion coefficient and the molecule degradation rate $\beta$. In Fig.\ \ref{fig:S1}(b) the simulation results are for $\lambda > a$. We find that $\epsilon^2$ is in very good agreement with our original analytic predictions. The only exception is that due to the exponential profile, $\langle P \rangle$ for 1D EC (Fig.\ \ref{fig:S1}(b), red squares) is non-linear in $N$ causing the relative error data to scale less steeply than the expected $N^{-2}$.
+% Simulations are performed to test model behavior when assumptions used to derive analytic results are relaxed. In Fig.\ \ref{fig:ch3_3}(a) we relax the assumption that the integration time $T$ must be larger than the timescale for diffusion $\tau_D \sim R^2/D$. We find that $\epsilon^2$ scales the same way as previously predicted for both EC and IC, even when $T = \tau_D/100$. The only exception is that $\epsilon^2$ for 3D EC [Fig.\ \ref{fig:ch3_3}(a), red circles] has a more negative power-law dependence on $N$ than the expected $\sim N^{-1}$. The shorter integration time results in decreased correlations between edge cells which when $T>\tau_D$ results in $C\sim N$. Hence with
+% $T < \tau_D$
+% the total variance is less dependent on $C$, and $V \sim N^{2/3}$ becomes the dominant contribution to $\text{Var}[P]$. This results in a steeper scaling of $\epsilon^2$ closer to
+% $\text{Var}[P]/\langle P \rangle^2 \sim N^{2/3}/N^2 = N^{-4/3}$.
+% Interestingly, we see that relaxing the assumption $T \gg \tau_D$ results in improved precision for EC over IC not just in 1D and 2D but also in 3D configurations.
+%
+% In Fig.\ \ref{fig:ch3_3}(b) we change the concentration profile from linear to exponential which has a mean concentration of
+% $\bar{c}(z) = c_0 e^{-z/\lambda}$.
+% The lengthscale $\lambda=\sqrt{D/\beta}$ depends on the diffusion coefficient and the molecule degradation rate $\beta$. In Fig.\ \ref{fig:ch3_3}(b) the simulation results are for $\lambda > a$. We find that $\epsilon^2$ is in very good agreement with our original analytic predictions. The only exception is that due to the exponential profile, $\langle P \rangle$ for 1D EC (Fig.\ \ref{fig:ch3_3}(b), red squares) is non-linear in $N$ causing the relative error data to scale less steeply than the expected $N^{-2}$.

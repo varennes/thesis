@@ -131,7 +131,7 @@ Cell lattice sites are given the lattice label $\sigma(x)=1$ whereas the extrace
 $N_p$ is the number of lattice sites that comprise the cell's perimeter, $N$ is the total number of cell lattice sites. The parameters $\lambda_{A}$ and $\lambda_{P}$ are the area and perimeter restriction costs.
 
 Cell motion is a consequence of minimizing the energy of the whole system. This stochastic process is sensitive to thermal fluctuations and is modeled using a Monte Carlo scheme. In a system of $n$ lattice sites, one \textit{Monte Carlo} time step (MC step) is composed of $n$ attempts to copy a random lattice site's label to a randomly chosen neighboring site. An attempt is accepted with probability $P$, which depends on the change in the system's energy $\Delta u$ accrued in copying over the lattice label,
-\begin{equation} \label{eq:prob}
+\begin{equation} \label{eq:ch2_prob}
     P =
     \begin{cases}
         e^{-\left( \Delta u - w \right)} &\ \Delta u - w > 0 , \\
@@ -143,7 +143,7 @@ The bias is defined as
 \begin{equation}
     w = \Delta\hat{x} \cdot \vec{p} \ ,
 \end{equation}
-with $\Delta\hat{x}$ the unit vector pointing in the change in the cell's center of mass caused by the addition or removal of the lattice site in question, and $\vec{p}$ is the cell's polarization vector (Fig.\ \ref{fig:ch2_3}a, black arrow). The dot product acts to bias cell motion since movement that is parallel to the polarization vector will result in a more positive $w$ which in turn results in a higher acceptance probability (Eq.\ \ref{eq:prob}).
+with $\Delta\hat{x}$ the unit vector pointing in the change in the cell's center of mass caused by the addition or removal of the lattice site in question, and $\vec{p}$ is the cell's polarization vector (Fig.\ \ref{fig:ch2_3}a, black arrow). The dot product acts to bias cell motion since movement that is parallel to the polarization vector will result in a more positive $w$ which in turn results in a higher acceptance probability (Eq.\ \ref{eq:ch2_prob}).
 
 After the random addition and removal of lattice sites occurs during one MC step the cell updates its polarization vector. The time evolution of the cell's polarization vector is defined as
 \begin{equation} \label{eq:CPMp1}
