@@ -24,10 +24,7 @@ $\{N^{-2}, N^{-3/2}, N^{-1}\}$ for 1D, 2D, and 3D, respectively, whereas in IC i
 We first consider IC [Fig.\ \ref{fig:1}(b)]. Due to the chemoattractant molecules in the environment, each cell $i$ becomes polarized with vector $\vec{p}_i$ in its desired direction of motion \cite{jilkine2011comparison}. The components of $\vec{p}_i$ reflect the difference in concentration $c(\vec{r},t)$ between the front and back of the cell in each respective direction. This concentration difference will fluctuate due to the particulate nature of diffusion. Focusing on this extrinsic source of noise, we treat each cell as a sphere of radius $a$ through which molecules freely diffuse, akin to the ``perfect instrument'' described by Berg and Purcell \cite{berg1977physics}.
 The concentration difference is encoded internally as a weighted count of the molecules within the cell volume $U_i$. The weighting function will depend on the sensory network, but will generally be positive at the front and negative at the back; here we choose cosine for simplicity. Orienting our coordinate system such that $\hat{z}$ is parallel to the gradient, the components of $\vec{p}_i$ become
 \begin{equation}
-p_{i\alpha}(t) = \int_{U_i} d^3r \ w_\alpha c(\vec{r},t) , \label{eq:ICcell}
-%    p_{x}(\vec{r},t) &= \int d^3r' \ \sin\theta' \cos\phi' \ c(\vec{r}+\vec{r}',t) , \label{eq:ICcell1} \\
-%    p_{y}(\vec{r},t) &= \int d^3r' \ \sin\theta' \sin\phi' \ c(\vec{r}+\vec{r}',t) , \label{eq:ICcell2} \\
-%    p_{z}(\vec{r},t) &= \int d^3r' \ \cos\theta' \ c(\vec{r}+\vec{r}',t) . \label{eq:ICcell3}
+    p_{i\alpha}(t) = \int_{U_i} d^3r \ w_\alpha c(\vec{r},t) , \label{eq:ICcell}
 \end{equation}
 where $\alpha\in\{x,y,z\}$, and in spherical coordinates the cosine is $w_\alpha = \{\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta\}$.
 %The $r'$ coordinate is relative to the center of the cell, $r_i$ is relative to the center of the collective, and the integral is over the volume of the cell.
