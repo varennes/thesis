@@ -121,18 +121,17 @@ Here we conduct single cell chemotaxis simulations to further probe cell chemota
     \label{fig:ch2_3}
 \end{figure}
 
-Cell chemotaxis simulations are implemented using the Cellular Potts Model (CPM) \cite{graner1992simulation,swat2012multi}. The CPM used here is similar to that used in our previous study \cite{varennes2016collective}.
-\red{The source code for the simulations can be found here [CITE].}
+Cell chemotaxis simulations are implemented using the Cellular Potts Model (CPM) \cite{graner1992simulation,swat2012multi}. The CPM used here is similar to that used in our previous study \cite{varennes2016collective}. The source code for the simulations can be found here \cite{ch2code}.
 Briefly, the cell in the CPM are composed of a finite set of simply connected lattice sites $\{ x \}$ (Fig.\ \ref{fig:ch2_3}a, inset).
 Cell lattice sites are given the lattice label $\sigma(x)=1$ whereas the extracellular environment is labeled $\sigma(x)=0$. Cells have a desired size $A_0$ and perimeter $P_0$ from which they can fluctuate, and cells adhere to their neighboring environment with an adhesion energy $\alpha$. The energy of the whole system is the sum of adhesion, area-restriction, and perimeter-restriction terms,
 \begin{equation} \label{eq:CPMu1}
-    u = \alpha N_p + \lambda_A(A_0 - N)^2 + \lambda_P(P_0 - N_p)^2 \ .
+    u = \alpha P + \lambda_A(A_0 - N)^2 + \lambda_P(P_0 - P)^2 \ .
 \end{equation}
-$N_p$ is the number of lattice sites that comprise the cell's perimeter, $N$ is the total number of cell lattice sites. The parameters $\lambda_{A}$ and $\lambda_{P}$ are the area and perimeter restriction costs.
+$A$ is the cell area, and $P$ is the cell's perimeter. The parameters $\lambda_{A}$ and $\lambda_{P}$ are the area and perimeter restriction costs.
 
-Cell motion is a consequence of minimizing the energy of the whole system. This stochastic process is sensitive to thermal fluctuations and is modeled using a Monte Carlo scheme. In a system of $n$ lattice sites, one \textit{Monte Carlo} time step (MC step) is composed of $n$ attempts to copy a random lattice site's label to a randomly chosen neighboring site. An attempt is accepted with probability $P$, which depends on the change in the system's energy $\Delta u$ accrued in copying over the lattice label,
+Cell motion is a consequence of minimizing the energy of the whole system. This stochastic process is sensitive to thermal fluctuations and is modeled using a Monte Carlo scheme. In a system of $n$ lattice sites, one \textit{Monte Carlo} time step (MC step) is composed of $n$ attempts to copy a random lattice site's label to a randomly chosen neighboring site. An attempt is accepted with probability $\mathcal{P}$, which depends on the change in the system's energy $\Delta u$ accrued in copying over the lattice label,
 \begin{equation} \label{eq:ch2_prob}
-    P =
+    \mathcal{P} =
     \begin{cases}
         e^{-\left( \Delta u - w \right)} &\ \Delta u - w > 0 , \\
         1 &\ \Delta u - w \leq 0 .
@@ -153,7 +152,7 @@ The first term in Eq.\ \ref{eq:CPMp1} results in exponential decay of the cell's
 \begin{equation} \label{eq:CPMq1}
     \vec{q} = \frac{1}{N_P} \sum_{i=1}^{N_P} \frac{c_i-\bar{c}}{\bar{c}} \ \hat{r}_i
 \end{equation}
-$\hat{r}_i$ is a unit vector that points radially outwards from the cell's center of mass to the location of lattice site $i$. $c_i$ is the concentration of the chemoattractant sampled at the lattice site $i$ and $\bar{c}$ is the cell's measurement of the mean concentration in its local environment; $c_i$ is sampled from a Poisson distribution and $\bar{c}$ is the mean from all $c_i$ measured at each lattice site.
+The sum is taken over all $N_P$ lattice sites which comprise the perimeter of the cell. $\hat{r}_i$ is a unit vector that points radially outwards from the cell's center of mass to the location of lattice site $i$. $c_i$ is the concentration of the chemoattractant sampled at the lattice site $i$ and $\bar{c}$ is the cell's measurement of the mean concentration in its local environment; $c_i$ is sampled from a Poisson distribution and $\bar{c}$ is the mean from all $c_i$ measured at each lattice site.
 
 
 \subsection{Calibration of Simulation Parameters}
