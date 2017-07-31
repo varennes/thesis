@@ -1,27 +1,42 @@
 # thesis
-PhD Thesis for Purdue University Department of Phyiscs and Astronomy
+Julien Varennes' PhD Thesis for Purdue University Department of Physics and Astronomy.
+
+- **TO DO**
+    - Introduction (Ch. 1) still needs work.
+        - Write review of single cell simulations.
+        - Edit / write review of collective simulations.
+        - Write some sort of conclusion and transition at the end of the introduction.
+    - Ch. 2
+        - Edit / write conclusion and transition.
+    - Perhaps (?) add a final chapter that is a conclusion for the whole thesis and future directions for the research presented here.
 
 # Organization
 
-- Introduction
+- Introduction (Ch. 1)
     - **Use the review paper as content for introduction.**
-        - Physical limits to cell sensory precision:
-            - Single cell and multicellular
-            - Concentration and gradient sensing
-        - Connection between gradient sensing and chemotaxis.
-            - Building off of cell sensory limits, can the physical limits to chemotaxis be studied?
-    - **Overview of the thesis content and structure.**
-        - Ch. 1: collaborative work on single cell chemotaxis.
-            - Should I keep the review of chemotaxis performance metrics?
-        - Ch. 2: collective chemotaxis CPM simulation paper.
-        - Ch. 3: EC vs. IC collective chemotaxis paper.
+    - Physical limits to cell sensory precision:
+        - Single cell and multicellular
+        - Concentration and gradient sensing
+    - Connection between gradient sensing and chemotaxis.
+        - Building off of cell sensory limits, can the physical limits to chemotaxis be studied?
+    - Overview of simulation techniques used to study chemotaxis.
+        - Single cell chemotaxis simulations.
+        - Collective cell chemotaxis simulations.
+- Body (**Overview of the thesis content and structure.**)
+    - Ch. 2: collaborative work on single cell chemotaxis.
+    - Ch. 3: EC vs. IC collective chemotaxis paper.
+        - Transition from single cell study to study of collective chemotaxis.
+    - Ch. 4: collective chemotaxis CPM simulation paper.
+        - Frame this as an application and extension of the theoretical study conducted in Ch. 3.
 
-Start off with collab paper since it is about single cell chemotaxis. Single cell chemotaxis is the most basic aspect/form of collective cell chemotaxis. From single cell experiments and theory transition to the study of collective cell chemotaxis. There are two projects that relate to collective chemotaxis: CPM simulations, and EC vs. IC theory. The ECvIC is more interesting. The CPM sim. work is less interesting but more directly applicable to the collab project since its version of CPM is a natural externsion of the single cell CPM.
+# Figures
 
-Supplementary information of collab project and ECvIC need to merged into their respective chapters.
+All figures located in `/fig/` directory.
 
-Abstract needs to be changed.
+- All figures should be converted to the same file type (`PNG`).
+- Edit figures to have consistent sub-figure reference style.
+- Perhaps add additional figures to serve illustration purposes.
 
 # References
 
-All references bibtex information located in `/ref/all.bib`.
+All citation bibtex information located in `/ref/all.bib`.
