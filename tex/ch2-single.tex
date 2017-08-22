@@ -121,8 +121,8 @@ Here we conduct single cell chemotaxis simulations to further probe cell chemota
     \label{fig:ch2_3}
 \end{figure}
 
-Cell chemotaxis simulations are implemented using the Cellular Potts Model (CPM) \cite{graner1992simulation,swat2012multi}. The CPM used here is similar to that used in our previous study \cite{varennes2016collective}. The source code for the simulations can be found here \cite{ch2code}.
-Briefly, the cell in the CPM are composed of a finite set of simply connected lattice sites $\{ x \}$ (Fig.\ \ref{fig:ch2_3}a, inset).
+Cell chemotaxis simulations are implemented using the Cellular Potts Model (CPM) \cite{graner1992simulation,swat2012multi}. The CPM is a lattice based simulation implementation. Cells are comprised of lattice sites, and cells move and fluctuate in shape by the stochastic addition or removal of lattice sites.
+Cells are defined as a finite set of simply connected lattice sites $\{ x \}$ (Fig.\ \ref{fig:ch2_3}a, inset).
 Cell lattice sites are given the lattice label $\sigma(x)=1$ whereas the extracellular environment is labeled $\sigma(x)=0$. Cells have a desired size $A_0$ and perimeter $P_0$ from which they can fluctuate, and cells adhere to their neighboring environment with an adhesion energy $\alpha$. The energy of the whole system is the sum of adhesion, area-restriction, and perimeter-restriction terms,
 \begin{equation} \label{eq:CPMu1}
     u = \alpha P + \lambda_A(A_0 - N)^2 + \lambda_P(P_0 - P)^2 \ .
@@ -154,6 +154,7 @@ The first term in Eq.\ \ref{eq:CPMp1} results in exponential decay of the cell's
 \end{equation}
 The sum is taken over all $N_P$ lattice sites which comprise the perimeter of the cell. $\hat{r}_i$ is a unit vector that points radially outwards from the cell's center of mass to the location of lattice site $i$. $c_i$ is the concentration of the chemoattractant sampled at the lattice site $i$ and $\bar{c}$ is the cell's measurement of the mean concentration in its local environment; $c_i$ is sampled from a Poisson distribution and $\bar{c}$ is the mean from all $c_i$ measured at each lattice site.
 
+The CPM used here is similar to that used in our previously published study on collective cell chemotaxis \cite{varennes2016collective}. The source code for the single-cell chemotaxis simulations can be found here \cite{ch2code}.
 
 \subsection{Calibration of Simulation Parameters}
 
@@ -162,7 +163,7 @@ The length and time scales of the simulation are calibrated to the experimentall
 From experiments we know that cells are on average $400 \mu\text{m}^2$ in size, and we use this to set one lattice site to equal $5 \mu\text{m}$ such that cells occupy $\sim 10$ lattice sites. Next we calibrate the time-scale in simulations by equating the average cell velocity in simulations to approximately that observed experimentally, $\sim 10 \mu\text{m/hr}$. With this we equate a simulation time step to $5 \text{min}$. Finally, we need to calibrate the internal cell parameters. We consider internal cell parameters to be those which are not affected by the environment and are characteristic of the particular cell type we are simulating.
 These include the energy costs of cell area and perimeter fluctuations $\lambda_A$, $\lambda_P$, the polarization decay rate $r$, and the bias strength $\epsilon$. These parameters are set such that the chemotactic index (CI) and chemotactic ratio (CR) recorded in experiments is approximately the same as that observed in experiments. We refer to the collagen stiffness $\alpha$, background concentration $c_0$, and the concentration gradient $g$ as experimental parameters.
 
-In running simulations internal parameters are fixed to the values used for the initial calibration. External parameters are varied (as in Fig.\ 3 of the manuscript) in order to quantify their effects on chemotactic performance. The internal parameter values used as well as the baseline external parameter values are listed in Table \ref{table:ch2_1}.
+In running simulations internal parameters are fixed to the values used for the initial calibration. External parameters are varied in order to quantify their effects on chemotactic performance. The internal parameter values used as well as the baseline external parameter values are listed in Table \ref{table:ch2_1}.
 
 
 \begin{table}[ht]
@@ -210,7 +211,7 @@ Biased persistent random walks (BPRWs) have been used to model chemotaxis \cite{
 
 The BPRW is modeled as a velocity jump process in which a walker moves in a particular direction with fixed speed for an exponentially distributed amount of time. The walker reorients to a new direction $\vec{v}$ from its previous velocity $\vec{v}'$ depending on the probability density $T(\vec{v},\vec{v}')$. We assume a reorientation frequency $\lambda$, thus $\lambda^{-1}$ is the average run time, and that it moves at a constant speed $s$. The reorientations are chosen based on a probability density $T(\vec{v},\vec{v}')$ which depends only on the angular direction of the walker's movements $T(\vec{v},\vec{v}') = T(\theta,\theta')$. Here $\theta$ is taken relative to the $x$ axis which is parallel to the gradient direction.
 
-Let $p(\vec{r},\theta,t) d\vec{r} d\theta$ be the number density of individual walkers found between positions $\vec{r}$ and $\vec{r}+d\vec{r}$ with movement orientation between $\theta$ and $\theta + d\theta$. From Othmer \textit{et al}.\ it is shown that the evolution equation for the probability density $p(\vec{r},\theta,t)$ simplifies to
+Let $p(\vec{r},\theta,t) d\vec{r} d\theta$ be the number density of individual walkers found between positions $\vec{r}$ and $\vec{r}+d\vec{r}$ with movement orientation between $\theta$ and $\theta + d\theta$. From Othmer \textit{et al}.\ \cite{othmer1988models} it is shown that the evolution equation for the probability density $p(\vec{r},\theta,t)$ simplifies to
 \begin{equation} \label{eq:p1}
     \frac{\partial p}{\partial t} + s \vec{\xi}\cdot\vec{\nabla} p =
     -\lambda p + \lambda \int_{-\pi}^{\pi} d\theta' \ T(\theta,\theta') \ p(\vec{r},\theta,t) \ ,
@@ -228,12 +229,16 @@ with $\phi = \theta - \theta'$ being the turning angle. $k(\theta)$ is maximally
     \int_{-\pi}^{\pi} d\phi    \ &h(\phi)           = 1 \ . \label{eq:t5}
 \end{align}
 
-With Eq.\ \ref{eq:p1} and the restrictions on $T(\theta,\theta')$ (Eq.\ \ref{eq:t2}-\ref{eq:t5}), Othmer \textit{et al}.\ derive the moments for the BPRW.
+With Eq.\ \ref{eq:p1} and the restrictions on $T(\theta,\theta')$ (Eq.\ \ref{eq:t2}-\ref{eq:t5}), Othmer \textit{et al}.\ \cite{othmer1988models} derive the moments for the BPRW.
 \begin{align} \label{eq:moment1}
+    \begin{split}
     \langle r^2(t) \rangle &= \frac{2s^2}{\lambda_0} \left[ \left(1-\frac{2\chi^2}{(1-\psi)^2}\right)t
     - \frac{\chi^2 t e^{-\lambda_0 t}}{(1-\psi)^2}
     + \frac{3\chi^2(1-\psi)^{-2}-1}{\lambda_0} \left(1-e^{-\lambda_0 t}\right)
-    + \frac{\chi^2 \lambda_0 t^2}{2(1-\psi)^2} \right] \\
+    \right. \\
+    &\qquad \left.
+    + \frac{\chi^2 \lambda_0 t^2}{2(1-\psi)^2} \right]
+    \end{split} \\
     \langle x(t) \rangle &= \frac{\chi}{1-\psi} s \left(t -\frac{1-e^{-\lambda_0 t}}{\lambda_0} \right) \label{eq:moment2} \\
     \langle y(t) \rangle &= 0 \label{eq:moment3}
 \end{align}

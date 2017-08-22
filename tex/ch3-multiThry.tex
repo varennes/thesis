@@ -86,7 +86,7 @@ for all three geometries [Fig.\ \ref{fig:ch3_2}(b), blue data points]. This is t
 We begin by linearizing the concentration $c(\vec{r},t) = \bar{c}(\vec{r}) + \delta c(\vec{r},t)$ as well as the cell polarization
 $\vec{p}_i(t) = \langle \vec{p}_i \rangle + \delta\vec{p}(t)$,
 and by Fourier transforming in both space and time we derive analytic expressions for
-$\text{Var}[P_z]$ and thereby $\epsilon^2$ \cite{supinfo}. Since
+$\text{Var}[P_z]$ and thereby $\epsilon^2$ (see Sect.\ 3.6). Since
 $P_z = \sum_{i=1}^N p_{iz}$,
 the variance in the total polarization is a linear combination of all cell polarization variances and covariances present in the collective,
 \begin{equation} \label{eq:ICvar1}
@@ -106,7 +106,7 @@ The variance and covariance for cells within the collective are derived from the
 \end{align}
 with $T$ the cell's measurement integration time and $\text{Var}[p_{i\alpha}] = \text{Cov}[p_{i\alpha},p_{i\alpha}]$ \cite{fancher2016fundamental,mugler2016limits,bialek2005physical}. Eq.\ \ref{eq:ICvar2} assumes that the integration time is larger than the timescale of molecule diffusion over the radius $R$ of the collective,
 $T \gg \tau_D = R^2/D$, though we relax this assumption in later simulations.
-Following this procedure we find that $V$ and $C$ for IC are \cite{supinfo}
+Following this procedure we find that $V$ and $C$ for IC are (see Sect.\ 3.6)
 \begin{align}
     V_\text{IC} &= \frac{4\pi a^5c_0}{45DT} N  \label{eq:ICV} , \\
     C_\text{IC} &= -\frac{\pi a^5c_0}{18DT} \sum_{i \neq j}^N \frac{3\cos^2\Theta_{ij}-1}{n^3_{ij}} . \label{eq:ICC}
@@ -122,7 +122,7 @@ resulting in a negative covariance, indicating that their gradient measurements 
 $\cos^2\Theta_{ij} = 0$,
 resulting in a positive covariance and correlations between the two cells. The resulting contribution of $C_\text{IC}$ to $\text{Var}[P_z]$ is dimensionality-dependent since the angles made between pairs of cells is determined by geometry, whereas $V_\text{IC}$ is dimension-independent.
 
-For a 1D chain of IC cells, every pair is parallel to the gradient resulting in anti-correlated measurements which we find in total scale as $N$ \cite{supinfo}. As dimensionality increases, more and more pairs of cells will be perpendicular to the gradient resulting in reduced anti-correlations in the collective. This culminates in 3D clusters having zero cell-cell covariance contribution to the total cluster variance \cite{supinfo}. The result is that $\epsilon^2 \sim N^{-1}$ regardless of dimensionality, indicating that IC cells behave as effectively independent gradient sensors, even though there are diffusion-mediated cross-correlations between cells. The scalings for $V$ and $C$ are summarized in Table \ref{table:1}. The resulting $\epsilon^2$ predictions are plotted in Fig.\ \ref{fig:ch3_2}(b) (blue lines), and we see excellent agreement with the simulations.
+For a 1D chain of IC cells, every pair is parallel to the gradient resulting in anti-correlated measurements which we find in total scale as $N$ (see Sect.\ 3.6). As dimensionality increases, more and more pairs of cells will be perpendicular to the gradient resulting in reduced anti-correlations in the collective. This culminates in 3D clusters having zero cell-cell covariance contribution to the total cluster variance (see Sect.\ 3.6). The result is that $\epsilon^2 \sim N^{-1}$ regardless of dimensionality, indicating that IC cells behave as effectively independent gradient sensors, even though there are diffusion-mediated cross-correlations between cells. The scalings for $V$ and $C$ are summarized in Table \ref{table:1}. The resulting $\epsilon^2$ predictions are plotted in Fig.\ \ref{fig:ch3_2}(b) (blue lines), and we see excellent agreement with the simulations.
 
 
 \begin{table}[t]
@@ -158,7 +158,7 @@ $\epsilon^2$ \\ \cline{1-6}
 \multicolumn{1}{ |c| }{ 3D } & $N^1$ & $N^{2/3}$ & $N^1$ & $N^{-1}$ \\
 \cline{1-6}
 \end{tabular}
-\caption{Summary of scaling behavior. $N$ dependence of the leading order term for the mean $\langle P_z \rangle$, and the variance ($V$) and covariance ($C$) contributions to the relative error $\epsilon^2 = (V+C)/\langle P_z \rangle^2$. $C$ for EC in 2D has a $\log$ correction \cite{supinfo}.}
+\caption{Summary of scaling behavior. $N$ dependence of the leading order term for the mean $\langle P_z \rangle$, and the variance ($V$) and covariance ($C$) contributions to the relative error $\epsilon^2 = (V+C)/\langle P_z \rangle^2$. $C$ for EC in 2D has a $\log$ correction (see Sect.\ 3.6).}
 \label{table:1}
 \end{center}
 \end{table}
@@ -181,7 +181,7 @@ $\vec{P} = \sum_i \vec{p}_i \ , \ \forall i \in \{N_\text{edge}\}$.
 
 Simulations for EC show that the mean polarization $\langle P_z \rangle$ scales with $N$ for all geometries [Fig.\ \ref{fig:ch3_2}(a), red points] even though $N_\text{edge}$ is dependent on the dimensionality of the collective. Our analytical solution helps us understand this result. For 1D EC, only the two opposing cells are polarized so $\langle\vec{P}\rangle$ can be solved for exactly, but for 2D and 3D we take the continuum limit of
 $\vec{P} = \sum_i \vec{p}_i$,
-assuming the collective is much larger than a single cell $R \gg a$ \cite{supinfo}. The resulting expressions are
+assuming the collective is much larger than a single cell $R \gg a$ (see Sect.\ 3.6). The resulting expressions are
 \begin{equation} \label{eq:ECmean}
     \langle \vec{P} \rangle_\text{EC} = f_d a^4gN \ \hat{z},
 \end{equation}
