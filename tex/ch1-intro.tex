@@ -2,7 +2,6 @@
 \chapter{Introduction}
 
 \noindent
-
 Cells are extremely sensitive to their environment, capable of gathering information on chemicals in their environment with remarkable precision. For example, the amoeba \textit{Dictyostelium discoideum} is sensitive to chemical concentration differences on the order of ten molecules between its front and back half \cite{song2006dictyostelium}. Cell sensory precision of chemical concentrations is limited by the extrinsic noise inherent in molecule diffusion. The physical limits to concentration sensing due to extrinsic noise were theoretically derived around 40 years ago by Berg and Purcell \cite{berg1977physics}. \textit{Escheria coli} bacterium operate very near this physical bound set by extrinsic noise \cite{lan2012energy}. Studies have revisited the topic of cell sensory precision to account for receptor binding kinetics, spatiotemporal correlations and spatial confinement
 \cite{bialek2005physical, kaizu2014berg, bicknell2015limits}.
 
@@ -328,37 +327,6 @@ Difference, $\Delta\bar{n} = \bar{g}a^4$ & & & & \\ \hline
 % In energy-based models, the parameters are less directly relatable to experiments; rather, their values can often be set by calibrating emergent features, such as cell diffusion coefficients or average speeds, with experimental measurements \cite{szabo2010collective}.
 %
 % Although the physical limits to multicellular sensing are becoming better understood, the physical limits constraining multicellular migration are less clear. This remains an interesting open question, and answering it will require integrating the theories of sensing and communication with the models of collective migration described herein. For tumor cells in particular, an integrated physical theory of sensing and migration would prove immensely useful for identifying the key determinants of invasive capabilities. Identifying these determinants would help pinpoint the ways that these capabilities could be disrupted, using drugs and other therapies, as described next.
-
-\section{Drug sensitivity and implications for therapy}
-
-We have seen that cells, including tumor cells, are remarkably precise sensors of molecules in their environment. This raises the question of how sensitive tumor cells are to drug molecules in their environment. What is the minimum drug concentration required not just for precise detection by a cell, but for causing a phenotypic change, such as cell death?
-
-Experiments have shown that cancer cells are sensitive to very small drug concentrations. For example, lung carcinoma cells were exposed \textit{in vitro} to various concentrations of the anti-cancer drug paclitaxel, also known as taxol, which acts to block mitosis in order to achieve cell death by disrupting microtubule regulation \cite{torres1998mechanisms}. Pacltaxel concentrations as low as $1$ nM were shown to affect microtubule dynamics of the cells. This concentration is commensurate with the smallest background concentrations in which cells can perform gradient sensing (Table \ref{sense_table}). Assuming a cell length of $20$ $\mu$m, this concentration corresponds to only a few thousand drug molecules in the volume of a cell (Table \ref{drug_table}). Evidently lung cancer cells are affected by drug concentrations that are near the fundamental limits of what can be sensed.
-
-
-
-\begin{table*}[t]
-\begin{center}
-    \begin{tabular}{ |l|c|c| }
-        \hline
-        \multicolumn{1}{|c|}{Outcome} & Drug Concentration & Molecules per Cell \\ \hline
-        Physical change \cite{torres1998mechanisms} & $1$ nM & $5$,$000$ \\ \hline
-        Cell death \cite{grantab2006penetration} & $10^4$ nM & $5\times 10^7$ \\ \hline
-        Cell death, nanoparticle delivery \cite{malam2009liposomes} & $100$ nM & $500$,$000$ \\ \hline
-        Communication blockage \cite{ellison2016cell} & $50$ nM & $30$,$000$ \\ \hline
-    \end{tabular}
-\caption{Drug sensitivity thresholds. Molecules per cell volume are calculated assuming a cubic cell of length $a = 20$ $\mu$m for tumor cells (rows 1-3) and $a = 10$ $\mu$m for epithelial cells (row 4).}
-\label{drug_table}
-\end{center}
-\end{table*}
-
-
-
-Although cancer cells may be very sensitive to small drug concentrations, that does not translate to successful treatment. In order to achieve cell death, much larger drug concentrations are required. In the same study on lung carcinoma cells, cell death was observed for drug concentrations on the order of $10$ nM and greater. More typical drug concentrations required for cell death are on the order of micromolars. For instance, it has been shown \textit{in vitro} that anticancer drug concentrations on the order of $10$ $\mu$M are required to kill at least $90\%$ of tumor cells \cite{grantab2006penetration}. With a cell length of $20$ $\mu$m, $10$ $\mu$M corresponds to tens of millions of drug molecules in the volume of a cell, four orders of magnitude greater than drug concentrations required to affect cell functionality (Table \ref{drug_table}). In order to effectively kill a solid tumor, very high drug doses are required.
-
-Complicating matters is the fact that the tumor and its surrounding microenvironment comprise a complex and heterogeneous system. Although most cells in the human body are naturally within a few cell lengths of a blood vessel, due to high proliferation tumor cells may be upwards of tens of cell lengths away from a vessel \cite{minchinton2006drug}. This makes it difficult for drugs to reach the tumor. Moreover, the high density of many solid tumors causes gradients of drug concentration to form as a function of tumor radius \cite{kwon2012analysis}. This results in a reduced drug concentration at the center of the tumor and makes innermost tumor cells the most difficult to kill. A promising way to overcome this difficulty is through the use of nanoparticle drug delivery systems, which increase both the specificity and penetration of drugs to the tumor. Nanoparticle delivery has been shown \cite{malam2009liposomes} to achieve cell death with concentrations as low as $100$ nM. Although this concentration is lower than for delivery without nanoparticles, it is still two orders of magnitude higher than the minimum concentration that causes physical changes in the cell (Table \ref{drug_table}). Even with targeted delivery, achieving drug-induced tumor cell death remains a challenging task.
-
-Given this challenge, we may hope to draw upon the physical insights reviewed herein to devise therapeutic strategies that are alternative or complementary to comprehensive cell death. Specifically, we imagine focusing on the metastatic invasion phase, and targeting the functions of invading tumor cells, including communication and migration, in addition to targeting cells' overall viability, to produce better treatment (Fig.\ \ref{fig:ch1_1}C). Communication is a particularly promising candidate, since it has recently been shown that cell-to-cell communication makes cancer cells more resistant to therapy and helps sustain tumor growth \cite{boelens2014exosome}. Indeed, the exchange of extracellular vesicles, which is a form of communication observed between tumor cells and stromal cells, has been linked to immune suppression, tumor development, angiogensis, and metastasis \cite{vader2014extracellular}. This suggests that disrupting cell-to-cell communication could be an effective strategy for stopping tumor progression or curbing metastatic invasion. Disrupting communication may not require concentrations as large as those necessary for cell death, which are difficult to maintain \textit{in vivo} across the whole tumor. For example, as little as $50$ nM of the gap-junction-blocking drug Endothelin-1 is sufficient to remove collective responses in epithelial cells \cite{ellison2016cell}. This concentration is several orders of magnitude smaller than that required for comprehensive cell death, and it is on the order of concentrations that are effective with targeted nanoparticle delivery (Table \ref{drug_table}). Therefore, it is tempting to suggest that managing metastatic invasion by blocking communication or other cell functions is a more accessible therapeutic strategy than eradicating a tumor outright.
 
 
 \section{Outlook}
