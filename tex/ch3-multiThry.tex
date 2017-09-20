@@ -13,21 +13,9 @@ Interactions within the collective results in cell behavior which is unlike that
 Specifically, outer cells polarize while inner cells do not, a mechanism observed in neural crest cells \cite{theveneau2010collective} and considered in several recent modeling studies
 \cite{malet2015collective,camley2016emergent,varennes2016collective}. This type of \textit{emergent chemotaxis} (EC) behavior seen in cell collectives presupposes a machinery within cells which allows for behavior to change once a cell is in a group. Since this machinery may come at a cost, this raises the question of whether EC offers any fundamental advantage over IC.
 
-\red{
-We address this question using simple physical models of EC and IC.
-The models presented in this chapter are paradigmatic and encompass many observed collective chemotaxis strategies.
-Known strategies of collective cell chemotaxis fall broadly into five categories. First, experiments focused on CIL have revealed collective cell streaming in which each cell makes independent protrusions \cite{mayor2010keeping}. Second, experiments discussed in Refs.\
-\cite{cai2016modeling,friedl2009collective,haeger2015collective,malet2015collective}
-all show behavior wherein edge cells exhibit an active, motile phenotype or make outward protrusions. Third, Refs.\
-\cite{theveneau2010collective,friedl2012classifying,cheung2013collective}
-illustrate cellular behavior wherein active, motile cells form one or more multicellular chain-like protrusions extending from the collective. Fourth, experiments on epithelial organoids demonstrated that chemical communication between cells can underlie collective gradient sensing \cite{ellison2016cell}. Finally, recent modeling studies have highlighted the role played by cell rearrangement within the collective in governing collective chemotaxis
-\cite{camley2016emergent,camley2016collective}. \\
-The first strategy in which cells act independently is directly described by the IC models. The second strategy in which edge cells make outward protrusions is exemplary of the EC model. The third strategy may be considered as a combination of our IC and EC models: the cell at the tip of the multicellular protrusion is often of a highly invasive phenotype akin to our EC edge cells, while the cells within the bulk of the protrusion are less invasive and may behave like bulk cells or IC cells depending on their activity. In the case of the fourth strategy, the error in the communication process will contribute additional noise to the collective polarization \cite{mugler2016limits}, and when communication is optimal we recover the same scaling relationship for the relative error as in our EC model, as discussed in the second paragraph on page 4 of the main text. Finally, the fifth strategy, namely collective chemotaxis in which cells rearrange, is not encompassed by our IC and EC models, since we consider cell locations to be fixed relative to the collective. It may very well be that cell rearrangement allows for spatial fluctuations, and thereby correlations, to be averaged out resulting in a quantitatively improved relative error. This is an interesting avenue of further research.
-}
+We address this question using simple physical models of IC and EC which are described and analyzed in detail in the following sections. In both models cell collectives respond to graded profiles of freely diffusing molecules. We quantify the migratory behavior of various geometries of cells collectives: one-dimensional (1D) cell chains, two-dimensional (2D) cell sheets, and three-dimensional (3D) cell clusters [Fig.\ \ref{fig:ch3_1}(a)]. These configurations are designed to mimic physiological multicellular structures such as filaments and ducts \cite{cheung2013collective,friedl2009collective,bardeesy2002pancreatic}.
 
-Cell collectives respond to graded profiles of freely diffusing molecules, and we quantify the migratory behavior of one-dimensional (1D) cell chains, two-dimensional (2D) cell sheets, and three-dimensional (3D) cell clusters [Fig.\ \ref{fig:ch3_1}(a)], configurations designed to mimic physiological multicellular structures such as filaments and ducts \cite{cheung2013collective,friedl2009collective,bardeesy2002pancreatic}.
-
-The collectives exist at low Reynolds number, hence their velocity $\vec{v}$ is proportional to the motility force, and in turn the polarization $\vec{P}$.
+The cell collectives exist at low Reynolds number, hence their velocity $\vec{v}$ is proportional to the motility force, and in turn the polarization $\vec{P}$.
 Therefore, understanding the behavior of $\vec{P}$ will inform us of the collective migratory performance. We focus on two measures of performance: the mean and the relative error of the polarization in the gradient direction $P_z$, where the relative error is defined
 \begin{equation} \label{eq:error1}
     \epsilon^2
@@ -37,9 +25,8 @@ Therefore, understanding the behavior of $\vec{P}$ will inform us of the collect
 In either model, cells sense and polarize in response the chemoattractant diffusing in the environment.
 The chemoattractant concentration $c(\vec{r},t)$ is a random variable
 which obeys regular diffusion $\dot{c} = D\nabla^2c+\eta_c$ with $D$ the diffusion coefficient.
-The Langevin noise term $\eta_c$ obeys
-$\langle \eta_c(\vec{r},t) \eta_c(\vec{r}',t') \rangle = 2 D \delta(t-t') \vec{\nabla}_{r} \cdot \vec{\nabla}_{r'} ( \bar{c}(\vec{r}) \delta^3(\vec{r}-\vec{r}'))$,
-and it accounts for the diffusive fluctuations in concentration
+The Langevin noise term $\eta_c$ accounts for the diffusive fluctuations in concentration, and it obeys
+$\langle \eta_c(\vec{r},t) \eta_c(\vec{r}',t') \rangle = 2 D \delta(t-t') \vec{\nabla}_{r} \cdot \vec{\nabla}_{r'} ( \bar{c}(\vec{r}) \delta^3(\vec{r}-\vec{r}'))$
 \cite{gardiner1985handbook,fancher2016fundamental}.
 We first consider a constant gradient $g$ with mean concentration profile
 $\bar{c}(\vec{r}) = c_0 + gz$.
@@ -49,7 +36,7 @@ Hence, the polarization of a collective of $N$ cells is $\vec{P}(t) = \sum_{i=1}
 
 The cell polarization will fluctuate due to the particulate nature of diffusion. Focusing on this extrinsic source of noise, we treat each cell as a sphere of radius $a$ through which molecules freely diffuse, akin to the ``perfect instrument'' described by Berg and Purcell \cite{berg1977physics}. It is important to note that treating cells as permeable spheres neglects receptor binding. We expect that the dimensionality-dependent scaling results derived herein will not change for reversible receptor binding but may change if binding is irreversible, as irreversible binding fundamentally changes the boundary conditions that cells present to the molecule field.
 
-Collectives performing EC and IC are found to have very similar mean speed, with polarization strength scaling linearly with the number of cells regardless of chemotactic mechanism or dimensionality. We will show that 1D and 2D EC collectives have higher chemotactic precision than IC collectives: we find that for $N$ cells, the relative error in EC scales as
+Collectives performing EC and IC are found to have very similar mean polarization, with polarization strength scaling linearly with the number of cells regardless of chemotactic mechanism or dimensionality. We will show that 1D and 2D EC collectives have higher chemotactic precision than IC collectives: we find that for $N$ cells, the relative error in EC scales as
 $\{N^{-2}, N^{-3/2}, N^{-1}\}$ for 1D, 2D, and 3D, respectively, whereas in IC it scales as $N^{-1}$ for any dimension. We explain the physical origin of this difference and discuss its implications.
 
 \begin{figure}
@@ -244,6 +231,18 @@ In our model, IC polarization is adaptive to the background concentration as obs
 $c(\vec{r}+\vec{r}',t)-c_0$.
 This change does not affect the properties of $\vec{P}$ since the background concentration cancels out when summing over all edge cells, but it does remove the internal tension in the collective.
 
+\section{Paradigms of EC and IC Behavior}
+
+Both models are paradigmatic, and encompass many observed collective chemotaxis strategies in biology.
+Known strategies of collective cell chemotaxis fall broadly into five categories. First, experiments focused on CIL have revealed collective cell streaming in which each cell makes independent protrusions \cite{mayor2010keeping}. Second, experiments discussed in Refs.\
+\cite{cai2016modeling,friedl2009collective,haeger2015collective,malet2015collective}
+all show behavior wherein edge cells exhibit an active, motile phenotype or make outward protrusions. Third, studies detailed in Refs.\
+\cite{theveneau2010collective,friedl2012classifying,cheung2013collective}
+illustrate cellular behavior wherein active, motile cells form one or more multicellular chain-like protrusions extending from the collective. Fourth, experiments on epithelial organoids demonstrated that chemical communication between cells can underlie collective gradient sensing \cite{ellison2016cell}. Finally, recent modeling studies have highlighted the role played by cell rearrangement within the collective in governing collective chemotaxis
+\cite{camley2016emergent,camley2016collective}.
+
+The first strategy in which cells act independently is directly described by the IC models. The second strategy in which edge cells make outward protrusions is exemplary of the EC model. The third strategy may be considered as a combination of our IC and EC models: the cell at the tip of the multicellular protrusion is often of a highly invasive phenotype akin to our EC edge cells, while the cells within the bulk of the protrusion are less invasive and may behave like bulk cells or IC cells depending on their activity. In the case of the fourth strategy, the error in the communication process will contribute additional noise to the collective polarization \cite{mugler2016limits}, and when communication is optimal we recover the same scaling relationship for the relative error as in our EC model, as discussed at the end of Sect.\ 3.3. Finally, the fifth strategy, namely collective chemotaxis in which cells rearrange, is not encompassed by our IC and EC models, since we consider cell locations to be fixed relative to the collective. It may very well be that cell rearrangement allows for spatial fluctuations, and thereby correlations, to be averaged out resulting in a quantitatively improved relative error. This is an interesting avenue of further research.
+
 \section{Discussion}
 
 Besides the advantage revealed here in terms of chemotactic precision, there may be other natural advantages to EC. In EC only edge cells are involved in chemical sensing and polarization, freeing bulk cells from receptor and protein production necessary for chemotaxis. Bulk cells are free to differentiate into other phenotypes, which is in stark contrast with IC where every cell must be of the polarized phenotype. Additionally, EC provides a simple solution to bulk cells being shielded from the diffusing chemoattractant by edge cells. This phenomenon is especially important for 3D collectives where it can significantly impact the sensory precision of bulk cells \cite{smith2016role}.
@@ -267,7 +266,7 @@ This advantage arises due to the ways that errors accumulate in the two mechanis
 
 \section{Description of Simulations} \label{sct:ch3_sim}
 
-Computational simulations are performed to test the properties of EC and IC for one, two and three dimensional collectives. In the simulation, particles move randomly inside a 3D volume and boundaries are set to produce the desired concentration profiles. Cells are placed at fixed positions in the 3D volume in either one, two or three dimensional configurations. For a linear concentration profile, one boundary produces particles, and the opposing one is an absorbing boundary while all other boundaries periodic. For an exponential concentration, the same boundaries are used and particles are also allowed to degrade.
+Computational simulations are performed to test the properties of EC and IC for one, two and three dimensional collectives. In the simulation, the chemical concentration and its dynamics are modeled by a bath of diffusing particles. All particles undergo a 3D random walk within a confined volume, and the volume's boundaries are set to produce the desired chemical concentration profiles. Cells are placed at fixed positions within the 3D volume in either one, two or three dimensional configurations. Particles move freely through cells and do not collide with one another. For a linear concentration profile, one volume boundary produces particles and is reflective, while the boundary on the opposite of the volume absorbs all particles that collide with it. The remaining boundaries are all periodic. For an exponential concentration, the same boundaries are used as in the linear concentration profile, and particles also degrade.
 
 At each time-step of the simulation particles randomly move and are produced. In a given time-step particles move in a random direction with a probability
 $p = D\Delta t/b^2$,
