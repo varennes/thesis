@@ -12,6 +12,16 @@ Julien Varennes' PhD Thesis for Purdue University Department of Physics and Astr
 
 # Organization
 
+**Ch. 1 Structure:**
+1. Brief description of motivation and previous studies.
+2. Physical Limits to Sensing
+    - concentration sensing
+    - gradient sensing - single cell
+    - gradient sensing - multicellular
+3. Models of Chemotaxis and Migration
+    - review single cell migration and chemotaxis models
+    - review collective cell migration and chemotaxis models
+
 - Introduction (Ch. 1)
     - **Use the review paper as content for introduction.**
     - Physical limits to cell sensory precision:

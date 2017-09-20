@@ -28,7 +28,7 @@ Chemotaxis plays an important role in many biological processes, of which cancer
 \label{fig:ch1_1}
 \end{figure}
 
-During metastasis, chemotaxis can occur as a single-cell (Fig.\ \ref{fig:ch1_1}A) or a multicellular phenomenon (Fig.\ \ref{fig:ch1_1}B). In either case, the cell's ability to precisely detect chemoattractants in the environment is bounded by the inherent diffusive fluctuations of the chemoattractants. Therefore it is important to understand the impact of the physics of diffusion on sensory precision.
+During metastasis, chemotaxis can occur as a single-cell (Fig.\ \ref{fig:ch1_1}A) or as a multicellular phenomenon involving the coherent motion of connected groups of cells (Fig.\ \ref{fig:ch1_1}B). In either case, the cell's ability to precisely detect chemoattractants in the environment is bounded by the inherent diffusive fluctuations of the chemoattractants. Therefore it is important to understand the impact of the physics of diffusion on sensory precision.
 
 \section{Physical limits to sensory precision}
 
@@ -120,7 +120,57 @@ The communication-limited relative error prediction was tested experimentally in
 Communication between cells is mediated by gap junctions between cells, and experiments show that when gab junctions are blocked, the biased response in collectives vanished \cite{ellison2016cell}. This demonstrates that collective response is critically dependent on cell-to-cell communication. Taken together, these results indicate that communication is a necessary but imperfect component of collective gradient sensing. The results also speak to the power of simple physical theory to quantitatively explain collective cellular capabilities. Many epithelial cancers are known to invade collectively \cite{cheung2013collective}, and these theoretical predictions may also describe the sensory behavior of metastatic cell collectives.
 
 
-\red{BELOW NOT EDITED}
+\subsection{Relative changes vs.\ absolute molecule numbers}
+
+The precision of gradient sensing is often reported in terms of percent concentration change across a cell body. For example, both amoeba \cite{van2007biased} and tumor cells \cite{shields2007autologous} are sensitive to a roughly $1\%$ change in concentration across the cell body. However, this method of reporting sensitivity may be misleading. Experiments imply very different sensory thresholds for these cells in terms of absolute molecule numbers, as we will now see.
+
+The key is that it takes two numbers to specify the conditions for gradient sensing: the mean gradient $\bar{g}$ and the mean background concentration $\bar{c}$. For the amoeba \textit{Dictyostelium}, these numbers are $\bar{g} = 10$ nM/mm and $\bar{c} = 7$ nM at the sensory threshold \cite{van2007biased}. Given a typical cell size of $a = 10$ $\mu$m, these values imply a mean percent concentration change of $\bar{p} = a\bar{g}/\bar{c} = 1.4\%$ (Table \ref{sense_table}). However, we may also compute from these values the mean molecule number difference
+$\Delta\bar{n} = a\bar{g}s^3$
+from one side of the cell to the other, within the effective compartments of size $s$. Taking $s\sim a$ gives the maximal molecule number difference of $\Delta\bar{n} = a^4\bar{g} = 60$
+for \textit{Dictyostelium} (Table \ref{sense_table}). Together $\bar{p}$ and $\Delta\bar{n}$ specify the sensing conditions as completely as $\bar{g}$ and $\bar{c}$ do.
+
+\begin{table*}[t]
+\begin{center}
+\begin{tabular}{ |l|c|c|c|c| }
+\hline
+\multirow{2}{*}{ }
+& \multicolumn{2}{ |c| }{Single Cell} & \multicolumn{2}{ |c| }{Multicellular} \\ \cline{2-5}
+ & \textit{Dictyostelium}
+ & Breast
+ & Neurons \cite{rosoff2004new}
+ & Mammary \\
+& (Amoeba) \cite{van2007biased}
+& Cancer \cite{shields2007autologous}
+& & Epithelia \cite{ellison2016cell} \\
+\hline
+Cell Length & 10 $\mu$m & 20 $\mu$m & 10 $\mu$m & 10 $\mu$m \\
+Scale, $a$  & & & & \\ \hline
+Background & 7 nM & 1100 nM & 1 nM & 2.5 nM \\
+Concentration, $\bar{c}$  & & & & \\ \hline
+Concentration & 10 nM/mm & 550 nM/mm & $0.1$ nM/mm & $0.5$ nM/mm \\
+Gradient, $\bar{g}$ & & & & \\ \hline
+Percent Concentration & 1.4\% & 1.0\% & 0.1\% & 0.2\% \\
+Difference, $\bar{p} = \bar{g}a/\bar{c}$ &  &  &  &  \\ \hline
+Molecule Number & 60 & 53,000 & 0.6 & 3 \\
+Difference, $\Delta\bar{n} = \bar{g}a^4$ & & & & \\ \hline
+\end{tabular}
+\caption{Gradient sensory thresholds for single cells and multicellular collectives. Note that experiments can provide equal percent concentration differences but unequal molecule number differences across a cell body, as seen for amoeba and breast cancer cells. We see that multicellular groups can detect smaller gradients than single cells by all measures.}
+\label{sense_table}
+\end{center}
+\end{table*}
+
+Experiments \cite{shields2007autologous} have shown that breast cancer tumor cells exhibit a chemotactic response in a gradient $\bar{g} = 550$ nM/mm of the cytokine CCL21, on top of a background concentration of $\bar{c} = 1100$ nM. Given a typical cell size of $a = 20$ $\mu$m, this corresponds to a percent difference of
+$\bar{p} = a\bar{g}/\bar{c} = 1\%$,
+similar to \textit{Dictyostelium}. Yet, this also corresponds to a maximal molecule number difference of
+$\Delta\bar{n} = a^4\bar{g} = 53,$$000$,
+which is much higher than that of \textit{Dictyostelium} (Table \ref{sense_table}). Even though the sensitivities are similar in terms of percent change, they are very different in terms of absolute molecule number.
+
+Lower molecule numbers correspond to higher relative error. We can see this explicitly by writing Eq.\ \ref{eq:ch1_g1} in terms of the percent change $\bar{p} = a\bar{g}/\bar{c}$. Defining $\epsilon = \sigma_g/\bar{g}$ and taking $s \sim a$, we have
+$\epsilon \sim 1/\sqrt{\bar{p}^2a\bar{c}DT}$.
+Accounting for the fact that tumor cells (TC) have roughly twice the diameter as \textit{Dictyostelium} cells (DC), this expression implies that the sensitivities of the two cell types over the same integration time $T$ to chemoattractants with the same diffusion constant $D$ satisfy
+$\epsilon_{\rm DC}/\epsilon_{\rm TC} = \sqrt{2\bar{c}_{\rm TC}/\bar{c}_{\rm DC}} \approx 18$.
+We see that because the \textit{Dictyostelium} experiments were performed at lower background concentration, corresponding to lower absolute molecule numbers, the relative error in gradient sensing is $18$ times that of the tumor cells, despite the fact that both cell types are responsive to $1\%$ concentration gradients. Therefore, it is important to take note of the background concentration when studying the precision of gradient sensing. These data imply that \textit{Dictyostelium} cells can sense noisier gradients than tumor cells. However, \textit{Dictyostelium} cells have been studied more extensively than tumor cells as exemplars of gradient detection. It remains an interesting open question what is the minimum gradient that tumor cells can detect, not only in terms of percent concentration change, but also in terms of absolute molecule number differences.
+
 
 \section{Models of collective migration}
 
@@ -215,57 +265,8 @@ Although the physical limits to multicellular sensing are becoming better unders
 %
 % Do cells reach this limit on gradient sensing? This question has been directly addressed for the amoeba \textit{Dictyostelium discoideum}. Experiments \cite{van2007biased} have shown that \textit{Dictyostelium} cells exhibit biased movement when exposed to gradients of cyclic adenosine monophosphate as small as $\bar{g} = 10$ nM/mm, on top of a background concentration of $\bar{c} = 7$ nM. Bias is typically quantified in terms of the chemotactic index (CI), which is the cosine of the angle between the gradient direction and the direction of a cell's actual motion. By relating the error in gradient sensing (a term of the form in Eq.\ \ref{eq:ch1_g1} with $s = a$) to the error in this angle, Endres and Wingreen \cite{endres2008accuracy} obtained an expression for the optimal CI, which they then fit to the experimental data with one free parameter, the integration time $T$.
 % The inferred value of $T = 3.2$ s serves as the physical lower bound on the response time required to perform chemotaxis. Actual response times of \textit{Dictyostelium} cells, as measured by the time from the addition of a chemoattractant to the peak activity of an observable signaling pathway associated with cell motility \cite{postma2003uniform, parent2004making}, are about $5$$-$$10$ s. Taken together, these results imply that \textit{Dictyostelium} operates remarkably close to the physical limit to sensory precision set by the physics of molecule counting.
-
-\subsection{Relative changes vs.\ absolute molecule numbers}
-
-The precision of gradient sensing is often reported in terms of percent concentration change across a cell body. For example, both amoeba \cite{van2007biased} and tumor cells \cite{shields2007autologous} are sensitive to a roughly $1\%$ change in concentration across the cell body. However, this method of reporting sensitivity may be misleading. Experiments imply very different sensory thresholds for these cells in terms of absolute molecule numbers, as we will now see.
-
-The key is that it takes two numbers to specify the conditions for gradient sensing: the mean gradient $\bar{g}$ and the mean background concentration $\bar{c}$. For the amoeba \textit{Dictyostelium}, these numbers are $\bar{g} = 10$ nM/mm and $\bar{c} = 7$ nM at the sensory threshold \cite{van2007biased}. Given a typical cell size of $a = 10$ $\mu$m, these values imply a mean percent concentration change of $\bar{p} = a\bar{g}/\bar{c} = 1.4\%$ (Table \ref{sense_table}). However, we may also compute from these values the mean molecule number difference
-$\Delta\bar{n} = a\bar{g}s^3$
-from one side of the cell to the other, within the effective compartments of size $s$. Taking $s\sim a$ gives the maximal molecule number difference of $\Delta\bar{n} = a^4\bar{g} = 60$
-for \textit{Dictyostelium} (Table \ref{sense_table}). Together $\bar{p}$ and $\Delta\bar{n}$ specify the sensing conditions as completely as $\bar{g}$ and $\bar{c}$ do.
-
-Experiments \cite{shields2007autologous} have shown that breast cancer tumor cells exhibit a chemotactic response in a gradient $\bar{g} = 550$ nM/mm of the cytokine CCL21, on top of a background concentration of $\bar{c} = 1100$ nM. Given a typical cell size of $a = 20$ $\mu$m, this corresponds to a percent difference of $\bar{p} = a\bar{g}/\bar{c} = 1\%$, similar to \textit{Dictyostelium}. Yet, this also corresponds to a maximal molecule number difference of $\Delta\bar{n} = a^4\bar{g} = 53,$$000$, which is much higher than that of \textit{Dictyostelium} (Table \ref{sense_table}). Even though the sensitivities are similar in terms of percent change, they are very different in terms of absolute molecule number.
-
-Lower molecule numbers correspond to higher relative error. We can see this explicitly by writing Eq.\ \ref{eq:ch1_g1} in terms of the percent change $\bar{p} = a\bar{g}/\bar{c}$. Defining $\epsilon = \sigma_g/\bar{g}$ and taking $s \sim a$, we have $\epsilon \sim 1/\sqrt{\bar{p}^2a\bar{c}DT}$. Accounting for the fact that tumor cells (TC) have roughly twice the diameter as \textit{Dictyostelium} cells (DC), this expression implies that the sensitivities of the two cell types over the same integration time $T$ to chemoattractants with the same diffusion constant $D$ satisfy
-$\epsilon_{\rm DC}/\epsilon_{\rm TC} = \sqrt{2\bar{c}_{\rm TC}/\bar{c}_{\rm DC}} \approx 18$.
-We see that because the \textit{Dictyostelium} experiments were performed at lower background concentration, corresponding to lower absolute molecule numbers, the relative error in gradient sensing is $18$ times that of the tumor cells, despite the fact that both cell types are responsive to $1\%$ concentration gradients. Therefore, it is important to take note of the background concentration when studying the precision of gradient sensing. These data imply that \textit{Dictyostelium} cells can sense noisier gradients than tumor cells. However, \textit{Dictyostelium} cells have been studied more extensively than tumor cells as exemplars of gradient detection. It remains an interesting open question what is the minimum gradient that tumor cells can detect, not only in terms of percent concentration change, but also in terms of absolute molecule number differences.
-
-
-
-\begin{table*}[t]
-\begin{center}
-\begin{tabular}{ |l|c|c|c|c| }
-\hline
-%\multicolumn{5}{ |c| }{Gradient Sensory Thresholds} \\ \hline
-\multirow{2}{*}{ }
-& \multicolumn{2}{ |c| }{Single Cell} & \multicolumn{2}{ |c| }{Multicellular} \\ \cline{2-5}
- & \textit{Dictyostelium}
- & Breast
- & Neurons \cite{rosoff2004new}
- & Mammary \\
-& (Amoeba) \cite{van2007biased}
-& Cancer \cite{shields2007autologous}
-& & Epithelia \cite{ellison2016cell} \\
-\hline
-Cell Length & 10 $\mu$m & 20 $\mu$m & 10 $\mu$m & 10 $\mu$m \\
-Scale, $a$  & & & & \\ \hline
-Background & 7 nM & 1100 nM & 1 nM & 2.5 nM \\
-Concentration, $\bar{c}$  & & & & \\ \hline
-Concentration & 10 nM/mm & 550 nM/mm & $0.1$ nM/mm & $0.5$ nM/mm \\
-Gradient, $\bar{g}$ & & & & \\ \hline
-Percent Concentration & 1.4\% & 1.0\% & 0.1\% & 0.2\% \\
-Difference, $\bar{p} = \bar{g}a/\bar{c}$ &  &  &  &  \\ \hline
-Molecule Number & 60 & 53,000 & 0.6 & 3 \\
-Difference, $\Delta\bar{n} = \bar{g}a^4$ & & & & \\ \hline
-\end{tabular}
-\caption{Gradient sensory thresholds for single cells and multicellular collectives. Note that experiments can provide equal percent concentration differences but unequal molecule number differences across a cell body, as seen for amoeba and breast cancer cells. We see that multicellular groups can detect smaller gradients than single cells by all measures.}
-\label{sense_table}
-\end{center}
-\end{table*}
-
-
-
+%
+%
 % \subsection{Multicellular gradient sensing}
 %
 % In many cancer types, tumor cells invade the surrounding tissue in a collective manner \cite{cheung2013collective, friedl2012classifying}. Cell collectives can sense shallower gradients than single cells, both in terms of percent concentration changes and absolute molecule numbers (Table \ref{sense_table}). Indeed, groups of neurons respond to gradients equivalent to a difference of less than one molecule across an individual neuron's growth cone \cite{rosoff2004new}. This raises the possibility that during the invasion process tumor cell collectives benefit from higher sensory precision than single tumor cells.
