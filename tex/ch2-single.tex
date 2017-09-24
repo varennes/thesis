@@ -54,19 +54,19 @@ since trajectories that occurred infinitely far apart in time have no effect on 
 \begin{equation} \label{eq:tau1}
     \tau = \int_0^\infty dt' \ \text{AC}(t') \ .
 \end{equation}
-The AC is useful for cross-comparing experiments since the persistence timescale $\tau$ is largely independent of the frequency at which measurements were taken as well as the total observation time. However, the timescale $\tau$ obtained from the AC is not a bounded dimensionless quantity unlike CR.
+The AC is useful for cross-comparing experiments since the persistence timescale $\tau$ is largely independent of the frequency at which measurements were taken as well as the total observation time. However, the timescale $\tau$ obtained from the AC is not a bounded dimensionless quantity unlike CR. For this reason we choose to use CR as the persistence metric over AC, and we discuss the validity of this choice after presenting the experimental results in Sect.\ 2.2.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.80\textwidth]{../fig/ch2_fig5.png}
-    \caption{a) Directional Autocorrelation from control dataset. Light-colored trajectories indicate autocorrelations for individual cell trajectories. Timescale $\tau$ is calculated using Eq.\ \ref{eq:tau1}. b) Directional autocorrelation timescales and CR values for all experimental assays. Data points are color-coded based on chemical environment.} \label{fig:ch2_5}
-\end{figure}
-
-We calculate the AC and its timescale $\tau$ from our experimental data. Fig.\ \ref{fig:ch2_5}a shows the autocorrelations from the control assay, the black dots are the AC values for all times $\Delta t$ observed in our experiment, and its AC has a timescale
-$\tau = 1.02 \ \text{hr}$.
-In Fig.\ \ref{fig:ch2_5}b we compare the CR and AC timescale values from all experimental conditions. Going from a uniform to a graded concentration of either EGF or TGF$\beta$ results in a decreased CR value, and the AC timescale also decreases when going from a uniform to a graded concentration. This indicates that there is a monotonic relationship between CR and $\tau$. As the measured value of CR increases so too will the AC timescale $\tau$.
-
-Therefore, quantifying persistence with CR leads to the same patterns and analysis that could have been deduced from using AC. Additionally, the timescale obtained from the AC is not a bounded, dimensionless quantity. This makes gaining intuition about persistence from the autocorrelation timescale more difficult than CR. Since CR provides a clearer intuitive picture for persistence in cell chemotaxis we use it in our study.
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.80\textwidth]{../fig/ch2_fig5.png}
+%     \caption{a) Directional Autocorrelation from control dataset. Light-colored trajectories indicate autocorrelations for individual cell trajectories. Timescale $\tau$ is calculated using Eq.\ \ref{eq:tau1}. b) Directional autocorrelation timescales and CR values for all experimental assays. Data points are color-coded based on chemical environment.} \label{fig:ch2_5}
+% \end{figure}
+%
+% We calculate the AC and its timescale $\tau$ from our experimental data. Fig.\ \ref{fig:ch2_5}a shows the autocorrelations from the control assay, the black dots are the AC values for all times $\Delta t$ observed in our experiment, and its AC has a timescale
+% $\tau = 1.02 \ \text{hr}$.
+% In Fig.\ \ref{fig:ch2_5}b we compare the CR and AC timescale values from all experimental conditions. Going from a uniform to a graded concentration of either EGF or TGF$\beta$ results in a decreased CR value, and the AC timescale also decreases when going from a uniform to a graded concentration. This indicates that there is a monotonic relationship between CR and $\tau$. As the measured value of CR increases so too will the AC timescale $\tau$.
+%
+% Therefore, quantifying persistence with CR leads to the same patterns and analysis that could have been deduced from using AC. Additionally, the timescale obtained from the AC is not a bounded, dimensionless quantity. This makes gaining intuition about persistence from the autocorrelation timescale more difficult than CR. Since CR provides a clearer intuitive picture for persistence in cell chemotaxis we use it in our study.
 
 \subsection{Migration Speed}
 
@@ -101,6 +101,17 @@ Examining the persistence and speed of cell movement (Fig.\ \ref{fig:ch2_2}b-c) 
 Next we used transforming growth factor type beta (TGF$\beta$) as a chemoattractant. TGF$\beta$ is a known chemoattractant for many cell types \cite{wahl1987transforming,bischoff1997chemotaxis}.
 It is also involved in development, inflammation, and may be involved in carcinogenesis \cite{clark1998molecules,javelaud2004mammalian,pang2016tgf}.
 Here we find that TGF$\beta$ is a strong chemoattractant (Fig.\ \ref{fig:ch2_2}a, light-blue) with $\text{CI} = 0.278 \pm 0.075$ when a 0-50nM gradient is used. TGF$\beta$ does promote more directionally persistent motion as its CR value for a uniform concentration (but not for the graded concentration) is greater than that recorded for the control (Fig.\ \ref{fig:ch2_2}b). Adding TGF$\beta$ to the cellular environment does improve cell speed, but not to the extent that was observed for motility-inducing EGF (Fig.\ \ref{fig:ch2_2}c).
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.80\textwidth]{../fig/ch2_fig5.png}
+    \caption{a) Directional Autocorrelation from control dataset. Light-colored trajectories indicate autocorrelations for individual cell trajectories. Timescale $\tau$ is calculated using Eq.\ \ref{eq:tau1}. b) Directional autocorrelation timescales and CR values for all experimental assays. Data points are color-coded based on chemical environment.} \label{fig:ch2_5}
+\end{figure}
+
+For all experimental conditions we calculate the AC and its timescale $\tau$ in order to verify the validity in using the CR as the persitence metric instead of the AC timescale. Fig.\ \ref{fig:ch2_5}a shows the autocorrelations from the control assay, the black dots are the AC values for all times $\Delta t$ observed in our experiment, and its AC has a timescale
+$\tau = 1.02 \ \text{hr}$.
+In Fig.\ \ref{fig:ch2_5}b we compare the CR and AC timescale values from all experimental conditions. Going from a uniform to a graded concentration of either EGF or TGF$\beta$ results in a decreased CR value, and the AC timescale also decreases when going from a uniform to a graded concentration. This indicates that there is a monotonic relationship between CR and $\tau$. As the measured value of CR increases so too will the AC timescale $\tau$.
+Therefore, quantifying persistence with CR leads to the same patterns, analysis, and conclusions that could have been deduced from using AC. Since CR provides a bounded dimensionless metric with clear intuition we use it in our analysis.
 
 In summary, adding a gradient of EGF or TGF$\beta$ results in chemotaxis as indicated by CI values significantly above zero. The experimental parameters' affects on chemotactic behavior are consolidated into Fig.\ \ref{fig:ch2_2}d. Movement in the CI-CR plane of Fig.\ \ref{fig:ch2_2}d indicates changing persitence and accuracy of chemotaxis, whereas the size of each data point represents the average speed. Under all conditions the cells move at speeds of $\sim 10 \mu\text{m}/\text{hr}$. An increase in speed is observed when the MD-MB-231 cells are exposed to either growth factor. This is not not a surprising result since chemical agents that promote persistent or directed migration often results in increased motility \cite{petrie2009random}. EGF and TGF$\beta$ both produce similarly persistent motion though EGF promotes more motility as indicated by its fastest cell speed.
 
@@ -201,7 +212,7 @@ Collagen stiffness is the only parameter that significantly affects the persiste
 
 From these simulation results we deduce some stereotypical patterns of cell chemotaxis. Increasing the relative change in chemoattractant concentration across cell (either by increasing $g$ or reducing $c_0$) results in more accurate chemotaxis. Material that is more difficult for cells to traverse during chemotaxis, whether its stiffer colagen \textit{in vitro} or denser extracellular matrix \textit{in vivo}, results in reduced chemotactic performance across all metrics. Finally, the simulations show a positive correlation between CR and speed since as cell motion becomes more persistent it typically also enables faster cell movement.
 
-\section{Theoretical Model of Chemotaxis}
+\section{Analytical Model of Chemotaxis}
 
 Interestingly, although both experiments and simulations vary environmental parameters affecting cell chemotaxis, the chemotactic performance metrics do not dramatically change. Both CI and CR can range from 0 to 1, but our MDA-MB 231 cell assays result in CR values close to 0.45 and CI values less than 0.3 for all environmental conditions (Fig.\ \ref{fig:ch2_2}). Simulations allow for probing chemotactic behavior over an even larger parameter space, and yet CI and CR values remain limited to a fraction of the whole range (Fig.\ \ref{fig:ch2_3}).
 
