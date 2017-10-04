@@ -224,12 +224,12 @@ From these simulation results we deduce some stereotypical patterns of cell chem
 
 Interestingly, although both experiments and simulations vary environmental parameters affecting cell chemotaxis, the chemotactic performance metrics do not dramatically change. Both CI and CR can range from 0 to 1, but our MDA-MB 231 cell assays result in CR values close to 0.45 and CI values less than 0.3 for all environmental conditions (Fig.\ \ref{fig:ch2_2}). Simulations allow for probing chemotactic behavior over an even larger parameter space, and yet CI and CR values remain limited to a fraction of the whole range (Fig.\ \ref{fig:ch2_3}).
 
-Can this phenomenon be explained with a simple physical model? One of the simplest models for cell movement and chemotaxis is the biased persistent random walk \cite{alt1980biased,othmer1988models}. In its simplest form, a random walk involves a walker that is equally likely to move in any direction, and its next movement is independent of its previous motion. To add persistence to the random walk means that the walkers' movements are correlated. The walker's next movement is not equally likely in all directions as in the simplest case, but now depends on its previous direction of motion \cite{patlak1953random}. Finally, adding bias means that the walker is more likely to move in a particular fixed direction.
+Can this phenomenon be explained with a simple physical model? One of the simplest models for cell movement and chemotaxis is the biased persistent random walk \cite{alt1980biased,othmer1988models}. In its simplest form, a random walk involves a walker that is equally likely to move in any direction, and its next step is independent of its previous motion. To add persistence to the random walk means that the walkers' movements are correlated in time. The walker's next movement is not equally likely in all directions as in the simplest case, but now depends on its previous direction of motion \cite{patlak1953random}. Finally, adding bias means that the walker is more likely to move in a particular fixed direction even in the absence of persistence.
 Before we get into how the BPRW model can shed light on the chemotactic performance of MDA-MB-231 breast cancer cells, lets review the model formulation.
 
 \subsection{Biased Persistent Random Walk Formulation}
 
-The BPRW is modeled as a velocity jump process instead of the typical on lattice hopping formulation of the standard random walk. In the BPRW a walker moves in a particular direction with fixed speed for an exponentially distributed amount of time before changing direction. The walker reorients to a new direction $\hat{v}$ from its previous direction $\hat{v}'$ depending on the probability density $T(\vec{v},\vec{v}')$. We assume a reorientation frequency $\lambda$, thus $\lambda^{-1}$ is the average run time, and we assume that it moves at a constant speed $s$. The reorientations are chosen based on a probability density $T(\vec{v},\vec{v}')$ which depends only on the angular direction of the walker's movements: $T(\vec{v},\vec{v}') = T(\theta,\theta')$. Here the angle $\theta$ is taken relative to the $x$ axis which is assumed to be parallel to the gradient direction.
+The BPRW is modeled as a velocity jump process instead of the typical on lattice hopping formulation of the standard random walk \cite{othmer1988models}. In the BPRW a walker moves in a particular direction with fixed speed for an exponentially distributed amount of time before changing direction. The walker reorients to a new direction $\hat{v}$ from its previous direction $\hat{v}'$ depending on the probability density $T(\vec{v},\vec{v}')$. We assume a reorientation frequency $\lambda$, thus $\lambda^{-1}$ is the average run time, and we assume that it moves at a constant speed $s$. The reorientations are chosen based on a probability density $T(\vec{v},\vec{v}')$ which depends only on the angular direction of the walker's movements: $T(\vec{v},\vec{v}') = T(\theta,\theta')$. Here the angle $\theta$ is taken relative to the $x$ axis which is assumed to be parallel to the gradient direction.
 
 Let $p(\vec{r},\theta,t) d\vec{r} d\theta$ be the number density of individual walkers found between positions $\vec{r}$ and $\vec{r}+d\vec{r}$ with movement orientation between $\theta$ and $\theta + d\theta$. From Othmer \textit{et al}.\ \cite{othmer1988models} it is shown that the evolution equation for the probability density $p(\vec{r},\theta,t)$ simplifies to
 \begin{equation} \label{eq:p1}
@@ -271,7 +271,7 @@ $\psi$ represents the persistence strength (also referred to as the persistence 
 \begin{equation} \label{eq:psi}
     \psi \equiv \int_{-\pi}^{\pi} d\phi \ h(\phi) \ \cos\phi \ .
 \end{equation}
-Note that the restrictions on the reorientation probability density (Eq.\ \ref{eq:t2}-\ref{eq:t5}) result in $\chi \leq 1 - \psi$. Fianlly, $\lambda_0$ is the effective turning rate of the walker,
+Note that the restrictions on the reorientation probability density (Eq.\ \ref{eq:t2}-\ref{eq:t5}) result in $\chi \leq 1 - \psi$. Finally, $\lambda_0$ is the effective turning rate of the walker,
 $\lambda_0 \equiv \lambda(1-\psi)$.
 Since $\lambda$ is the reorientation rate and $\psi$ is the persistence strength, $\lambda_0$ describes the effective rate at which the walker forgets its previous orientation.
 
@@ -289,34 +289,45 @@ Starting from the definitions for CI and CR in Eqs.\ \ref{eq:defCI}-\ref{eq:defC
 \end{align}
 The term $[ \ \ldots \ ]$ is shorthand for the bracketed term in Eq.\ \ref{eq:moment1}, and $L$ is the total path length. In Eq.\ \ref{eq:ci1} we approximate the two moments as being independent of one another, and in both Eqs.\ \ref{eq:ci1}-\ref{eq:cr1} we make the approximation that
 $\langle x \rangle \approx \sqrt{\langle x^2 \rangle}$.
-These approximations are in very good agreement the exact solutions of CI and CR times in which many reorientation events occur, $t \gg \lambda^{-1}$. Note that neither CI nor CR depend on the speed $s$, and assuming that $\chi < 1 - \psi$, to first order CR decays as $\text{CR} \sim t^{-1/2}$.
+These approximations are in very good agreement the exact solutions of CI and CR times in which many reorientation events occur, $\lambda t \gg 1$.
+
+Interestingly neither the prediction for CI nor CR depend on the speed $s$. Additionally, assuming that $\chi < 1 - \psi$,
+to first order $[ \ \ldots \ ]^{1/2} \sim \sqrt{t}$ and so
+to first order CR decays as $\text{CR} \sim t^{-1/2}$. We can make intuitive sense of Eqs.\ \ref{eq:ci1}-\ref{eq:cr1} in these limits as well. CI is proportional to $\chi$ since the bias strength should be the most significant factor in determine accuracy. CI is also dependent on the persistence strength
+$\text{CI} \sim (1-\psi)^{-1/2}$, since given some non-zero bias higher persistence will reinforce movement in the desired direction. Interpretation of CR is more straightforward with
+$\text{CR} \sim \lambda_0^{-1/2}$. CR depends inversely on the effective turning rate because a lower turning rate leads to straighter trajectories.
+
+
+\subsection{Biased Persistent Random Walk Results}
 
 The BPRW predictions for CI and CR depend on how strongly persistence and bias affect the walker's movements. The timescales in the BRPW are calibrated to those of our experiments; total observation time $t = 9 \text{hr}$, the reorientation frequency
 $\lambda = 4 \text{hr}^{-1}$), and we approximate the speed to be
-$s = 15 \mu\text{m/hr}$. With the BPRW timescales calibrated we can proceed to vary $T(\theta,\theta')$ which in turn affects the bias strength $\chi$, and the persistence strength $\psi$.
+$s = 15 \mu\text{m/hr}$.
+With the BPRW timescales calibrated we can proceed to vary $T(\theta,\theta')$ which in turn affects the bias strength $\chi$, and the persistence strength $\psi$.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.80\textwidth]{../fig/ch2_fig6.png}
-    \caption{a) Possible values of CI and CR for a BPRW. Each dot represents the CI and CR value for a BPRW of a given bias and persistence strength. Inset, sample trajectories of a BPRW. b) Example reorientation probability densities $T(\theta,\theta')$, and their component bias $k(\theta$) and persistence $h(\theta-\theta')$ functions. For both b) plots $\theta'=0$. For all plots: $t =36$, $\lambda = 1.0$, $s = 3.75$, and $\theta=0$ is the direction of bias.}
+    \caption{a) Possible values of CI and CR for a BPRW. Each dot represents the CI and CR value for a BPRW of a given bias and persistence strength. Inset, sample trajectories of a BPRW. b) Example reorientation probability densities $T(\theta,\theta')$, and their component bias $k(\theta$) and persistence $h(\theta-\theta')$ functions. For both b) plots $\theta'=0$. For all plots: $t = 9\text{hr}$, $\lambda = 4 \text{hr}^{-1}$, $s = 15 \mu\text{m/hr}$, and $\theta=0$ is the direction of bias.}
     \label{fig:ch2_6}
 \end{figure}
 
-Simulations of the BPRW are performed with varying $T(\theta,\theta')$ to find the resulting values of CI and CR possible given our experimental system. In the simulations the bias and persistence functions to take on the forms:
+Simulations of the BPRW are performed with varying $T(\theta,\theta')$ to find the resulting values of CI and CR possible given our experimental system (Fig.\ \ref{fig:ch2_6}). In the simulations the bias and persistence functions take on the forms:
 \begin{align}
     k(\theta) &= k_1 \cos\theta \ , \\
     h(\theta-\theta') &= h_1 f_\text{VM}(\theta | \ \theta', \kappa_1) + h_2 f_\text{VM}(\theta | \ \theta', \kappa_2) \ .
 \end{align}
 Here $k_1$ sets the bias strength, and $h(\theta-\theta')$ is a linear combination of two von Mises distributions with
 $f_\text{VM}(\theta | \ \theta', \kappa) = \frac{1}{2\pi I_0(\kappa)} e^{\kappa \cos(\theta-\theta')}$.
-The von Mises distribution is approximately equal to a normal distribution bounded to a circle, and it is commonly used in random walk models of biological systems \cite{codling2008random}.
+The von Mises distribution is approximately equal to a normal distribution bounded to a circle, and it is commonly used in random walk models of biological systems \cite{codling2008random}. A linear combination of two such distributions is used to construct a broad range of biologically relevant $h(\theta-\theta')$ distributions.
 The parameters $\kappa_1$ and $\kappa_2$ set the persistence strength with larger values of $\kappa$ resulting in higher persistence. $h_1$ and $h_2$ set the shape of the distribution, with $\{h_1,h_2\} > 0$ results in a single-peaked $h(\theta-\theta')$ function as shown in Fig.\ \ref{fig:ch2_6}b, top. Whereas, if $h_1> 0$ and $h_2<0$ then the resulting $h(\theta-\theta')$ function has two peaks, symmetric across $\theta=\theta'$ (Fig.\ \ref{fig:ch2_6}b, bottom).
-Interestingly, even in this idealized model of chemotaxis the whole range of CI and CR values is not available to the BPRW. The mechanics of the random walk limit its performance resulting in behavior that cannot attain perfect accuracy ($\text{CI}=1$), nor perfect persistence ($\text{CR}=1$).
 
-In summary, by calibrating BPRW to our experiments the parameters $t$, $\lambda$, and $s$ are fixed. From here we can sample possible CI and CR values given a particular bias and persistence strength. By varying over all possible combinations of bias and persistence parameters while enforcing the restrictions on $T(\theta,\theta')$ (Eq.\ \ref{eq:t2}-\ref{eq:t3}) all possible values of CI and CR permitted under the BPRW model are calculated. The CI and CR values permitted by our theoretical model are shown alongside the experimental results in  Fig.\ \ref{fig:ch2_4}. We see that our simple analytical model is able to recover the CI and CR values observed. More importantly, the BPRW puts limits on how well these breast cancer cells can chemotaxis regardless of how favorable the environmental conditions are made as represented by the gray-shaded region in Fig.\ \ref{fig:ch2_4}.
+Interestingly, even in this idealized model of chemotaxis the whole range of CI and CR values is not available to the BPRW (Fig.\ \ref{fig:ch2_6}a). The mechanics of the biased persistent random walk limit its performance resulting in behavior that cannot attain perfect accuracy ($\text{CI}=1$), nor perfect persistence ($\text{CR}=1$). This is a consequence of the reorientation probability density $T(\theta,\theta') = k(\theta) + h(\theta-\theta')$ which cannot simultaneously feature high bias and persistence, and the resulting CI and CR values are a reflection of this trade-off. By sampling over possible combinations of the bias and persistence distributions we find that even when $k(\theta)$ and $h(\theta-\theta')$ are optimized to produced the highest pair of CI and CR values, the end result is still not the ideal.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.80\textwidth]{../fig/ch2_fig4.png}
     \caption{Theoretical bounds on chemotactic performance based on the biased persistent random walk model. Gray dots represent possible theoretical CI and CR values for a BPRW. Colored squares are experimentally recorded values for different environmental conditions.} \label{fig:ch2_4}
 \end{figure}
+
+In summary, by calibrating BPRW to our experiments the parameters $t$, $\lambda$, and $s$ are fixed. From here we can sample possible CI and CR values given a particular bias and persistence strength. By varying over all possible combinations of bias and persistence parameters while enforcing the restrictions on $T(\theta,\theta')$ (Eq.\ \ref{eq:t2}-\ref{eq:t3}) all possible values of CI and CR permitted under the BPRW model are calculated. Since our BPRW parameters were set by our breast cancer cell experiments, the theoretical CI and CR values are compared with the experimental results in  Fig.\ \ref{fig:ch2_4}. We see that for a given turning angle probability distribution our simple analytical model is able to recover the CI and CR values observed in experiments. More importantly, the BPRW puts limits on how well these breast cancer cells can perform chemotaxis. The BPRW model predicts that regardless of the environmental conditions of the breast cancer cells, their chemotactic performance is limited to a small region of the whole CI-CR phase space as shown by the gray-shaded region in Fig.\ \ref{fig:ch2_4}. Therefore, the internal cell parameters $\lambda$ and $s$ as well as the experimental parameter $t$ restrict chemotactic performance of these breast cancer cells.
