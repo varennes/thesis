@@ -617,7 +617,10 @@ To obtain a scaling for $C_\text{IC}$ in a three dimensional cluster we assume t
 with $n_\text{shell}$ the radius of the shell in terms of cell radii.
 Going to continuum we can calculate the contribution from the cell and all its pairs
 \begin{equation}
-    C_\text{cell} = -\frac{\pi a^5c_0}{18DT n_\text{shell}^3} \int_0^{2\pi} d\phi \int_0^{\pi} d\theta \ \sin\theta (3\cos^2\theta-1) = -\frac{\pi^2 a^5c_0}{9DT n_\text{shell}^3} \int_0^\pi d\theta \ (3\cos^2\sin\theta - \sin\theta) = 0 \ .
+\begin{split}
+    C_\text{cell} = -\frac{\pi a^5c_0}{18DT n_\text{shell}^3} \int_0^{2\pi} d\phi \int_0^{\pi} d\theta \ \sin\theta (3\cos^2\theta-1) \\
+    = -\frac{\pi^2 a^5c_0}{9DT n_\text{shell}^3} \int_0^\pi d\theta \ (3\cos^2\sin\theta - \sin\theta) = 0 \ .
+\end{split}
 \end{equation}
 In the last step, we see that the integral vanishes. Thus, the contribution from a single cell and its shell of pairs sum to zero. Repeating this argument for all cells in the cluster results in the total $C_\text{IC} = 0$. Therefore for 3D clusters there is no covariance contribution to the total variance, and $\text{Var}[P_z] = V_\text{IC} \sim N$ as in Table I of the main text.
 
@@ -637,9 +640,9 @@ with $\Theta_i$ the angle cell $i$ makes with the gradient.
 The cross-spectrum for the $z$-component between two cells is
 \begin{equation} \label{eq:pijEC1}
 \begin{split}
-    \langle\delta\tilde{p}_i^*(\vec{k}',\omega')\delta\tilde{p}_j(\vec{k},\omega) \rangle = \cos\Theta_i \cos\Theta_j \int_V d^3x d^3x' \int \frac{d^3kd^3k'}{(2\pi)^6}
+    \langle\delta\tilde{p}_i^*(\vec{k}',\omega')\delta\tilde{p}_j(\vec{k},\omega) \rangle = \cos\Theta_i \cos\Theta_j \int_V d^3x d^3x' \int \frac{d^3kd^3k'}{(2\pi)^6} \\
     \langle \delta\tilde{c}^*(\vec{k}',\omega')\delta\tilde{c}(\vec{k},\omega) \rangle
-    e^{-i\vec{k}\cdot(\vec{x}_j+\vec{x})} e^{i\vec{k}\cdot(\vec{x}_i+\vec{x}')}
+    e^{-i\vec{k}\cdot(\vec{x}_j+\vec{x})} e^{i\vec{k}\cdot(\vec{x}_i+\vec{x}')} \ .
 \end{split}
 \end{equation}
 Following the same procedure as in the case of IC, we get an expression for $S_{ij}^1$ for EC:
@@ -700,8 +703,8 @@ Here $\Delta = 2a/R$ is the anguler separation between two edge cells, and
 is the number of cell radii separating two edge cells. Using this expression for $n(\theta_1,\theta_2)$ we evaluate the integral over $\theta_2$:
 \begin{equation}
     \begin{split}
-        \left( \frac{R}{2a^2} \right) \int_{\Delta/2}^{2\pi-\Delta/2} &d\theta_1 \int_{\theta_1+\Delta/2}^{2\pi} d\theta_2 \ \frac{\cos\theta_1 \cos\theta_2}{n(\theta_1,\theta_2)} \\
-        &= \frac{R}{8a} \int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \cos\theta_1 [ -4\left( \cos(\theta_1/2) + \cos(\theta_1+\Delta/2) \right)
+        \left( \frac{R}{2a^2} \right) \int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \int_{\theta_1+\Delta/2}^{2\pi} d\theta_2 \ \frac{\cos\theta_1 \cos\theta_2}{n(\theta_1,\theta_2)} \\
+        = \frac{R}{8a} \int_{\Delta/2}^{2\pi-\Delta/2} d\theta_1 \cos\theta_1 [ -4\left( \cos(\theta_1/2) + \cos(\theta_1+\Delta/2) \right) \\
         -2 \cos\theta_1 \log\left( \tan(\Delta/4) \tan(\theta_1/4) \right) ]
     \end{split}
 \end{equation}

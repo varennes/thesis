@@ -1,10 +1,13 @@
 
 \chapter{Dynamics of Collective Chemotaxis}
 
+\textit{Parts of this chapter have been published as J.\ Varennes, B.\ Han, and A.\ Mugler, ``Collective chemotaxis through noisy multicellular gradient sensing,'' Biophysical journal 111.3 (2016): 640-649.}
+\vspace{5mm}
+
 \noindent
-In this chapter we study the dynamics of more detailed model of collective emergent chemotaxis (EC) than that presented in Ch.\ 3.
-Here we further explore how intercellular interactions result in emergent chemotaxis of a cell collective. In Ch.\ 3 it was assumed that collective edge cells polarize, whereas here we provide a simple, biologically motivated, physical model for how cell polarization emerges from interactions within the collective. It was also assumed that cells in the collective rigidly adhere to one another, this assumption is now relaxed. We explicitly model cell-cell contacts, intracellular molecule production due to chemoattractant sensing, intercellular communication, as well as stochastic fluctuations in individual cell shape and motility.
-This provides a more realistic application of the EC model presented in Ch.\ 3 with the addition of cell-cell communication in order to achieve adaptive gradient sensing across a whole collective of cells. The work discussed in this chapter has been published in \textit{Biophysical Journal} \cite{varennes2016collective}.
+In this chapter we study the dynamics of a more detailed model of collective emergent chemotaxis (EC) than that presented in Ch.\ 3.
+Here we further explore how intercellular interactions result in emergent chemotaxis of a cell collective. In Ch.\ 3 it was assumed that collective edge cells polarize, whereas here we provide a simple, biologically motivated, physical model for how cell polarization emerges from interactions within the collective. It was also assumed that cells in the collective rigidly adhere to one another, and here this assumption is relaxed. We explicitly model cell-cell contacts, intracellular molecule production due to chemoattractant sensing, intercellular communication, as well as stochastic fluctuations in individual cell shape and motility.
+This provides a more realistic application of the EC model presented in Ch.\ 3 with the addition of cell-cell communication in order to achieve adaptive gradient sensing across a whole collective of cells.
 
 % Cells can migrate in response to a chemoattractant and can detect extraordinarily small changes in chemical concentrations. The limits to cell sensory precision have been a topic of research in biology and biophysics for many years. \textit{Escheria coli} bacterial chemotaxis operates very near the physical limits of their sensory machinery, and \textit{Dictyostelium discoideum} amoebae are sensitive to differences in chemical concentrations on the order of ten molecules across the cell \cite{berg1977physics,song2006dictyostelium}. Recent studies on individual breast cancer cells showed that they are sensitive to 1\% differences in concentration across the cell length \cite{shields2007autologous}.
 % Limits to cell sensory precision were first derived by Berg and Purcell almost 40 years ago \cite{berg1977physics} and have been revisited to account for binding kinetics, spatiotemporal correlations and spatial confinement \cite{bialek2005physical, kaizu2014berg, bicknell2015limits}. However, in nature cells are rarely found alone, and the interactions between nearby cells may alter cells' sensory capabilities.
@@ -68,8 +71,7 @@ In order for collective chemotaxis to occur cells within the collective must sen
 
 Communication between cells and collective sensing can improve upon an individual cell's ability to sense the environment \cite{ellison2016cell}, and in turn this information may be used to direct cell motion.
 In the LEGI model cells produce two chemical species, a ``local'' species $X$, and a ``global'' species $Y$, in response to the chemoattractant $S$. The local species $X$ remains within an individual cell and represents that cell's measurement of its local chemical concentration. This species can be a molecule produced or activated in response to attractant-bound receptors, or the bound receptors themselves. The global species $Y$ can diffuse at the rate $\gamma$ between neighboring cells and therefore represents the average $X$ population among neighboring cells. $Y$ molecules may only be exchanged when two or more cells are in direct contact with one another. Recent experiments in epithelial cells identified this global species as either calcium or a small molecule involved in calcium signaling (such as IP3), and identified the intercell diffusion mechanism as mediated by gap junctions \cite{ellison2016cell}.
-Finally, $X$ activates a downstream reporter molecule $R$, while $Y$ inhibits $R$.
-\red{[CONSIDER ADDING FIGURE THAT ILLUSTRATES LEGI (similar to Ch1 fig)]}
+Finally, $X$ activates a downstream reporter molecule $R$, while $Y$ inhibits $R$ as illustrated in Fig.\ 2.1C.
 
 Let $x_k$, $y_k$, and $R_k$ represent the molecule populations in $X$, $Y$, and $R$ in the $k^\text{th}$ cell. The chemical reactions in cell $k$ are
 \begin{equation}
