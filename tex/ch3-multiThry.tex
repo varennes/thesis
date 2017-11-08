@@ -1,6 +1,9 @@
 
 \chapter{Limits to Collective Chemotaxis}
 
+\textit{Parts of this chapter have been published as J.\ Varennes, S.\ Fancher, B.\ Han, and A.\ Mugler, ``Emergent versus Individual-Based Multicellular Chemotaxis,'' Physical Review Letter 119.18 (2017): 188101.}
+\vspace{5mm}
+
 \noindent
 In this chapter we transition from studying single-cell chemotaxis to that of multicellular collectives.
 Collective behavior occurs in a variety of biological systems such as organism development \cite{theveneau2010collective,cai2016modeling,bianco2007two,montell2008morphogenetic},
@@ -742,22 +745,3 @@ For the three-dimensional cluster, numerical methods must be used in order to fi
 
 The numerical results [Fig.\ \ref{fig:ch3_4}] show that $V \sim N^{2/3}$ since the number of edge cells also scales as $N^{2/3}$. We also find that $C \sim N$; the covariance contribution to the total cluster polarization grows linearly with $N$. For large clusters the $N$ scaling dominates the behavior of $\text{Var}[P_z]$. Therefore, in 3D the leading order scaling for the variance is
 $\text{Var}[P_z] \sim N$ as in Table I of the main text.
-
-
-% \section{Testing Analytic Model Assumptions}
-%
-% \begin{figure}[ht]
-%     \centering
-%         \includegraphics[width=0.8\textwidth]{../fig/ch3_si1.pdf}
-%     \caption{(a) Short-time integration relative error results. Data points are of simulations for $T= \frac{1}{100} \tau_D$. (b) Exponential concentration profile relative error results. The mean concentration profile is $\bar{c}(z) = c_0 e^{-z/\lambda}$, the lengthscale $\lambda=\sqrt{D/\beta}$ is set by the diffusion coefficient $D$ and the molecule decay rate $\beta$. Lines are from original analytical predictions using $T > \tau_D$ and a linear concentration profile.} \label{fig:ch3_3}
-% \end{figure}
-
-% Simulations are performed to test model behavior when assumptions used to derive analytic results are relaxed. In Fig.\ \ref{fig:ch3_3}(a) we relax the assumption that the integration time $T$ must be larger than the timescale for diffusion $\tau_D \sim R^2/D$. We find that $\epsilon^2$ scales the same way as previously predicted for both EC and IC, even when $T = \tau_D/100$. The only exception is that $\epsilon^2$ for 3D EC [Fig.\ \ref{fig:ch3_3}(a), red circles] has a more negative power-law dependence on $N$ than the expected $\sim N^{-1}$. The shorter integration time results in decreased correlations between edge cells which when $T>\tau_D$ results in $C\sim N$. Hence with
-% $T < \tau_D$
-% the total variance is less dependent on $C$, and $V \sim N^{2/3}$ becomes the dominant contribution to $\text{Var}[P]$. This results in a steeper scaling of $\epsilon^2$ closer to
-% $\text{Var}[P]/\langle P \rangle^2 \sim N^{2/3}/N^2 = N^{-4/3}$.
-% Interestingly, we see that relaxing the assumption $T \gg \tau_D$ results in improved precision for EC over IC not just in 1D and 2D but also in 3D configurations.
-%
-% In Fig.\ \ref{fig:ch3_3}(b) we change the concentration profile from linear to exponential which has a mean concentration of
-% $\bar{c}(z) = c_0 e^{-z/\lambda}$.
-% The lengthscale $\lambda=\sqrt{D/\beta}$ depends on the diffusion coefficient and the molecule degradation rate $\beta$. In Fig.\ \ref{fig:ch3_3}(b) the simulation results are for $\lambda > a$. We find that $\epsilon^2$ is in very good agreement with our original analytic predictions. The only exception is that due to the exponential profile, $\langle P \rangle$ for 1D EC (Fig.\ \ref{fig:ch3_3}(b), red squares) is non-linear in $N$ causing the relative error data to scale less steeply than the expected $N^{-2}$.
