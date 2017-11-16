@@ -1,52 +1,36 @@
 # thesis
-Julien Varennes' PhD Thesis for Purdue University Department of Physics and Astronomy.
 
-- **TO DO**
-    - Introduction (Ch. 1) still needs work.
-        - Write review of single cell simulations.
-        - Edit / write review of collective simulations.
-        - Write some sort of conclusion and transition at the end of the introduction.
-    - Ch. 2
-        - Edit / write conclusion and transition.
-    - Perhaps (?) add a final chapter that is a conclusion for the whole thesis and future directions for the research presented here.
+Julien Varennes' dissertation entitled "Computational and theoretical study of the physical constraints on chemotaxis," in partial fulfillment of the Doctor of Philosophy degree from the Physics and Astronomy Department at Purdue University.
 
-# Organization
+Please cite this document or [my other publications](http://varennes.github.io/about/#research-papers) if you used them in your own work.
 
-**Ch. 1 Structure:**
-1. Brief description of motivation and previous studies.
-2. Physical Limits to Sensing
-    - concentration sensing
-    - gradient sensing - single cell
-    - gradient sensing - multicellular
-3. Models of Chemotaxis and Migration
-    - review single cell migration and chemotaxis models
-    - review collective cell migration and chemotaxis models
+# Content
 
-- Introduction (Ch. 1)
-    - **Use the review paper as content for introduction.**
-    - Physical limits to cell sensory precision:
-        - Single cell and multicellular
-        - Concentration and gradient sensing
-    - Connection between gradient sensing and chemotaxis.
-        - Building off of cell sensory limits, can the physical limits to chemotaxis be studied?
-    - Overview of simulation techniques used to study chemotaxis.
-        - Single cell chemotaxis simulations.
-        - Collective cell chemotaxis simulations.
-- Body (**Overview of the thesis content and structure.**)
-    - Ch. 2: collaborative work on single cell chemotaxis.
-    - Ch. 3: EC vs. IC collective chemotaxis paper.
-        - Transition from single cell study to study of collective chemotaxis.
-    - Ch. 4: collective chemotaxis CPM simulation paper.
-        - Frame this as an application and extension of the theoretical study conducted in Ch. 3.
+## tex
 
-# Figures
+All latex files comprising the chapters are located in the `/tex/` directory.
 
-All figures located in `/fig/` directory.
+- `ch0-background.tex`
+    - Background information related to the thesis.
+- `ch1-intro.tex`
+    - Content previously [published here](http://pubs.acs.org/doi/abs/10.1021/acs.molpharmaceut.5b00899).
+- `ch2-single.tex`
+    - Single cell chemotaxis study.
+- `ch3-multiThry.tex`
+    - Content previously [published here](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.188101).
+- `ch4-multiSim.tex`
+    - Content previously [published here](http://www.cell.com/biophysj/abstract/S0006-3495(16)30523-9).
+- `ch5-conclusion.tex`
+    - Concluding statement.
+
+## Figures
+
+All figures located in the `/fig/` directory.
 
 - All figures should be converted to the same file type (`PNG`).
 - Edit figures to have consistent sub-figure reference style.
 - Perhaps add additional figures to serve illustration purposes.
 
-# References
+## References
 
 All citation bibtex information located in `/ref/all.bib`.
