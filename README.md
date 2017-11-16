@@ -4,6 +4,8 @@ Julien Varennes' dissertation entitled "Computational and theoretical study of t
 
 Please cite this document or [my other publications](http://varennes.github.io/about/#research-papers) if you used them in your own work.
 
+The thesis document itself is located at [`/tex/thesis.pdf`](https://github.com/varennes/thesis/blob/master/tex/thesis.pdf).
+
 # Content
 
 ## Tex
@@ -37,4 +39,4 @@ All citation bibtex information located in `/ref/all.bib`.
 
 ## Template
 
-The `/template/` directory includes the template files for using Purdue University's latex documentclass. [The files were originally obtained here](https://engineering.purdue.edu/~mark/puthesis/). 
+The `/template/` directory includes the template files for using Purdue University's latex documentclass. [The files were originally obtained here](https://engineering.purdue.edu/~mark/puthesis/).
