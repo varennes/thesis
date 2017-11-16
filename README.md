@@ -6,7 +6,7 @@ Please cite this document or [my other publications](http://varennes.github.io/a
 
 # Content
 
-## tex
+## Tex
 
 All latex files comprising the chapters are located in the `/tex/` directory.
 
@@ -34,3 +34,7 @@ All figures located in the `/fig/` directory.
 ## References
 
 All citation bibtex information located in `/ref/all.bib`.
+
+## Template
+
+The `/template/` directory includes the template files for using Purdue University's latex documentclass. [The files were originally obtained here](https://engineering.purdue.edu/~mark/puthesis/). 
